@@ -218,7 +218,10 @@ export default function Home() {
           background: 'var(--card)', 
           padding: '1.5rem 1rem', 
           textAlign: 'center', 
-          borderBottom: '1px solid var(--border)',
+          borderRadius: 12,
+          marginTop: 24,
+          marginBottom: 22,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
           position: 'sticky',
           top: 0,
           zIndex: 10
@@ -229,7 +232,7 @@ export default function Home() {
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)'
           }}>
-            Welcome to Zoomies
+            Giving Animals the Zoomies
           </h1>
           <p style={{ 
             fontSize: 16, 
@@ -271,7 +274,7 @@ export default function Home() {
         </div>
 
         {/* Feed Posts */}
-        <div className="home-feed" style={{ padding: '1rem' }}>
+        <div className="home-feed" style={{ padding: '0.5rem 1rem' }}>
           {FEED_POSTS.map(post => (
             <div key={post.id} style={{ 
               background: 'var(--card)', 
