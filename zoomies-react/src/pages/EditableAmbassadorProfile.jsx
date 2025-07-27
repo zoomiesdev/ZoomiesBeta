@@ -100,10 +100,12 @@ export default function EditableAmbassadorProfile() {
   const [animal, setAnimal] = useState(ANIMALS[id] || ANIMALS['stompy']);
   const [isDark, setIsDark] = useState(false);
   const [newPostContent, setNewPostContent] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState({
     name: animal.name,
     about: animal.about,
+    profileImg: animal.profileImg,
+    coverImg: animal.coverImg,
     donationGoal: animal.donation.goal
   });
 
@@ -208,21 +210,25 @@ export default function EditableAmbassadorProfile() {
       ...prev,
       name: editData.name,
       about: editData.about,
+      profileImg: editData.profileImg,
+      coverImg: editData.coverImg,
       donation: {
         ...prev.donation,
         goal: editData.donationGoal
       }
     }));
-    setIsEditing(false);
+    setShowEditModal(false);
   };
 
   const handleCancelEdit = () => {
     setEditData({
       name: animal.name,
       about: animal.about,
+      profileImg: animal.profileImg,
+      coverImg: animal.coverImg,
       donationGoal: animal.donation.goal
     });
-    setIsEditing(false);
+    setShowEditModal(false);
   };
 
   return (
@@ -252,41 +258,13 @@ export default function EditableAmbassadorProfile() {
         >
           ← Back to Dashboard
         </button>
-        <div style={{ display: 'flex', gap: 12 }}>
-          {isEditing ? (
-            <>
-              <button 
-                onClick={handleSaveEdit}
-                className="button"
-                style={{ padding: '8px 16px', fontSize: 14 }}
-              >
-                Save Changes
-              </button>
-              <button 
-                onClick={handleCancelEdit}
-                style={{
-                  background: 'none',
-                  border: '1px solid var(--border)',
-                  padding: '8px 16px',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  color: 'var(--text)'
-                }}
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            <button 
-              onClick={() => setIsEditing(true)}
-              className="button"
-              style={{ padding: '8px 16px', fontSize: 14 }}
-            >
-              Edit Profile
-            </button>
-          )}
-        </div>
+        <button 
+          onClick={() => setShowEditModal(true)}
+          className="button"
+          style={{ padding: '8px 16px', fontSize: 14 }}
+        >
+          Edit Profile
+        </button>
       </div>
 
       {/* Cover and Profile Header */}
@@ -296,25 +274,7 @@ export default function EditableAmbassadorProfile() {
           <img src={animal.profileImg} alt="Animal Avatar" style={{ border: '4px solid var(--background)', borderRadius: '50%', width: 100, height: 100, objectFit: 'cover' }} />
           <div style={{ marginBottom: 60 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={editData.name}
-                  onChange={(e) => setEditData(prev => ({ ...prev, name: e.target.value }))}
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 600,
-                    border: '1px solid rgba(255,255,255,0.3)',
-                    borderRadius: 8,
-                    padding: '8px 12px',
-                    background: 'rgba(255,255,255,0.1)',
-                    color: '#fff',
-                    fontFamily: 'Calistoga, serif'
-                  }}
-                />
-              ) : (
-                <h1 style={{ margin: 0, fontFamily: 'Calistoga, serif', color: '#fff', fontSize: 28 }}>{animal.name}</h1>
-              )}
+              <h1 style={{ margin: 0, fontFamily: 'Calistoga, serif', color: '#fff', fontSize: 28 }}>{animal.name}</h1>
               <span style={{ color: '#fff', opacity: 0.7, fontSize: 16, fontWeight: 400, marginLeft: 4 }}>{animal.species} @ {animal.sanctuary}</span>
             </div>
           </div>
@@ -401,26 +361,7 @@ export default function EditableAmbassadorProfile() {
         <div className="sidebar">
           <div className="about-card" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
             <h2>About {animal.name.split(' ')[0]}</h2>
-            {isEditing ? (
-              <textarea
-                value={editData.about}
-                onChange={(e) => setEditData(prev => ({ ...prev, about: e.target.value }))}
-                rows={4}
-                style={{
-                  width: '100%',
-                  fontSize: 16,
-                  border: '1px solid var(--border)',
-                  borderRadius: 8,
-                  padding: 12,
-                  background: 'var(--background)',
-                  color: 'var(--text)',
-                  resize: 'vertical',
-                  marginBottom: 16
-                }}
-              />
-            ) : (
-              <p>{animal.about}</p>
-            )}
+            <p>{animal.about}</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
               <div><strong>Age:</strong><br />{animalStats.age}</div>
               <div><strong>Location:</strong><br />{animalStats.location}</div>
@@ -509,6 +450,221 @@ export default function EditableAmbassadorProfile() {
           </div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {showEditModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 16,
+            padding: 32,
+            maxWidth: 500,
+            width: '90%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600, color: 'var(--text)' }}>Edit Profile</h2>
+              <button 
+                onClick={handleCancelEdit}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {/* Profile Picture */}
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
+                  Profile Picture
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <img 
+                    src={editData.profileImg} 
+                    alt="Profile" 
+                    style={{ 
+                      width: 80, 
+                      height: 80, 
+                      borderRadius: '50%', 
+                      objectFit: 'cover',
+                      border: '2px solid var(--border)'
+                    }} 
+                  />
+                  <input
+                    type="text"
+                    value={editData.profileImg}
+                    onChange={(e) => setEditData(prev => ({ ...prev, profileImg: e.target.value }))}
+                    placeholder="Enter image URL"
+                    style={{
+                      flex: 1,
+                      padding: '12px',
+                      border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      background: 'var(--background)',
+                      color: 'var(--text)',
+                      fontSize: 14
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Banner Image */}
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
+                  Banner Image
+                </label>
+                <div style={{ marginBottom: 12 }}>
+                  <img 
+                    src={editData.coverImg} 
+                    alt="Banner" 
+                    style={{ 
+                      width: '100%', 
+                      height: 120, 
+                      objectFit: 'cover',
+                      borderRadius: 8,
+                      border: '2px solid var(--border)'
+                    }} 
+                  />
+                </div>
+                <input
+                  type="text"
+                  value={editData.coverImg}
+                  onChange={(e) => setEditData(prev => ({ ...prev, coverImg: e.target.value }))}
+                  placeholder="Enter banner image URL"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    fontSize: 14
+                  }}
+                />
+              </div>
+
+              {/* Name */}
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={editData.name}
+                  onChange={(e) => setEditData(prev => ({ ...prev, name: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    fontSize: 16
+                  }}
+                />
+              </div>
+
+              {/* About */}
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
+                  About
+                </label>
+                <textarea
+                  value={editData.about}
+                  onChange={(e) => setEditData(prev => ({ ...prev, about: e.target.value }))}
+                  rows={4}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    fontSize: 14,
+                    resize: 'vertical'
+                  }}
+                />
+              </div>
+
+              {/* Donation Goal */}
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
+                  Donation Goal ($)
+                </label>
+                <input
+                  type="number"
+                  value={editData.donationGoal}
+                  onChange={(e) => setEditData(prev => ({ ...prev, donationGoal: parseInt(e.target.value) || 0 }))}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    fontSize: 16
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
+              <button 
+                onClick={handleCancelEdit}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 16,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveEdit}
+                className="button"
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  fontSize: 16
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
