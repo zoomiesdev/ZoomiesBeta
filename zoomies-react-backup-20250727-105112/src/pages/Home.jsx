@@ -136,7 +136,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="home-grid" style={{
+    <div style={{
       display: 'grid',
       gridTemplateColumns: '1fr 2.5fr',
       gap: 32,
@@ -146,7 +146,7 @@ export default function Home() {
       background: 'var(--background)'
     }}>
       {/* Sidebar */}
-      <aside className="home-sidebar" style={{
+      <aside style={{
         display: 'flex',
         flexDirection: 'column',
         gap: 24,
@@ -212,9 +212,9 @@ export default function Home() {
       </aside>
 
       {/* Main Feed Area */}
-      <main className="home-main" style={{ minWidth: 0 }}>
+      <main style={{ minWidth: 0 }}>
         {/* Welcome Header */}
-        <div className="home-hero" style={{ 
+        <div style={{ 
           background: 'var(--card)', 
           padding: '1.5rem 1rem', 
           textAlign: 'center', 
@@ -271,7 +271,7 @@ export default function Home() {
         </div>
 
         {/* Feed Posts */}
-        <div className="home-feed" style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem' }}>
           {FEED_POSTS.map(post => (
             <div key={post.id} style={{ 
               background: 'var(--card)', 
@@ -366,7 +366,7 @@ export default function Home() {
         </div>
 
         {/* Urgent Campaigns Section */}
-        <div className="home-urgent" style={{ 
+        <div style={{ 
           margin: '1rem', 
           padding: '1.5rem', 
           background: 'var(--card)', 
@@ -426,7 +426,7 @@ export default function Home() {
         </div>
 
         {/* Call to Action */}
-        <div className="home-cta" style={{ 
+        <div style={{ 
           margin: '1rem', 
           padding: '2rem', 
           background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
