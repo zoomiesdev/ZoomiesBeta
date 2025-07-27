@@ -16,30 +16,10 @@ const ANIMALS = {
       'https://placehold.co/150x100?text=2',
       'https://placehold.co/150x100?text=3',
     ],
-    posts: [
-      {
-        id: 1,
-        type: 'status',
-        content: 'Just had the best headbutt session with my friends! 🐐',
-        timestamp: '2 hours ago',
-        reactions: { heart: 12, laugh: 3, wow: 1 },
-        comments: [
-          { user: 'Clara', text: 'Stunned by Stompy\'s beauty! ♥' },
-          { user: 'James', text: '👑 1 ♥' },
-          { user: 'Emily', text: 'You go, Stomp!' },
-        ]
-      },
-      {
-        id: 2,
-        type: 'photo',
-        content: 'Exploring the new climbing structure!',
-        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop',
-        timestamp: '1 day ago',
-        reactions: { heart: 8, laugh: 2 },
-        comments: [
-          { user: 'Sam', text: 'So adventurous!' },
-        ]
-      }
+    comments: [
+      { user: 'Clara', text: 'Stunned by Stompy\'s beauty! ♥' },
+      { user: 'James', text: '👑 1 ♥' },
+      { user: 'Emily', text: 'You go, Stomp!' },
     ],
     supporters: [
       { name: 'Pawfect Coffee Co.', amount: 2000 },
@@ -61,18 +41,9 @@ const ANIMALS = {
       'https://placehold.co/150x100?text=Luna2',
       'https://placehold.co/150x100?text=Luna3',
     ],
-    posts: [
-      {
-        id: 1,
-        type: 'status',
-        content: 'Perfect day for sunbathing! ☀️',
-        timestamp: '3 hours ago',
-        reactions: { heart: 15, laugh: 2 },
-        comments: [
-          { user: 'Sam', text: 'Luna is the sweetest!' },
-          { user: 'Jess', text: 'So glad she\'s safe now.' },
-        ]
-      }
+    comments: [
+      { user: 'Sam', text: 'Luna is the sweetest!' },
+      { user: 'Jess', text: 'So glad she\'s safe now.' },
     ],
     supporters: [
       { name: 'Happy Hooves', amount: 900 },
@@ -93,17 +64,8 @@ const ANIMALS = {
       'https://placehold.co/150x100?text=Bella2',
       'https://placehold.co/150x100?text=Bella3',
     ],
-    posts: [
-      {
-        id: 1,
-        type: 'status',
-        content: 'Mud bath time! 🐷💦',
-        timestamp: '5 hours ago',
-        reactions: { heart: 10, laugh: 5 },
-        comments: [
-          { user: 'Megan', text: 'Bella is adorable!' },
-        ]
-      }
+    comments: [
+      { user: 'Megan', text: 'Bella is adorable!' },
     ],
     supporters: [
       { name: 'Piggy Pals', amount: 400 },
@@ -123,17 +85,8 @@ const ANIMALS = {
       'https://placehold.co/150x100?text=Max2',
       'https://placehold.co/150x100?text=Max3',
     ],
-    posts: [
-      {
-        id: 1,
-        type: 'status',
-        content: 'Morning run in the field! 🐎',
-        timestamp: '1 day ago',
-        reactions: { heart: 20, wow: 3 },
-        comments: [
-          { user: 'Alex', text: 'Max is so majestic!' },
-        ]
-      }
+    comments: [
+      { user: 'Alex', text: 'Max is so majestic!' },
     ],
     supporters: [
       { name: 'Horse Heroes', amount: 1500 },
@@ -168,21 +121,84 @@ export default function EditableAmbassadorProfile() {
     };
   }, []);
 
+  // Add mock stats and timeline posts for desktop, inspired by mobile
+  const animalStats = {
+    age: animal.age || '3 years old',
+    location: animal.location || 'Austin, Texas',
+    rescueDate: animal.rescueDate || 'March 2022',
+    followers: animal.followers || 1247,
+    personality: animal.personality || ['Playful', 'Adventurous', 'Social'],
+    needs: animal.needs || ['Special diet', 'Regular vet checkups', 'Enrichment toys'],
+    feeling: animal.feeling || 'Silly',
+    feelingEmoji: animal.feelingEmoji || '🤪',
+    feelingUpdate: animal.feelingUpdate || '2 hours ago',
+  };
+  
+  const timelinePosts = [
+    {
+      id: 1,
+      date: '2 days ago',
+      user: animal.name,
+      avatar: animal.profileImg,
+      content: 'Stompy got a new climbing structure! Thanks to your donations, Stompy now has a brand new climbing structure in his enclosure. He absolutely loves it!',
+      image: animal.gallery[0],
+      reactions: { like: 8, laugh: 2, love: 5, sad: 0 },
+      comments: [
+        { user: 'Clara', text: 'So happy for Stompy!' },
+        { user: 'James', text: 'Goat parkour king!' }
+      ]
+    },
+    {
+      id: 2,
+      date: '1 week ago',
+      user: animal.name,
+      avatar: animal.profileImg,
+      content: 'Vet checkup went great! Stompy had his annual checkup and the vet says he\'s in perfect health. His hooves are looking great too!',
+      image: null,
+      reactions: { like: 12, laugh: 1, love: 7, sad: 0 },
+      comments: [
+        { user: 'Emily', text: 'Healthy and happy!' }
+      ]
+    }
+  ];
+  
+  const [postReactions, setPostReactions] = useState(timelinePosts.map(post => ({ ...post.reactions })));
+  const [postComments, setPostComments] = useState(timelinePosts.map(post => post.comments));
+  const [commentInputs, setCommentInputs] = useState(timelinePosts.map(() => ''));
+
+  const handleReact = (postIdx, type) => {
+    setPostReactions(prev => prev.map((r, i) => i === postIdx ? { ...r, [type]: r[type] + 1 } : r));
+  };
+  
+  const handleCommentInput = (postIdx, value) => {
+    setCommentInputs(prev => prev.map((v, i) => i === postIdx ? value : v));
+  };
+  
+  const handleAddComment = (postIdx) => {
+    if (commentInputs[postIdx].trim()) {
+      setPostComments(prev => prev.map((c, i) => i === postIdx ? [...c, { user: 'You', text: commentInputs[postIdx] }] : c));
+      setCommentInputs(prev => prev.map((v, i) => i === postIdx ? '' : v));
+    }
+  };
+
   const handleAddPost = () => {
     if (newPostContent.trim()) {
       const newPost = {
         id: Date.now(),
-        type: 'status',
+        date: 'Just now',
+        user: animal.name,
+        avatar: animal.profileImg,
         content: newPostContent,
-        timestamp: 'Just now',
-        reactions: { heart: 0, laugh: 0, wow: 0 },
+        image: null,
+        reactions: { like: 0, laugh: 0, love: 0, sad: 0 },
         comments: []
       };
       
-      setAnimal(prev => ({
-        ...prev,
-        posts: [newPost, ...prev.posts]
-      }));
+      // Add to timeline posts
+      timelinePosts.unshift(newPost);
+      setPostReactions(prev => [{ like: 0, laugh: 0, love: 0, sad: 0 }, ...prev]);
+      setPostComments(prev => [[], ...prev]);
+      setCommentInputs(prev => ['', ...prev]);
       setNewPostContent('');
     }
   };
@@ -209,19 +225,8 @@ export default function EditableAmbassadorProfile() {
     setIsEditing(false);
   };
 
-  const handleReact = (postIdx, type) => {
-    setAnimal(prev => ({
-      ...prev,
-      posts: prev.posts.map((post, idx) => 
-        idx === postIdx 
-          ? { ...post, reactions: { ...post.reactions, [type]: (post.reactions[type] || 0) + 1 } }
-          : post
-      )
-    }));
-  };
-
   return (
-    <div style={{ background: 'var(--background)', minHeight: '100vh' }}>
+    <div className="ambassador-profile" style={{ background: 'var(--background)' }}>
       {/* Header with Edit Button */}
       <div style={{ 
         background: 'var(--card)', 
@@ -229,7 +234,8 @@ export default function EditableAmbassadorProfile() {
         borderBottom: '1px solid var(--border)',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 24
       }}>
         <button 
           onClick={() => navigate(-1)}
@@ -244,7 +250,7 @@ export default function EditableAmbassadorProfile() {
             gap: 8
           }}
         >
-          ← Back
+          ← Back to Dashboard
         </button>
         <div style={{ display: 'flex', gap: 12 }}>
           {isEditing ? (
@@ -283,36 +289,14 @@ export default function EditableAmbassadorProfile() {
         </div>
       </div>
 
-      {/* Cover Image */}
-      <div style={{ position: 'relative', height: 250, overflow: 'hidden' }}>
-        <img 
-          src={animal.coverImg} 
-          alt={`${animal.name} cover`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-      </div>
-
-      {/* Profile Info */}
-      <div style={{ padding: '24px', maxWidth: 800, margin: '0 auto' }}>
-        <div style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
-          {/* Profile Image */}
-          <img 
-            src={animal.profileImg} 
-            alt={animal.name}
-            style={{ 
-              width: 120, 
-              height: 120, 
-              borderRadius: '50%', 
-              objectFit: 'cover',
-              border: '4px solid var(--card)',
-              marginTop: -60
-            }}
-          />
-          
-          {/* Profile Details */}
-          <div style={{ flex: 1 }}>
-            {isEditing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* Cover and Profile Header */}
+      <div className="profile-header" style={{ position: 'relative', height: 180, background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${animal.coverImg})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 24, marginBottom: 24 }}>
+        {/* Avatar and name/species/sanctuary positioned together */}
+        <div className="avatar-name" style={{ position: 'absolute', bottom: -60, left: 32, display: 'flex', alignItems: 'flex-end', gap: 24 }}>
+          <img src={animal.profileImg} alt="Animal Avatar" style={{ border: '4px solid var(--background)', borderRadius: '50%', width: 100, height: 100, objectFit: 'cover' }} />
+          <div style={{ marginBottom: 60 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {isEditing ? (
                 <input
                   type="text"
                   value={editData.name}
@@ -320,102 +304,62 @@ export default function EditableAmbassadorProfile() {
                   style={{
                     fontSize: 28,
                     fontWeight: 600,
-                    border: '1px solid var(--border)',
+                    border: '1px solid rgba(255,255,255,0.3)',
                     borderRadius: 8,
                     padding: '8px 12px',
-                    background: 'var(--background)',
-                    color: 'var(--text)'
+                    background: 'rgba(255,255,255,0.1)',
+                    color: '#fff',
+                    fontFamily: 'Calistoga, serif'
                   }}
                 />
-                <textarea
-                  value={editData.about}
-                  onChange={(e) => setEditData(prev => ({ ...prev, about: e.target.value }))}
-                  rows={4}
-                  style={{
-                    fontSize: 16,
-                    border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    padding: '12px',
-                    background: 'var(--background)',
-                    color: 'var(--text)',
-                    resize: 'vertical'
-                  }}
-                />
-                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-                  <label style={{ fontSize: 14, fontWeight: 600 }}>Donation Goal: $</label>
-                  <input
-                    type="number"
-                    value={editData.donationGoal}
-                    onChange={(e) => setEditData(prev => ({ ...prev, donationGoal: parseInt(e.target.value) }))}
-                    style={{
-                      fontSize: 16,
-                      border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      padding: '8px 12px',
-                      background: 'var(--background)',
-                      color: 'var(--text)',
-                      width: 100
-                    }}
-                  />
-                </div>
-              </div>
-            ) : (
-              <>
-                <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8, color: 'var(--text)' }}>
-                  {animal.name}
-                </h1>
-                <p style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 16 }}>
-                  {animal.species} • {animal.sanctuary} • Joined {animal.joined}
-                </p>
-                <p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--text)' }}>
-                  {animal.about}
-                </p>
-              </>
-            )}
+              ) : (
+                <h1 style={{ margin: 0, fontFamily: 'Calistoga, serif', color: '#fff', fontSize: 28 }}>{animal.name}</h1>
+              )}
+              <span style={{ color: '#fff', opacity: 0.7, fontSize: 16, fontWeight: 400, marginLeft: 4 }}>{animal.species} @ {animal.sanctuary}</span>
+            </div>
           </div>
         </div>
+        <div className="actions" style={{ position: 'absolute', top: 12, right: 24, display: 'flex', gap: 12 }}>
+          <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+            Donate
+          </button>
+          <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+            Follow
+          </button>
+          <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+            Share
+          </button>
+        </div>
+      </div>
 
-        {/* Donation Progress */}
-        <div style={{ 
-          background: 'var(--card)', 
-          padding: 24, 
-          borderRadius: 12, 
-          marginBottom: 32,
-          border: '1px solid var(--border)'
-        }}>
-          <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: 'var(--text)' }}>
-            Fundraising Progress
-          </h3>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Raised</span>
-            <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
-              ${animal.donation.raised.toLocaleString()} / ${animal.donation.goal.toLocaleString()}
-            </span>
+      {/* Fundraising Bar */}
+      <div className="profile-stats" style={{ marginLeft: 176, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 16 }}>
+          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>${animal.donation.raised} raised</div>
+          <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>/ ${animal.donation.goal} goal</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ width: '100%', height: 8, background: 'var(--gray)', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ width: `${Math.round((animal.donation.raised/animal.donation.goal)*100)}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary), var(--secondary))', borderRadius: 4 }} />
+            </div>
           </div>
-          <div style={{ 
-            width: '100%', 
-            height: 8, 
-            background: 'var(--border)', 
-            borderRadius: 4,
-            overflow: 'hidden'
-          }}>
-            <div style={{ 
-              width: `${(animal.donation.raised / animal.donation.goal) * 100}%`, 
-              height: '100%', 
-              background: 'linear-gradient(90deg, var(--primary), var(--secondary))',
-              borderRadius: 4
-            }} />
+          <div style={{ fontSize: 14, color: 'var(--primary)', fontWeight: 600 }}>{Math.round((animal.donation.raised/animal.donation.goal)*100)}%</div>
+        </div>
+      </div>
+
+      {/* Emotion Card */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: 'var(--card)', border: '2px solid var(--accent)', borderRadius: 16, padding: '16px 24px' }}>
+          <span style={{ fontSize: 32 }}>{animalStats.feelingEmoji}</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600, fontSize: 18, color: 'var(--primary)' }}>{animal.name} is feeling: {animalStats.feeling}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Updated {animalStats.feelingUpdate}</div>
           </div>
         </div>
+      </div>
 
-        {/* New Post Section */}
-        <div style={{ 
-          background: 'var(--card)', 
-          padding: 24, 
-          borderRadius: 12, 
-          marginBottom: 32,
-          border: '1px solid var(--border)'
-        }}>
+      {/* New Post Section */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', marginBottom: 24 }}>
+        <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24, border: '2px solid var(--primary)' }}>
           <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: 'var(--text)' }}>
             Post Update for {animal.name}
           </h3>
@@ -449,90 +393,120 @@ export default function EditableAmbassadorProfile() {
             Post Update
           </button>
         </div>
+      </div>
 
-        {/* Posts Timeline */}
-        <div>
-          <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 24, color: 'var(--text)' }}>
-            Recent Updates
-          </h3>
-          {animal.posts.map((post, idx) => (
-            <div key={post.id} style={{ 
-              background: 'var(--card)', 
-              padding: 24, 
-              borderRadius: 12, 
-              marginBottom: 16,
-              border: '1px solid var(--border)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                <img 
-                  src={animal.profileImg} 
-                  alt={animal.name}
-                  style={{ 
-                    width: 40, 
-                    height: 40, 
-                    borderRadius: '50%', 
-                    objectFit: 'cover',
-                    marginRight: 12
-                  }}
-                />
-                <div>
-                  <div style={{ fontWeight: 600, color: 'var(--text)' }}>{animal.name}</div>
-                  <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>{post.timestamp}</div>
-                </div>
-              </div>
-              
-              <p style={{ fontSize: 16, lineHeight: 1.5, marginBottom: 16, color: 'var(--text)' }}>
-                {post.content}
-              </p>
-              
-              {post.image && (
-                <img 
-                  src={post.image} 
-                  alt="Post"
-                  style={{ 
-                    width: '100%', 
-                    maxWidth: 400, 
-                    borderRadius: 8, 
-                    marginBottom: 16 
-                  }}
-                />
-              )}
-              
-              {/* Reactions */}
-              <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-                {Object.entries(post.reactions).map(([type, count]) => (
-                  <button
-                    key={type}
-                    onClick={() => handleReact(idx, type)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontSize: 14,
-                      color: 'var(--text-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4
-                    }}
-                  >
-                    {type === 'heart' ? '❤️' : type === 'laugh' ? '😂' : '😮'} {count}
-                  </button>
+      {/* Main Content Layout */}
+      <div className="tab-content" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24 }}>
+        {/* Sidebar */}
+        <div className="sidebar">
+          <div className="about-card" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2>About {animal.name.split(' ')[0]}</h2>
+            {isEditing ? (
+              <textarea
+                value={editData.about}
+                onChange={(e) => setEditData(prev => ({ ...prev, about: e.target.value }))}
+                rows={4}
+                style={{
+                  width: '100%',
+                  fontSize: 16,
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  padding: 12,
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  resize: 'vertical',
+                  marginBottom: 16
+                }}
+              />
+            ) : (
+              <p>{animal.about}</p>
+            )}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+              <div><strong>Age:</strong><br />{animalStats.age}</div>
+              <div><strong>Location:</strong><br />{animalStats.location}</div>
+              <div><strong>Rescued:</strong><br />{animalStats.rescueDate}</div>
+              <div><strong>Followers:</strong><br />{animalStats.followers.toLocaleString()}</div>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <strong>Personality:</strong>
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                {animalStats.personality.map(trait => (
+                  <span key={trait} style={{ padding: '4px 8px', background: 'linear-gradient(90deg, var(--accent), var(--primary))', color: '#fff', borderRadius: 12, fontSize: 12, fontWeight: 600 }}>{trait}</span>
                 ))}
               </div>
-              
-              {/* Comments */}
-              {post.comments.length > 0 && (
-                <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
-                  {post.comments.map((comment, commentIdx) => (
-                    <div key={commentIdx} style={{ marginBottom: 8 }}>
-                      <span style={{ fontWeight: 600, color: 'var(--text)' }}>{comment.user}</span>
-                      <span style={{ color: 'var(--text-secondary)', marginLeft: 8 }}>{comment.text}</span>
-                    </div>
+            </div>
+            <div>
+              <strong>Current Needs:</strong>
+              <ul style={{ margin: '8px 0 0 0', paddingLeft: 20, color: 'var(--text)' }}>
+                {animalStats.needs.map(need => (
+                  <li key={need} style={{ marginBottom: 4 }}>{need}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="leaderboard" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2>Top Supporters 🏆</h2>
+            <ol>
+              {animal.supporters.map((s, i) => (
+                <li key={i}><strong>{s.name}</strong> – ${s.amount.toLocaleString()}</li>
+              ))}
+            </ol>
+          </div>
+          <div className="gallery" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2>Photo Gallery</h2>
+            <div className="photo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginTop: 12 }}>
+              {(animal.gallery.slice(0, 9)).map((img, i) => (
+                <img key={i} src={img} alt={`${animal.name} ${i+1}`} style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }} />
+              ))}
+            </div>
+            <a href="#" style={{ display: 'block', marginTop: 16, color: 'var(--primary)', fontWeight: 600, textDecoration: 'none', textAlign: 'right' }}>See all photos</a>
+          </div>
+          <div className="comments" style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
+            <h2>Comments</h2>
+            <div style={{ background: 'var(--background)', padding: 16, borderRadius: 12, marginTop: 12 }}>
+              {animal.comments.map((c, i) => (
+                <p key={i}><strong>{c.user}:</strong> {c.text}</p>
+              ))}
+            </div>
+            <div style={{ marginTop: 16, display: 'flex' }}>
+              <input type="text" placeholder="Add a comment..." style={{ flex: 1, padding: '0.5rem', borderRadius: '6px 0 0 6px', border: '1.5px solid var(--border)', background: 'var(--background)', color: 'var(--text)' }} />
+              <button className="button" style={{ borderRadius: '0 6px 6px 0', background: 'var(--pink)', color: '#fff' }}>Post</button>
+            </div>
+          </div>
+        </div>
+        {/* Main Content */}
+        <div>
+          <div className="status" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2>Timeline & Updates</h2>
+            {timelinePosts.map((post, idx) => (
+              <div key={post.id} style={{ background: 'var(--background)', borderRadius: 12, padding: 20, marginBottom: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  <img src={post.avatar} alt={post.user} style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, color: 'var(--text)' }}>{post.user}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{post.date}</div>
+                  </div>
+                </div>
+                <div style={{ marginBottom: 8, color: 'var(--text)' }}>{post.content}</div>
+                {post.image && <img src={post.image} alt="Post" style={{ width: '100%', borderRadius: 8, marginBottom: 8 }} />}
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
+                  <button onClick={() => handleReact(idx, 'like')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>👍 {postReactions[idx].like}</button>
+                  <button onClick={() => handleReact(idx, 'laugh')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>😂 {postReactions[idx].laugh}</button>
+                  <button onClick={() => handleReact(idx, 'love')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>😍 {postReactions[idx].love}</button>
+                  <button onClick={() => handleReact(idx, 'sad')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>😢 {postReactions[idx].sad}</button>
+                </div>
+                <div style={{ marginBottom: 8 }}>
+                  {postComments[idx].map((c, i) => (
+                    <div key={i} style={{ fontSize: 14, color: 'var(--text)', marginBottom: 4 }}><strong>{c.user}:</strong> {c.text}</div>
                   ))}
                 </div>
-              )}
-            </div>
-          ))}
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input type="text" value={commentInputs[idx]} onChange={e => handleCommentInput(idx, e.target.value)} placeholder="Add a comment..." style={{ flex: 1, padding: '0.5rem', borderRadius: 6, border: '1.5px solid var(--border)', background: 'var(--background)', color: 'var(--text)' }} />
+                  <button className="button" style={{ borderRadius: 6, background: 'var(--pink)', color: '#fff' }} onClick={() => handleAddComment(idx)}>Post</button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
