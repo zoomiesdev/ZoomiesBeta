@@ -108,6 +108,8 @@ export default function EditableAmbassadorProfile() {
     coverImg: animal.coverImg,
     donationGoal: animal.donation.goal
   });
+  const [selectedProfileFile, setSelectedProfileFile] = useState(null);
+  const [selectedBannerFile, setSelectedBannerFile] = useState(null);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -205,6 +207,30 @@ export default function EditableAmbassadorProfile() {
     }
   };
 
+  const handleProfileFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedProfileFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setEditData(prev => ({ ...prev, profileImg: e.target.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBannerFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedBannerFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setEditData(prev => ({ ...prev, coverImg: e.target.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveEdit = () => {
     setAnimal(prev => ({
       ...prev,
@@ -218,6 +244,8 @@ export default function EditableAmbassadorProfile() {
       }
     }));
     setShowEditModal(false);
+    setSelectedProfileFile(null);
+    setSelectedBannerFile(null);
   };
 
   const handleCancelEdit = () => {
@@ -229,6 +257,8 @@ export default function EditableAmbassadorProfile() {
       donationGoal: animal.donation.goal
     });
     setShowEditModal(false);
+    setSelectedProfileFile(null);
+    setSelectedBannerFile(null);
   };
 
   return (
@@ -503,7 +533,7 @@ export default function EditableAmbassadorProfile() {
                 <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)' }}>
                   Profile Picture
                 </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
                   <img 
                     src={editData.profileImg} 
                     alt="Profile" 
@@ -515,22 +545,50 @@ export default function EditableAmbassadorProfile() {
                       border: '2px solid var(--border)'
                     }} 
                   />
-                  <input
-                    type="text"
-                    value={editData.profileImg}
-                    onChange={(e) => setEditData(prev => ({ ...prev, profileImg: e.target.value }))}
-                    placeholder="Enter image URL"
-                    style={{
-                      flex: 1,
-                      padding: '12px',
-                      border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      background: 'var(--background)',
-                      color: 'var(--text)',
-                      fontSize: 14
-                    }}
-                  />
+                  <div style={{ flex: 1 }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileFileChange}
+                      style={{ display: 'none' }}
+                      id="profile-upload"
+                    />
+                    <label 
+                      htmlFor="profile-upload"
+                      className="button"
+                      style={{
+                        display: 'inline-block',
+                        padding: '8px 16px',
+                        fontSize: 14,
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        marginBottom: 8
+                      }}
+                    >
+                      Choose File
+                    </label>
+                    {selectedProfileFile && (
+                      <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                        Selected: {selectedProfileFile.name}
+                      </div>
+                    )}
+                  </div>
                 </div>
+                <input
+                  type="text"
+                  value={editData.profileImg}
+                  onChange={(e) => setEditData(prev => ({ ...prev, profileImg: e.target.value }))}
+                  placeholder="Or enter image URL"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    fontSize: 14
+                  }}
+                />
               </div>
 
               {/* Banner Image */}
@@ -551,16 +609,43 @@ export default function EditableAmbassadorProfile() {
                     }} 
                   />
                 </div>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBannerFileChange}
+                    style={{ display: 'none' }}
+                    id="banner-upload"
+                  />
+                  <label 
+                    htmlFor="banner-upload"
+                    className="button"
+                    style={{
+                      display: 'inline-block',
+                      padding: '8px 16px',
+                      fontSize: 14,
+                      cursor: 'pointer',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Choose File
+                  </label>
+                  {selectedBannerFile && (
+                    <div style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }}>
+                      Selected: {selectedBannerFile.name}
+                    </div>
+                  )}
+                </div>
                 <input
                   type="text"
                   value={editData.coverImg}
                   onChange={(e) => setEditData(prev => ({ ...prev, coverImg: e.target.value }))}
-                  placeholder="Enter banner image URL"
+                  placeholder="Or enter banner image URL"
                   style={{
                     width: '100%',
-                    padding: '12px',
+                    padding: '8px 12px',
                     border: '1px solid var(--border)',
-                    borderRadius: 8,
+                    borderRadius: 6,
                     background: 'var(--background)',
                     color: 'var(--text)',
                     fontSize: 14
