@@ -84,6 +84,18 @@ export default function UserProfile() {
     coverFile: null
   });
 
+  // Post creation state
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [showPollCreator, setShowPollCreator] = useState(false);
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [newPost, setNewPost] = useState({
+    content: '',
+    image: null,
+    gif: null,
+    poll: null
+  });
+
   const renderProgressBar = (current, max) => {
     const percentage = (current / max) * 100;
     return (
@@ -131,6 +143,43 @@ export default function UserProfile() {
 
   const handleCancelEdit = () => {
     setShowEditModal(false);
+  };
+
+  // Post creation handlers
+  const handlePostImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setNewPost(prev => ({ ...prev, image: e.target.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePostGifChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setNewPost(prev => ({ ...prev, gif: e.target.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddPost = () => {
+    if (newPost.content.trim()) {
+      // Add post to timeline (in a real app, this would save to backend)
+      console.log('New post:', newPost);
+      setNewPost({
+        content: '',
+        image: null,
+        gif: null,
+        poll: null
+      });
+      setShowPostModal(false);
+    }
   };
 
   return (
@@ -200,6 +249,560 @@ export default function UserProfile() {
         </div>
       )}
 
+      {/* Post Modal */}
+      {showPostModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '2rem',
+            maxWidth: 500,
+            width: '90%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Create Post</h3>
+              <button 
+                onClick={() => setShowPostModal(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            {/* User Info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <img 
+                src={profile.avatar} 
+                alt={profile.name} 
+                style={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: '50%', 
+                  objectFit: 'cover' 
+                }} 
+              />
+              <div>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>{profile.name}</div>
+                <button style={{
+                  background: 'var(--background)',
+                  borderRadius: 6,
+                  padding: '4px 8px',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  border: '1px solid var(--border)',
+                  fontSize: 12
+                }}>
+                  🌐 Public ▼
+                </button>
+              </div>
+            </div>
+
+            {/* Post Content */}
+            <textarea
+              value={newPost.content}
+              onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
+              placeholder={`What's on your mind, ${profile.name.split(' ')[0]}?`}
+              style={{
+                width: '100%',
+                minHeight: 120,
+                border: 'none',
+                background: 'transparent',
+                color: 'var(--text)',
+                fontSize: 16,
+                resize: 'none',
+                outline: 'none',
+                fontFamily: 'inherit',
+                marginBottom: 20
+              }}
+            />
+            
+            {/* Post Image Preview */}
+            {newPost.image && (
+              <div style={{ marginBottom: 20, position: 'relative' }}>
+                <img 
+                  src={newPost.image} 
+                  alt="Post preview" 
+                  style={{ 
+                    width: '100%', 
+                    maxHeight: 300, 
+                    borderRadius: 8,
+                    objectFit: 'cover'
+                  }} 
+                />
+                <button 
+                  onClick={() => setNewPost(prev => ({ ...prev, image: null }))}
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    background: 'rgba(0,0,0,0.7)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 32,
+                    height: 32,
+                    color: 'white',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            {/* Post GIF Preview */}
+            {newPost.gif && (
+              <div style={{ marginBottom: 20, position: 'relative' }}>
+                <img 
+                  src={newPost.gif} 
+                  alt="GIF preview" 
+                  style={{ 
+                    width: '100%', 
+                    maxHeight: 300, 
+                    borderRadius: 8,
+                    objectFit: 'cover'
+                  }} 
+                />
+                <button 
+                  onClick={() => setNewPost(prev => ({ ...prev, gif: null }))}
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    background: 'rgba(0,0,0,0.7)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 32,
+                    height: 32,
+                    color: 'white',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            {/* Poll Preview */}
+            {newPost.poll && (
+              <div style={{ 
+                marginBottom: 20, 
+                padding: '16px',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                background: 'var(--background)'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  marginBottom: 12
+                }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>📊 Poll</span>
+                  <button 
+                    onClick={() => setNewPost(prev => ({ ...prev, poll: null }))}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#ff4444',
+                      cursor: 'pointer',
+                      fontSize: 16
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>
+                  {newPost.poll.question}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {newPost.poll.options.map((option, index) => (
+                    <div key={index} style={{
+                      padding: '8px 12px',
+                      border: '1px solid var(--border)',
+                      borderRadius: 6,
+                      fontSize: 14,
+                      color: 'var(--text-secondary)',
+                      background: 'var(--card)'
+                    }}>
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Add to your post section */}
+            <div style={{ 
+              padding: '16px 0',
+              borderTop: '1px solid var(--border)',
+              borderBottom: '1px solid var(--border)',
+              marginBottom: 20
+            }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>
+                Add to your post
+              </div>
+              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                <button 
+                  onClick={() => document.getElementById('user-post-image-upload').click()}
+                  style={{ 
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'var(--background)';
+                    e.target.style.color = 'var(--text)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'none';
+                    e.target.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  <span style={{ color: '#45bd62', fontSize: 18 }}>📷</span>
+                  Photo/Video
+                </button>
+                
+                <button 
+                  onClick={() => document.getElementById('user-post-gif-upload').click()}
+                  style={{ 
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'var(--background)';
+                    e.target.style.color = 'var(--text)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'none';
+                    e.target.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  <span style={{ color: '#1877f2', fontSize: 18 }}>🎬</span>
+                  GIF
+                </button>
+                
+                <button 
+                  onClick={() => setShowPollCreator(true)}
+                  style={{ 
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'var(--background)';
+                    e.target.style.color = 'var(--text)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'none';
+                    e.target.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  <span style={{ color: '#f7b928', fontSize: 18 }}>📊</span>
+                  Poll
+                </button>
+              </div>
+            </div>
+
+            {/* Hidden file inputs */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePostImageChange}
+              style={{ display: 'none' }}
+              id="user-post-image-upload"
+            />
+            <input
+              type="file"
+              accept="image/gif,video/*"
+              onChange={handlePostGifChange}
+              style={{ display: 'none' }}
+              id="user-post-gif-upload"
+            />
+
+            {/* Post Button */}
+            <button
+              onClick={handleAddPost}
+              disabled={!newPost.content.trim()}
+              style={{ 
+                width: '100%',
+                padding: '12px',
+                background: newPost.content.trim() ? 'var(--primary)' : 'var(--border)',
+                color: newPost.content.trim() ? 'white' : 'var(--text-secondary)',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 16,
+                fontWeight: 600,
+                cursor: newPost.content.trim() ? 'pointer' : 'not-allowed'
+              }}
+            >
+              Post
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Poll Creator Modal */}
+      {showPollCreator && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '2rem',
+            maxWidth: 500,
+            width: '90%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Create Poll</h3>
+              <button 
+                onClick={() => setShowPollCreator(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            {/* Poll Question */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Poll Question
+              </label>
+              <input
+                type="text"
+                value={pollQuestion}
+                onChange={(e) => setPollQuestion(e.target.value)}
+                placeholder="Ask a question..."
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  fontSize: 16,
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  outline: 'none'
+                }}
+              />
+            </div>
+            
+            {/* Poll Options */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Poll Options
+              </label>
+              {pollOptions.map((option, index) => (
+                <div key={index} style={{ marginBottom: 12, display: 'flex', gap: 8 }}>
+                  <input
+                    type="text"
+                    value={option}
+                    onChange={(e) => {
+                      const newOptions = [...pollOptions];
+                      newOptions[index] = e.target.value;
+                      setPollOptions(newOptions);
+                    }}
+                    placeholder={`Option ${index + 1}`}
+                    style={{
+                      flex: 1,
+                      padding: '8px 12px',
+                      border: '1px solid var(--border)',
+                      borderRadius: 6,
+                      fontSize: 14,
+                      background: 'var(--background)',
+                      color: 'var(--text)',
+                      outline: 'none'
+                    }}
+                  />
+                  {pollOptions.length > 2 && (
+                    <button
+                      onClick={() => {
+                        const newOptions = pollOptions.filter((_, i) => i !== index);
+                        setPollOptions(newOptions);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#ff4444',
+                        cursor: 'pointer',
+                        padding: '8px',
+                        fontSize: 16
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+              {pollOptions.length < 6 && (
+                <button
+                  onClick={() => setPollOptions([...pollOptions, ''])}
+                  style={{
+                    background: 'none',
+                    border: '1px dashed var(--border)',
+                    color: 'var(--text-secondary)',
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    width: '100%'
+                  }}
+                >
+                  + Add Option
+                </button>
+              )}
+            </div>
+            
+            {/* Action Buttons */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 12, 
+              justifyContent: 'flex-end',
+              marginTop: 20,
+              paddingTop: 20,
+              borderTop: '1px solid var(--border)'
+            }}>
+              <button 
+                onClick={() => setShowPollCreator(false)}
+                style={{
+                  background: 'none',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-secondary)',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  if (pollQuestion.trim() && pollOptions.some(opt => opt.trim())) {
+                    setNewPost(prev => ({ 
+                      ...prev, 
+                      poll: {
+                        question: pollQuestion,
+                        options: pollOptions.filter(opt => opt.trim()),
+                        votes: pollOptions.filter(opt => opt.trim()).map(() => 0)
+                      }
+                    }));
+                    setShowPollCreator(false);
+                    setPollQuestion('');
+                    setPollOptions(['', '']);
+                  }
+                }}
+                disabled={!pollQuestion.trim() || !pollOptions.some(opt => opt.trim())}
+                style={{
+                  background: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'linear-gradient(90deg, var(--primary), var(--pink))' : 'var(--border)',
+                  border: 'none',
+                  color: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'white' : 'var(--text-secondary)',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'pointer' : 'not-allowed'
+                }}
+              >
+                Add Poll
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Cover and Profile Header */}
       <div className="profile-header" style={{ position: 'relative', height: 180, background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${profile.coverPhoto})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 24, marginBottom: 24 }}>
         {/* Avatar and name/username positioned together */}
@@ -215,9 +818,6 @@ export default function UserProfile() {
         <div className="actions" style={{ position: 'absolute', top: 12, right: 24, display: 'flex', gap: 12 }}>
           <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} onClick={handleEditProfile}>
             Edit Profile
-          </button>
-          <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
-            Settings
           </button>
         </div>
       </div>
@@ -299,8 +899,8 @@ export default function UserProfile() {
                 <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
                   <img src={profile.avatar} alt={profile.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
                   <div style={{ flex: 1 }}>
-                    <textarea 
-                      placeholder="What's on your mind? Share your animal sanctuary experiences, donations, or thoughts..."
+                    <div 
+                      onClick={() => setShowPostModal(true)}
                       style={{
                         width: '100%',
                         minHeight: 80,
@@ -309,19 +909,56 @@ export default function UserProfile() {
                         fontSize: 16,
                         resize: 'vertical',
                         outline: 'none',
-                        fontFamily: 'inherit'
+                        fontFamily: 'inherit',
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        padding: '12px 0'
                       }}
-                    />
+                    >
+                      What's on your mind? Share your animal sanctuary experiences, donations, or thoughts...
+                    </div>
                   </div>
                 </div>
                 <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', gap: 12 }}>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} title="Add photo">📸</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} title="Add video">🎥</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} title="Tag animal">🐾</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} title="Add location">📍</button>
+                    <button 
+                      onClick={() => setShowPostModal(true)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
+                      title="Add photo"
+                    >
+                      📸
+                    </button>
+                    <button 
+                      onClick={() => setShowPostModal(true)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
+                      title="Add video"
+                    >
+                      🎥
+                    </button>
+                    <button 
+                      onClick={() => setShowPostModal(true)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
+                      title="Tag animal"
+                    >
+                      🐾
+                    </button>
+                    <button 
+                      onClick={() => setShowPostModal(true)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
+                      title="Add location"
+                    >
+                      📍
+                    </button>
                   </div>
-                  <button className="button" style={{ padding: '8px 20px', fontSize: 14 }}>Post</button>
+                  <button 
+                    onClick={() => setShowPostModal(true)}
+                    className="button" 
+                    style={{ padding: '8px 20px', fontSize: 14 }}
+                  >
+                    Post
+                  </button>
                 </div>
               </div>
               

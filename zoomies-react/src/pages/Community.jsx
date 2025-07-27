@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const SECTIONS = [
   'Animal Care',
@@ -498,7 +499,7 @@ export default function Community() {
                   </h3>
                   
                   <div style={{ color: 'var(--text)', fontSize: 14, marginBottom: 12, opacity: 0.7 }}>
-                    Posted by <strong>u/{post.user}</strong> • {post.time}
+                    Posted by <Link to={`/user/${post.user.toLowerCase()}`} style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>u/{post.user}</Link> • {post.time}
                   </div>
                   
                   <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>

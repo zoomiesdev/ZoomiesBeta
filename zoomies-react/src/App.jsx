@@ -5,6 +5,7 @@ import AmbassadorProfilePage from './pages/AmbassadorProfilePage';
 import AmbassadorProfilePageCopy from './pages/AmbassadorProfilePageCopy';
 import AmbassadorProfilePageOld from './pages/AmbassadorProfilePageOld';
 import EditableAmbassadorProfile from './pages/EditableAmbassadorProfile';
+import SampleUserProfile from './pages/SampleUserProfile';
 import AmbassadorHub from './pages/AmbassadorHub';
 import Home from './pages/Home';
 import Community from './pages/Community';
@@ -28,6 +29,7 @@ function App() {
           <Route path="/ambassadors-copy/:id" element={<AmbassadorProfilePageCopy />} />
           <Route path="/ambassadors-old/:id" element={<AmbassadorProfilePageOld />} />
           <Route path="/edit-ambassador/:id" element={<EditableAmbassadorProfile />} />
+        <Route path="/user/:username" element={<SampleUserProfile />} />
         </Routes>
       </div>
     </Router>
