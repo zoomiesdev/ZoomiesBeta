@@ -89,21 +89,6 @@ export default function AmbassadorHub() {
 
   return (
     <div className="ambassador-hub" style={{ background: 'var(--background)', minHeight: '100vh' }}>
-      {/* Hero Section */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
-        padding: '24px 32px',
-        textAlign: 'center',
-        color: 'var(--white)'
-      }}>
-        <h1 style={{ fontFamily: 'Calistoga, serif', fontWeight: 300, fontSize: 36, marginBottom: 8 }}>
-          Meet Our Ambassador Animals
-        </h1>
-        <p style={{ fontSize: 18, opacity: 0.9, marginBottom: 24 }}>
-          Support these amazing animals and help them thrive in their sanctuaries.
-        </p>
-      </div>
-
       {/* Search and Filter Section */}
       <div className="ambassador-filters" style={{ padding: '32px', maxWidth: 1200, margin: '0 auto' }}>
         {/* View Mode Tabs */}
