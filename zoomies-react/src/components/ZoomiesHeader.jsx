@@ -521,7 +521,7 @@ export default function ZoomiesHeader() {
                   transition: 'background 0.2s',
                   borderBottom: '1px solid var(--border, #eee)'
                 }} onClick={() => setProfileDropdownOpen(false)}>
-                  View Profile
+                  {user.type === 'sanctuary' ? 'View Dashboard' : 'View Profile'}
                 </Link>
                 <button style={{
                   padding: '0.75rem 1.25rem',

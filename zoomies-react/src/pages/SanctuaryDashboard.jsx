@@ -227,8 +227,8 @@ export default function SanctuaryDashboard() {
                       <span style={{ fontSize: 12, padding: '4px 8px', background: 'var(--primary)', color: '#fff', borderRadius: 12 }}>{animal.status}</span>
                     </div>
                     <div className="animal-actions" style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                      <button className="button" style={{ flex: 1, fontSize: 12, padding: '6px 12px' }}>Edit</button>
-                      <button className="button" style={{ flex: 1, fontSize: 12, padding: '6px 12px' }}>View</button>
+                      <Link to={`/edit-ambassador/${animal.name.toLowerCase()}`} className="button" style={{ flex: 1, fontSize: 12, padding: '6px 12px', textDecoration: 'none', textAlign: 'center' }}>Edit</Link>
+                      <Link to={`/ambassadors/${animal.name.toLowerCase()}`} className="button" style={{ flex: 1, fontSize: 12, padding: '6px 12px', textDecoration: 'none', textAlign: 'center' }}>View</Link>
                     </div>
                   </div>
                 ))}
