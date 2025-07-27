@@ -96,6 +96,15 @@ export default function UserProfile() {
     poll: null
   });
 
+  // Color theme editor state
+  const [showColorEditor, setShowColorEditor] = useState(false);
+  const [customColors, setCustomColors] = useState({
+    primary: '#fc97ca',
+    secondary: '#ff69b4',
+    pink: '#fc97ca',
+    accent: '#fc97ca'
+  });
+
   const renderProgressBar = (current, max) => {
     const percentage = (current / max) * 100;
     return (
@@ -180,6 +189,11 @@ export default function UserProfile() {
       });
       setShowPostModal(false);
     }
+  };
+
+  const handleColorChange = (colorType, value) => {
+    setCustomColors(prev => ({ ...prev, [colorType]: value }));
+    document.documentElement.style.setProperty(`--${colorType}`, value);
   };
 
   return (
@@ -803,6 +817,332 @@ export default function UserProfile() {
         </div>
       )}
 
+      {/* Color Editor Modal */}
+      {showColorEditor && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '2rem',
+            maxWidth: 400,
+            width: '90%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Color Theme Editor</h3>
+              <button 
+                onClick={() => setShowColorEditor(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: 20 }}>
+              <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>
+                Experiment with different coral color themes. Changes are temporary and will reset on page refresh.
+              </p>
+            </div>
+
+            {/* Primary Color */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Primary Color
+              </label>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <input
+                  type="color"
+                  value={customColors.primary}
+                  onChange={(e) => handleColorChange('primary', e.target.value)}
+                  style={{
+                    width: 50,
+                    height: 40,
+                    border: 'none',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                <input
+                  type="text"
+                  value={customColors.primary}
+                  onChange={(e) => handleColorChange('primary', e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Secondary Color */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Secondary Color
+              </label>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <input
+                  type="color"
+                  value={customColors.secondary}
+                  onChange={(e) => handleColorChange('secondary', e.target.value)}
+                  style={{
+                    width: 50,
+                    height: 40,
+                    border: 'none',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                <input
+                  type="text"
+                  value={customColors.secondary}
+                  onChange={(e) => handleColorChange('secondary', e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Pink Color */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Pink Color
+              </label>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <input
+                  type="color"
+                  value={customColors.pink}
+                  onChange={(e) => handleColorChange('pink', e.target.value)}
+                  style={{
+                    width: 50,
+                    height: 40,
+                    border: 'none',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                <input
+                  type="text"
+                  value={customColors.pink}
+                  onChange={(e) => handleColorChange('pink', e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Accent Color */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Accent Color
+              </label>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <input
+                  type="color"
+                  value={customColors.accent}
+                  onChange={(e) => handleColorChange('accent', e.target.value)}
+                  style={{
+                    width: 50,
+                    height: 40,
+                    border: 'none',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                <input
+                  type="text"
+                  value={customColors.accent}
+                  onChange={(e) => handleColorChange('accent', e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    background: 'var(--background)',
+                    color: 'var(--text)',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Preset Colors */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Quick Presets
+              </label>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {[
+                  { name: 'Coral', primary: '#fc97ca', secondary: '#ff69b4', pink: '#fc97ca', accent: '#fc97ca' },
+                  { name: 'Rose', primary: '#e91e63', secondary: '#c2185b', pink: '#e91e63', accent: '#e91e63' },
+                  { name: 'Peach', primary: '#ff8a65', secondary: '#ff7043', pink: '#ff8a65', accent: '#ff8a65' },
+                  { name: 'Salmon', primary: '#ff6b6b', secondary: '#ff5252', pink: '#ff6b6b', accent: '#ff6b6b' },
+                  { name: 'Lavender', primary: '#ab47bc', secondary: '#8e24aa', pink: '#ab47bc', accent: '#ab47bc' },
+                  { name: 'Teal', primary: '#26a69a', secondary: '#00897b', pink: '#26a69a', accent: '#26a69a' }
+                ].map((preset, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCustomColors(preset);
+                      Object.entries(preset).forEach(([key, value]) => {
+                        document.documentElement.style.setProperty(`--${key}`, value);
+                      });
+                    }}
+                    style={{
+                      background: preset.primary,
+                      border: 'none',
+                      color: 'white',
+                      padding: '8px 12px',
+                      borderRadius: 6,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'scale(1)';
+                    }}
+                  >
+                    {preset.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 12, 
+              justifyContent: 'flex-end',
+              marginTop: 20,
+              paddingTop: 20,
+              borderTop: '1px solid var(--border)'
+            }}>
+              <button 
+                onClick={() => {
+                  // Reset to default colors
+                  const defaultColors = {
+                    primary: '#fc97ca',
+                    secondary: '#ff69b4',
+                    pink: '#fc97ca',
+                    accent: '#fc97ca'
+                  };
+                  setCustomColors(defaultColors);
+                  Object.entries(defaultColors).forEach(([key, value]) => {
+                    document.documentElement.style.setProperty(`--${key}`, value);
+                  });
+                }}
+                style={{
+                  background: 'none',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-secondary)',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Reset
+              </button>
+              <button 
+                onClick={() => setShowColorEditor(false)}
+                style={{
+                  background: 'var(--primary)',
+                  border: 'none',
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Cover and Profile Header */}
       <div className="profile-header" style={{ position: 'relative', height: 180, background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${profile.coverPhoto})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 24, marginBottom: 24 }}>
         {/* Avatar and name/username positioned together */}
@@ -818,6 +1158,42 @@ export default function UserProfile() {
         <div className="actions" style={{ position: 'absolute', top: 12, right: 24, display: 'flex', gap: 12 }}>
           <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} onClick={handleEditProfile}>
             Edit Profile
+          </button>
+          <button 
+            className="button" 
+            style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              color: '#fff', 
+              border: '1px solid rgba(255,255,255,0.2)',
+              transition: 'all 0.2s'
+            }} 
+            onClick={() => window.open('/sample-user-profile', '_blank')}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.1)';
+            }}
+          >
+            View Profile
+          </button>
+          <button 
+            className="button" 
+            style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              color: '#fff', 
+              border: '1px solid rgba(255,255,255,0.2)',
+              transition: 'all 0.2s'
+            }} 
+            onClick={() => setShowColorEditor(true)}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.1)';
+            }}
+          >
+            🎨 Colors
           </button>
         </div>
       </div>

@@ -1158,7 +1158,31 @@ export default function EditableAmbassadorProfile() {
               transition: 'all 0.2s'
             }}
           >
-            ✏️ Edit Profile
+            Edit Profile
+          </button>
+          <button 
+            onClick={() => window.open('/ambassador-profile', '_blank')}
+            className="button" 
+            style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              color: 'white', 
+              border: '1px solid rgba(255,255,255,0.2)',
+              padding: '8px 16px',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255,255,255,0.1)';
+            }}
+          >
+            View Profile
           </button>
         </div>
       </div>
