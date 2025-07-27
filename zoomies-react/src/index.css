@@ -157,6 +157,15 @@ a:hover {
   .desktop-nav, .desktop-search, .desktop-actions {
     display: none !important;
   }
+  
+  .desktop-nav-icons {
+    display: none !important;
+  }
+  
+  /* Hide search, theme toggle, and login on mobile - they're in the mobile menu */
+  .header-right-actions {
+    display: none !important;
+  }
   .mobile-menu-toggle {
     display: block !important;
   }
