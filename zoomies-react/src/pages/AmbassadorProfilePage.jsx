@@ -258,7 +258,6 @@ export default function AmbassadorProfilePage() {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      background: 'var(--background)',
       paddingTop: 0
     }}>
       {/* Cover Photo */}

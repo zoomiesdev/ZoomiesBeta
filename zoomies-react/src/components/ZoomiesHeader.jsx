@@ -92,17 +92,17 @@ export default function ZoomiesHeader() {
           }} />
           <span style={{ 
             fontFamily: "'VT323', monospace", 
-            fontSize: 24, 
+            fontSize: 28, 
             color: 'var(--primary, #fc97ca)', 
             letterSpacing: 0.1,
-            fontWeight: normal,
+            fontWeight: 'normal',
             display: 'flex',
             alignItems: 'center',
             lineHeight: 1,
             marginTop: '6px',
             textTransform: 'uppercase'
           }}>
-            zoomies
+            ZOOMIES
           </span>
         </div>
 

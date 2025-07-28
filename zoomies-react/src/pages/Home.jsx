@@ -148,8 +148,7 @@ export default function Home() {
       gap: 32,
       maxWidth: 1200,
       margin: '0 auto',
-      padding: '0 1rem',
-      background: 'var(--background)'
+      padding: '0 1rem'
     }}>
       {/* Sidebar */}
       <aside className="home-sidebar" style={{
@@ -232,27 +231,16 @@ export default function Home() {
           top: 0,
           zIndex: 10
         }}>
-          <h1 style={{ 
-            fontFamily: "'Gayo', Calistoga, serif", 
-            fontSize: 25, 
+          <h1 className="pixel-font" style={{ 
+            fontSize: 32, 
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)',
-            fontWeight: 300,
-            fontStyle: 'normal',
+            fontWeight: 'normal',
             letterSpacing: '0.1em'
           }}>
             Give Animals the Zoomies
           </h1>
-          <p style={{ 
-            fontSize: 16, 
-            margin: '0 0 1rem 0', 
-            color: 'var(--text-secondary)',
-            maxWidth: 500,
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}>
-            Empowering animal sanctuaries and uniting animal lovers through joyful fundraising and community.
-          </p>
+
           {/* Community Stats */}
           <div style={{ 
             display: 'grid', 
@@ -260,24 +248,25 @@ export default function Home() {
             gap: 16, 
             marginTop: 16,
             padding: '12px',
-            background: 'var(--card)',
-            borderRadius: 12
+            background: isDark ? '#000' : '#f5f5f5',
+            borderRadius: 12,
+            border: '1px solid var(--accent)'
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--primary)' }}>$45,230</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Raised Today</div>
+              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--primary)' }}>1,247</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Animals Helped</div>
+              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--primary)' }}>8,934</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Supporters</div>
+              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--primary)' }}>156</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Sanctuaries</div>
+              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
             </div>
           </div>
         </div>

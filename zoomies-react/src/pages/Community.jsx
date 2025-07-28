@@ -72,7 +72,6 @@ export default function Community() {
     <div className="community-root" style={{ 
       display: 'flex', 
       minHeight: '100vh', 
-      background: 'var(--background)',
       overflowX: 'hidden'
     }}>
       {/* Left Sidebar */}

@@ -67,6 +67,27 @@ body {
   min-height: 100vh;
 }
 
+/* TV Line Effect Background */
+.tv-line-background {
+  background: 
+    linear-gradient(90deg, transparent 0%, transparent 49%, rgba(0,0,0,0.02) 50%, transparent 51%, transparent 100%),
+    linear-gradient(0deg, transparent 0%, transparent 49%, rgba(0,0,0,0.02) 50%, transparent 51%, transparent 100%);
+  background-size: 2px 2px, 2px 2px;
+  background-position: 0 0, 0 0;
+}
+
+/* Alternative TV line effect with horizontal stripes only */
+.tv-stripes-background {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0,0,0,0.03) 1px,
+      rgba(0,0,0,0.03) 2px
+    );
+}
+
 /* VT323 Pixel Font Classes */
 .pixel-font {
   font-family: 'VT323', monospace;
@@ -86,6 +107,13 @@ body {
   letter-spacing: 0.1em;
   font-weight: normal;
   text-transform: uppercase;
+}
+
+/* Override button font for pixel-font class */
+.button.pixel-font {
+  font-family: 'VT323', monospace !important;
+  letter-spacing: 0.05em;
+  font-weight: normal;
 }
 nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions, .tabs, .content, .card, .gallery, .status, .profile-info, .ambassador-profile, .photo-grid, .menu, .menu-item {
   font-family: 'Poppins', Arial, sans-serif;

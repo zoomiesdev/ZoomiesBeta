@@ -83,8 +83,7 @@ export default function Premium() {
     <div className="premium-page" style={{ 
       maxWidth: 1200, 
       margin: '0 auto', 
-      padding: '2rem 1rem',
-      background: 'var(--background)'
+      padding: '2rem 1rem'
     }}>
       {/* Donation Fees Section */}
       <div className="donation-fees-section" style={{ 

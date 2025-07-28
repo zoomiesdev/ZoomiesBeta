@@ -16,7 +16,7 @@ import Premium from './pages/Premium';
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--text)' }}>
+      <div className="tv-stripes-background" style={{ minHeight: '100vh', color: 'var(--text)' }}>
         <ZoomiesHeader />
         <Routes>
           <Route path="/" element={<Home />} />
