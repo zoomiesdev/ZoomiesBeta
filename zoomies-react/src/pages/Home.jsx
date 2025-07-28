@@ -234,7 +234,7 @@ export default function Home() {
         }}>
           <h1 style={{ 
             fontFamily: "'Gayo', Calistoga, serif", 
-            fontSize: 30, 
+            fontSize: 25, 
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)',
             fontWeight: 300,

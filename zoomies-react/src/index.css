@@ -118,11 +118,16 @@ a:hover {
     padding: 1.2rem 0.5rem !important;
   }
   .home-hero h1, section h1 {
-    font-size: 2rem !important;
+    font-size: 1.5rem !important;
   }
   .home-hero p, section p {
     font-size: 1rem !important;
     margin-bottom: 1rem !important;
+  }
+  /* Specific rules for Gayo font headers */
+  h1[style*="fontFamily: 'Gayo'"], h2[style*="fontFamily: 'Gayo'"] {
+    font-size: 1.2rem !important;
+    letter-spacing: 0.05em !important;
   }
   .button {
     width: 100%;

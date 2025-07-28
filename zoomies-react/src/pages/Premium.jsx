@@ -99,7 +99,7 @@ export default function Premium() {
           textAlign: 'center', 
           marginBottom: '1.5rem',
           fontFamily: "'Gayo', Calistoga, serif", 
-          fontSize: '2rem', 
+          fontSize: '1.5rem', 
           color: 'var(--primary)',
           position: 'relative',
           zIndex: 1,
@@ -371,11 +371,11 @@ export default function Premium() {
       <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '4rem' }}>
         <h1 style={{ 
           fontFamily: "'Gayo', Calistoga, serif", 
-          fontSize: '2rem', 
+          fontSize: '1.5rem', 
           color: 'var(--primary)', 
           marginBottom: '1rem',
           textAlign: 'center',
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: '0.05em'
         }}>
           Choose Your Plan
