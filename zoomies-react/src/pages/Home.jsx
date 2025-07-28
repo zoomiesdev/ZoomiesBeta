@@ -281,6 +281,94 @@ export default function Home() {
 
         {/* Feed Posts */}
         <div className="home-feed" style={{ padding: '0.5rem 1rem' }}>
+          {/* Post Creation Widget */}
+          <div style={{ 
+            background: 'var(--card)', 
+            borderRadius: 12, 
+            padding: '16px', 
+            marginBottom: 16,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+              <div style={{ 
+                width: 40, 
+                height: 40, 
+                borderRadius: '50%', 
+                background: 'var(--gray)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text-secondary)',
+                fontSize: 16
+              }}>
+                👤
+              </div>
+              <input
+                type="text"
+                placeholder="Login to post..."
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  borderRadius: 20,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 14,
+                  outline: 'none'
+                }}
+                disabled
+              />
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-around',
+              borderTop: '1px solid var(--border)',
+              paddingTop: 12
+            }}>
+              <button style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8,
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                fontSize: 14,
+                cursor: 'pointer',
+                padding: '8px 12px',
+                borderRadius: 8
+              }}>
+                📷 Photo/video
+              </button>
+              <button style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8,
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                fontSize: 14,
+                cursor: 'pointer',
+                padding: '8px 12px',
+                borderRadius: 8
+              }}>
+                🎬 GIF
+              </button>
+              <button style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8,
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                fontSize: 14,
+                cursor: 'pointer',
+                padding: '8px 12px',
+                borderRadius: 8
+              }}>
+                📊 Poll
+              </button>
+            </div>
+          </div>
           {FEED_POSTS.map(post => (
             <div key={post.id} style={{ 
               background: 'var(--card)', 

@@ -29,10 +29,10 @@ const RECENT_COMMUNITIES = [
 ];
 
 const TRENDING_POSTS = [
-  { id: 1, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', image: 'https://placehold.co/300x200?text=Ducklings', upvotes: 15, source: 'r/RescueHeroes' },
-  { id: 2, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', image: 'https://placehold.co/300x200?text=Goats', upvotes: 20, source: 'r/SanctuaryLife' },
-  { id: 3, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', image: 'https://placehold.co/300x200?text=Cat+Box', upvotes: 8, source: 'r/PetPics' },
-  { id: 4, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', image: 'https://placehold.co/300x200?text=Kittens', upvotes: 18, source: 'r/AnimalCare' },
+  { id: 1, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', image: 'https://i.imgur.com/1LD5mHH.jpeg', upvotes: 15, source: 'r/RescueHeroes' },
+  { id: 2, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', image: 'https://i.imgur.com/1Gh6zcQ.jpeg', upvotes: 20, source: 'r/SanctuaryLife' },
+  { id: 3, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', image: 'https://i.imgur.com/YeLIvnw.jpeg', upvotes: 8, source: 'r/PetPics' },
+  { id: 4, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', image: 'https://i.imgur.com/OH2ORCK.jpeg', upvotes: 18, source: 'r/AnimalCare' },
   { id: 5, section: 'Training Tips', title: 'Teaching my dog to sit properly', user: 'Alex', time: '6h ago', image: 'https://placehold.co/300x200?text=Dog+Training', upvotes: 9, source: 'r/TrainingTips' },
 ];
 
