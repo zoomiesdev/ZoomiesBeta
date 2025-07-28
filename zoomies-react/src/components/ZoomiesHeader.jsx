@@ -91,11 +91,11 @@ export default function ZoomiesHeader() {
             objectFit: 'cover'
           }} />
           <span style={{ 
-            fontFamily: 'Calistoga, serif', 
+            fontFamily: "'Dunkin', Calistoga, serif", 
             fontSize: 20, 
             color: 'var(--primary, #fc97ca)', 
             letterSpacing: 0.5,
-            fontWeight: 600
+            fontWeight: 200
           }}>
             Zoomies
           </span>

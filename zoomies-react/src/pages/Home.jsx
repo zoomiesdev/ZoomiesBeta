@@ -233,10 +233,11 @@ export default function Home() {
           zIndex: 10
         }}>
           <h1 style={{ 
-            fontFamily: 'Calistoga, serif', 
+            fontFamily: "'Dunkin', Calistoga, serif", 
             fontSize: 32, 
             margin: '0 0 0.5rem 0', 
-            color: 'var(--primary)'
+            color: 'var(--primary)',
+            fontWeight: 300
           }}>
             Giving Animals the Zoomies
           </h1>
@@ -555,4 +556,4 @@ export default function Home() {
       </main>
     </div>
   );
-} 
+}
