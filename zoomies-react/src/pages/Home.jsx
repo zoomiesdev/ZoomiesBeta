@@ -233,13 +233,15 @@ export default function Home() {
           zIndex: 10
         }}>
           <h1 style={{ 
-            fontFamily: "'Dunkin', Calistoga, serif", 
-            fontSize: 32, 
+            fontFamily: "'Gayo', Calistoga, serif", 
+            fontSize: 30, 
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)',
-            fontWeight: 300
+            fontWeight: 300,
+            fontStyle: 'normal',
+            letterSpacing: '0.1em'
           }}>
-            Giving Animals the Zoomies
+            Give Animals the Zoomies
           </h1>
           <p style={{ 
             fontSize: 16, 

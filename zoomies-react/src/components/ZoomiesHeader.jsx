@@ -86,16 +86,20 @@ export default function ZoomiesHeader() {
         {/* Left side: Logo and Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src={isDark ? logoWhite : logoBlack} alt="Zoomies Logo" style={{ 
-            width: 40, 
-            height: 43, 
+            width: 44, 
+            height: 47, 
             objectFit: 'cover'
           }} />
           <span style={{ 
-            fontFamily: "'Dunkin', Calistoga, serif", 
-            fontSize: 20, 
+            fontFamily: "'Gayo', Calistoga, serif", 
+            fontSize: 17, 
             color: 'var(--primary, #fc97ca)', 
             letterSpacing: 0.5,
-            fontWeight: 200
+            fontWeight: 200,
+            display: 'flex',
+            alignItems: 'center',
+            lineHeight: 4,
+            marginTop: '6px'
           }}>
             Zoomies
           </span>

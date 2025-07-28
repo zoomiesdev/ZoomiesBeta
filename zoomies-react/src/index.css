@@ -7,6 +7,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Gayo';
+  src: url('./assets/gayo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Ensure proper viewport scaling */
 html {
   font-size: 16px;

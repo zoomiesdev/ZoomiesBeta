@@ -98,12 +98,13 @@ export default function Premium() {
         <h2 style={{ 
           textAlign: 'center', 
           marginBottom: '1.5rem',
-          fontFamily: "'Dunkin', Calistoga, serif", 
+          fontFamily: "'Gayo', Calistoga, serif", 
           fontSize: '2rem', 
           color: 'var(--primary)',
           position: 'relative',
           zIndex: 1,
-          fontWeight: 300
+          fontWeight: 300,
+          letterSpacing: '0.08em'
         }}>
           Understanding Donation Fees
         </h2>
@@ -369,12 +370,13 @@ export default function Premium() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '4rem' }}>
         <h1 style={{ 
-          fontFamily: "'Dunkin', Calistoga, serif", 
+          fontFamily: "'Gayo', Calistoga, serif", 
           fontSize: '2rem', 
           color: 'var(--primary)', 
           marginBottom: '1rem',
           textAlign: 'center',
-          fontWeight: 300
+          fontWeight: 300,
+          letterSpacing: '0.05em'
         }}>
           Choose Your Plan
         </h1>
