@@ -16,7 +16,7 @@ const ANIMALS = {
     coverImg: StompyBanner,
     donation: { raised: 815, goal: 2000 },
     featured: true,
-    story: 'Stompy loves headbutts and to climb and explore!',
+    story: 'Stompy loves to climb and explore!',
     followers: 1247
   },
   luna: {
