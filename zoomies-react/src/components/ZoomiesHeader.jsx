@@ -92,7 +92,7 @@ export default function ZoomiesHeader() {
           }} />
           <span style={{ 
             fontFamily: "'Gayo', Calistoga, serif", 
-            fontSize: 17, 
+            fontSize: 19, 
             color: 'var(--primary, #fc97ca)', 
             letterSpacing: 0.5,
             fontWeight: 200,
@@ -101,7 +101,7 @@ export default function ZoomiesHeader() {
             lineHeight: 4,
             marginTop: '6px'
           }}>
-            Zoomies
+            zoomies
           </span>
         </div>
 
