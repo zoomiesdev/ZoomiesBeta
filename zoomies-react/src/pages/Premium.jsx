@@ -369,59 +369,84 @@ export default function Premium() {
       <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '4rem' }}>
         <h1 style={{ 
           fontFamily: 'Calistoga, serif', 
-          fontSize: '2.5rem', 
+          fontSize: '2rem', 
           color: 'var(--primary)', 
-          marginBottom: '1rem' 
+          marginBottom: '1rem',
+          textAlign: 'center'
         }}>
           Choose Your Plan
         </h1>
         <p style={{ 
-          fontSize: '1.2rem', 
-          color: 'var(--text-secondary)', 
-          marginBottom: '2rem' 
+          fontSize: '1rem', 
+          color: 'var(--text)', 
+          marginBottom: '2rem',
+          textAlign: 'center',
+          opacity: 0.8
         }}>
           Support animal sanctuaries and join our community with the perfect plan for you.
         </p>
         
         {/* User Type Toggle */}
-        <div className="user-type-toggle" style={{ 
+        <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 
-          gap: '1rem', 
-          marginBottom: '2rem' 
+          alignItems: 'center', 
+          gap: '1.5rem',
+          marginBottom: '2.5rem',
+          flexWrap: 'wrap',
+          position: 'relative',
+          zIndex: 1
         }}>
-          <button 
-            style={{ 
-              padding: '0.75rem 1.5rem',
-              border: '2px solid var(--primary)',
-              background: selectedUserType === 'sanctuaries' ? 'var(--primary)' : 'transparent',
-              color: selectedUserType === 'sanctuaries' ? 'var(--white)' : 'var(--primary)',
-              borderRadius: '25px',
-              cursor: 'pointer',
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+            padding: '0.75rem 1.5rem',
+            background: 'rgba(252, 151, 202, 0.1)',
+            borderRadius: '25px',
+            border: '1px solid rgba(252, 151, 202, 0.2)'
+          }}>
+            <span style={{ 
+              color: selectedUserType === 'sanctuaries' ? 'var(--primary)' : 'var(--text)', 
+              fontWeight: 600,
               fontSize: '1rem',
-              fontWeight: '600',
-              transition: 'all 0.2s'
-            }}
-            onClick={() => setSelectedUserType('sanctuaries')}
-          >
-            🏠 Sanctuaries
-          </button>
-          <button 
-            style={{ 
-              padding: '0.75rem 1.5rem',
-              border: '2px solid var(--primary)',
-              background: selectedUserType === 'community' ? 'var(--primary)' : 'transparent',
-              color: selectedUserType === 'community' ? 'var(--white)' : 'var(--primary)',
-              borderRadius: '25px',
+              opacity: selectedUserType === 'sanctuaries' ? 1 : 0.6,
+              transition: 'all 0.3s ease'
+            }}>
+              Sanctuaries
+            </span>
+            <div style={{
+              position: 'relative',
+              width: 60,
+              height: 30,
+              background: selectedUserType === 'sanctuaries' ? 'var(--primary)' : 'var(--gray)',
+              borderRadius: 15,
               cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: selectedUserType === 'sanctuaries' ? '0 4px 12px rgba(252, 151, 202, 0.4)' : '0 2px 4px rgba(0,0,0,0.1)'
+            }} onClick={() => setSelectedUserType(selectedUserType === 'sanctuaries' ? 'community' : 'sanctuaries')}>
+              <div style={{
+                position: 'absolute',
+                top: 3,
+                left: selectedUserType === 'sanctuaries' ? 3 : 33,
+                width: 24,
+                height: 24,
+                background: '#fff',
+                borderRadius: '50%',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }} />
+            </div>
+            <span style={{ 
+              color: selectedUserType === 'community' ? 'var(--primary)' : 'var(--text)', 
+              fontWeight: 600,
               fontSize: '1rem',
-              fontWeight: '600',
-              transition: 'all 0.2s'
-            }}
-            onClick={() => setSelectedUserType('community')}
-          >
-            👥 Community
-          </button>
+              opacity: selectedUserType === 'community' ? 1 : 0.6,
+              transition: 'all 0.3s ease'
+            }}>
+              Community
+            </span>
+          </div>
         </div>
       </div>
 
@@ -435,12 +460,11 @@ export default function Premium() {
       }}>
         {(selectedUserType === 'sanctuaries' ? sanctuaryTiers : communityTiers).map((tier, index) => (
           <div key={index} className="pricing-card" style={{
-            background: 'var(--card)',
-            borderRadius: '20px',
-            padding: '2rem',
-            border: tier.popular ? '3px solid var(--primary)' : '1px solid var(--gray)',
-            position: 'relative',
-            boxShadow: tier.popular ? '0 8px 32px rgba(252, 151, 202, 0.2)' : '0 4px 16px rgba(0,0,0,0.1)'
+            background: 'rgba(252, 151, 202, 0.05)',
+            borderRadius: '16px',
+            padding: '1.5rem',
+            border: tier.popular ? '2px solid var(--primary)' : '1px solid rgba(252, 151, 202, 0.1)',
+            position: 'relative'
           }}>
             {tier.popular && (
               <div style={{
