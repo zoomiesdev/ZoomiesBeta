@@ -227,7 +227,7 @@ export default function Community() {
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: '32px', minWidth: 0, marginLeft: 280 }}>
+      <div style={{ flex: 1, padding: '32px 24px', minWidth: 0, marginLeft: 280 }}>
         {/* Mobile Category Bar */}
         <div className="category-bar" style={{
           display: 'none',
@@ -309,7 +309,7 @@ export default function Community() {
             </span>
           </div>
         </div>
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div>
           {/* Trending Posts Scroll */}
           <div style={{ marginBottom: 32, position: 'relative' }}>
             <div className="trending-scroll" style={{ 

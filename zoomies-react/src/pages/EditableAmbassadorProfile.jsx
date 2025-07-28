@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import StompyBanner from '../assets/StompyBanner.png';
+import StompyProfilePic from '../assets//StompyProfilePic.png';
+import LunaBanner from '../assets/LunaBanner.png';
+import LunaProfilePic from '../assets/LunaProfilePic.png';
 
 // Sample data for the ambassador
 const animal = {
-    name: 'Stompy the Goat',
-    species: 'Goat',
-    sanctuary: 'Alveus Sanctuary',
-    profileImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=100&h=100&fit=crop&crop=center',
-  coverImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=400&fit=crop&crop=center',
-  about: 'Hi I\'m Stompy and I\'m a goat who loves headbutts and snacks. I was rescued from a difficult situation and now I live happily at Alveus Sanctuary where I get all the love and care I need.',
+  name: 'Stompy the Goat',
+  species: 'Goat',
+  sanctuary: 'Alveus Sanctuary',
+  profileImg: StompyProfilePic,
+  coverImg: StompyBanner,
+  about: "Hi I'm Stompy and I'm a goat who loves headbutts and snacks. I was rescued from a difficult situation and now I live happily at Alveus Sanctuary where I get all the love and care I need.",
   joined: 'August 2023',
   donation: {
     raised: 815,
     goal: 2000
   },
-    supporters: [
-      { name: 'Pawfect Coffee Co.', amount: 2000 },
-      { name: 'Linda S.', amount: 1500 },
+  supporters: [
+    { name: 'Pawfect Coffee Co.', amount: 2000 },
+    { name: 'Linda S.', amount: 1500 },
     { name: 'CryptoCat DAO', amount: 1250 }
   ],
-    gallery: [
+  gallery: [
     'https://placehold.co/300x300?text=Stompy+1',
     'https://placehold.co/300x300?text=Stompy+2',
     'https://placehold.co/300x300?text=Stompy+3',
@@ -29,9 +33,9 @@ const animal = {
     'https://placehold.co/300x300?text=Stompy+7',
     'https://placehold.co/300x300?text=Stompy+8',
     'https://placehold.co/300x300?text=Stompy+9'
-    ],
-    comments: [
-    { user: 'Clara', text: 'Stunned by Stompy\'s beauty! ♥' },
+  ],
+  comments: [
+    { user: 'Clara', text: "Stunned by Stompy's beauty! ♥" },
     { user: 'James', text: '👑 1 ♥' },
     { user: 'Emily', text: 'You go, Stomp!' }
   ]

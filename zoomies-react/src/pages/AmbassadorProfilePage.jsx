@@ -1,40 +1,185 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import StompyBanner from '../assets/StompyBanner.png';
+import StompyProfilePic from '../assets/StompyProfilePic.png';
+import LunaBanner from '../assets/LunaBanner.png';
+import LunaProfilePic from '../assets/LunaProfilePic.png';
+import MaxBanner from '../assets/MaxBanner.png';
+import MaxProfilePic from '../assets/MaxProfilePic.png';
 
-// Sample data for the ambassador
-const animal = {
+const ANIMALS = {
+  stompy: {
     name: 'Stompy the Goat',
     species: 'Goat',
     sanctuary: 'Alveus Sanctuary',
-  profileImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=100&h=100&fit=crop&crop=center',
-  coverImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=400&fit=crop&crop=center',
-  about: 'Hi I\'m Stompy and I\'m a goat who loves headbutts and snacks. I was rescued from a difficult situation and now I live happily at Alveus Sanctuary where I get all the love and care I need.',
+    profileImg: StompyProfilePic,
+    coverImg: StompyBanner,
+    about: "Hi I'm Stompy and I'm a goat who loves headbutts and snacks. I was rescued from a difficult situation and now I live happily at Alveus Sanctuary where I get all the love and care I need.",
     joined: 'August 2023',
-  donation: {
-    raised: 815,
-    goal: 2000
-  },
-  supporters: [
-    { name: 'Pawfect Coffee Co.', amount: 2000 },
-    { name: 'Linda S.', amount: 1500 },
-    { name: 'CryptoCat DAO', amount: 1250 }
-  ],
+    donation: { raised: 815, goal: 2000 },
+    supporters: [
+      { name: 'Pawfect Coffee Co.', amount: 2000 },
+      { name: 'Linda S.', amount: 1500 },
+      { name: 'CryptoCat DAO', amount: 1250 }
+    ],
     gallery: [
-    'https://placehold.co/300x300?text=Stompy+1',
-    'https://placehold.co/300x300?text=Stompy+2',
-    'https://placehold.co/300x300?text=Stompy+3',
-    'https://placehold.co/300x300?text=Stompy+4',
-    'https://placehold.co/300x300?text=Stompy+5',
-    'https://placehold.co/300x300?text=Stompy+6',
-    'https://placehold.co/300x300?text=Stompy+7',
-    'https://placehold.co/300x300?text=Stompy+8',
-    'https://placehold.co/300x300?text=Stompy+9'
+      'https://placehold.co/300x300?text=Stompy+1',
+      'https://placehold.co/300x300?text=Stompy+2',
+      'https://placehold.co/300x300?text=Stompy+3',
+      'https://placehold.co/300x300?text=Stompy+4',
+      'https://placehold.co/300x300?text=Stompy+5',
+      'https://placehold.co/300x300?text=Stompy+6',
+      'https://placehold.co/300x300?text=Stompy+7',
+      'https://placehold.co/300x300?text=Stompy+8',
+      'https://placehold.co/300x300?text=Stompy+9'
     ],
     comments: [
-      { user: 'Clara', text: 'Stunned by Stompy\'s beauty! ♥' },
+      { user: 'Clara', text: "Stunned by Stompy's beauty! ♥" },
       { user: 'James', text: '👑 1 ♥' },
-    { user: 'Emily', text: 'You go, Stomp!' }
-  ]
+      { user: 'Emily', text: 'You go, Stomp!' }
+    ],
+    timelinePosts: [
+      {
+        id: 1,
+        user: 'Stompy the Goat',
+        avatar: StompyProfilePic,
+        date: '2 hours ago',
+        content: 'Just had a big bowl of insects — thanks Name for the $25 treat!',
+        reactions: { like: 12, love: 8, laugh: 3 },
+        comments: [
+          { user: 'Clara', text: 'So cute! ♥' },
+          { user: 'James', text: 'Love seeing you happy!' }
+        ]
+      },
+      {
+        id: 2,
+        user: 'Stompy the Goat',
+        avatar: StompyProfilePic,
+        date: '5 hours ago',
+        content: 'Thanks Name for the $255 donation yabababadaddboooo',
+        reactions: { like: 15, love: 12, laugh: 2 },
+        comments: [
+          { user: 'Emily', text: 'You deserve it!' }
+        ]
+      }
+    ]
+  },
+  luna: {
+    name: 'Luna the Cow',
+    species: 'Cow',
+    sanctuary: 'Gentle Barn',
+    profileImg: LunaProfilePic,
+    coverImg: LunaBanner,
+    about: "Luna is the gentlest soul you'll ever meet.",
+    joined: 'May 2022',
+    donation: { raised: 1200, goal: 2500 },
+    supporters: [
+      { name: 'Gentle Friends', amount: 900 },
+      { name: 'Moo Crew', amount: 600 },
+      { name: 'Linda S.', amount: 400 }
+    ],
+    gallery: [
+      'https://placehold.co/300x300?text=Luna+1',
+      'https://placehold.co/300x300?text=Luna+2',
+      'https://placehold.co/300x300?text=Luna+3'
+    ],
+    comments: [
+      { user: 'Sam', text: "Luna is so sweet!" },
+      { user: 'Jess', text: 'Love her story!' }
+    ],
+    timelinePosts: [
+      {
+        id: 1,
+        user: 'Luna the Cow',
+        avatar: LunaProfilePic,
+        date: '1 hour ago',
+        content: 'Enjoyed a sunny nap in the pasture today! 🌞',
+        reactions: { like: 10, love: 7, laugh: 1 },
+        comments: [
+          { user: 'Jess', text: 'So peaceful!' }
+        ]
+      },
+      {
+        id: 2,
+        user: 'Luna the Cow',
+        avatar: LunaProfilePic,
+        date: '3 hours ago',
+        content: 'Thank you to the Moo Crew for the fresh hay!',
+        reactions: { like: 8, love: 5, laugh: 0 },
+        comments: [
+          { user: 'Sam', text: 'Yay Luna!' }
+        ]
+      }
+    ]
+  },
+  bella: {
+    name: 'Bella the Pig',
+    species: 'Pig',
+    sanctuary: 'Sunny Acres',
+    profileImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=100&h=100&fit=crop&crop=center',
+    coverImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=200&fit=crop&crop=center',
+    about: 'Bella loves belly rubs and mud baths!',
+    joined: 'March 2021',
+    donation: { raised: 600, goal: 1800 },
+    supporters: [
+      { name: 'Piggy Pals', amount: 300 },
+      { name: 'Sunny Acres', amount: 200 }
+    ],
+    gallery: [
+      'https://placehold.co/300x300?text=Bella+1',
+      'https://placehold.co/300x300?text=Bella+2'
+    ],
+    comments: [
+      { user: 'Alex', text: 'Bella is adorable!' }
+    ],
+    timelinePosts: [
+      {
+        id: 1,
+        user: 'Bella the Pig',
+        avatar: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=100&h=100&fit=crop&crop=center',
+        date: '4 hours ago',
+        content: 'Had the best mud bath ever today! 🐷',
+        reactions: { like: 6, love: 3, laugh: 2 },
+        comments: [
+          { user: 'Alex', text: 'Living the dream!' }
+        ]
+      }
+    ]
+  },
+  max: {
+    name: 'Max the Horse',
+    species: 'Horse',
+    sanctuary: 'Freedom Reins',
+    profileImg: MaxProfilePic,
+    coverImg: MaxBanner,
+    about: 'Max is a retired racehorse who loves carrots.',
+    joined: 'July 2020',
+    donation: { raised: 2000, goal: 3000 },
+    supporters: [
+      { name: 'Horse Heroes', amount: 1200 },
+      { name: 'Freedom Reins', amount: 800 }
+    ],
+    gallery: [
+      'https://placehold.co/300x300?text=Max+1',
+      'https://placehold.co/300x300?text=Max+2'
+    ],
+    comments: [
+      { user: 'Taylor', text: 'Max is a champ!' }
+    ],
+    timelinePosts: [
+      {
+        id: 1,
+        user: 'Max the Horse',
+        avatar: MaxProfilePic,
+        date: '6 hours ago',
+        content: 'Went for a gallop and got extra carrots! 🥕',
+        reactions: { like: 9, love: 4, laugh: 1 },
+        comments: [
+          { user: 'Taylor', text: 'Go Max!' }
+        ]
+      }
+    ]
+  }
 };
 
 const animalStats = {
@@ -49,33 +194,9 @@ const animalStats = {
   needs: ['Medical checkup', 'New toys', 'Special diet']
 };
 
-const timelinePosts = [
-  {
-    id: 1,
-    user: animal.name,
-    avatar: animal.profileImg,
-    date: '2 hours ago',
-    content: 'Just had a big bowl of insects — thanks Name for the $25 treat!',
-    reactions: { like: 12, love: 8, laugh: 3 },
-    comments: [
-      { user: 'Clara', text: 'So cute! ♥' },
-      { user: 'James', text: 'Love seeing you happy!' }
-    ]
-  },
-  {
-    id: 2,
-    user: animal.name,
-    avatar: animal.profileImg,
-    date: '5 hours ago',
-    content: 'Thanks Name for the $255 donation yabababadaddboooo',
-    reactions: { like: 15, love: 12, laugh: 2 },
-    comments: [
-      { user: 'Emily', text: 'You deserve it!' }
-    ]
-  }
-];
-
 export default function AmbassadorProfilePage() {
+  const { id } = useParams();
+  const animal = ANIMALS[id];
   const [activeTab, setActiveTab] = useState('timeline');
   const [isDark, setIsDark] = useState(false);
   const [reactions, setReactions] = useState({});
@@ -108,13 +229,31 @@ export default function AmbassadorProfilePage() {
 
   const handleAddComment = (postIdx) => {
     if (commentInputs[postIdx]?.trim()) {
-      timelinePosts[postIdx].comments.push({
+      animal.timelinePosts[postIdx].comments.push({
         user: 'You',
         text: commentInputs[postIdx]
       });
       setCommentInputs(prev => ({ ...prev, [postIdx]: '' }));
     }
   };
+
+  if (!animal) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'var(--background)',
+        paddingTop: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'var(--text)'
+      }}>
+        <h1>Animal Not Found</h1>
+        <p>The animal with ID "{id}" does not exist.</p>
+        <Link to="/">Back to Home</Link>
+      </div>
+    );
+  }
 
   return (
     <div style={{ 
@@ -309,7 +448,7 @@ export default function AmbassadorProfilePage() {
               </div>
 
               {/* Timeline Posts */}
-              {timelinePosts.map((post, idx) => (
+              {animal.timelinePosts.map((post, idx) => (
                 <div key={post.id} style={{ 
                   background: 'var(--card)', 
                   borderRadius: 16, 

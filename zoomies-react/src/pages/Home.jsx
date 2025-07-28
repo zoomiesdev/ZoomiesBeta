@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import MaxProfilePic from '../assets/MaxProfilePic.png';
+import MaxBanner from '../assets/MaxBanner.png';
+import StompyProfilePic from '../assets/StompyProfilePic.png';
+import StompyBanner from '../assets/StompyBanner.png';
+import LunaProfilePic from '../assets/LunaProfilePic.png';
+import LunaBanner from '../assets/LunaBanner.png';
 
 // Mock data for feed posts
 const FEED_POSTS = [
@@ -7,8 +13,8 @@ const FEED_POSTS = [
     id: 1,
     user: 'Clara',
     avatar: 'https://placehold.co/40x40?text=C',
-    content: 'Just donated $50 to help Stompy get his medical treatment! 🐐💕',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+    content: 'Visited Bella the Pig today! She was so funny in her ball pit! 🐷💕',
+    image: 'https://i.imgur.com/g1ayW9C.mp4',
     likes: 124,
     comments: 23,
     time: '2m ago',
@@ -19,7 +25,7 @@ const FEED_POSTS = [
     user: 'Alveus Sanctuary',
     avatar: 'https://placehold.co/40x40?text=A',
     content: 'Stompy had a great day today! He loves headbutts and to climb and explore! 🐐✨',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+    image: 'https://i.imgur.com/kSanFdP.jpeg',
     likes: 892,
     comments: 156,
     time: '1h ago',
@@ -41,7 +47,7 @@ const FEED_POSTS = [
     user: 'Gentle Barn',
     avatar: 'https://placehold.co/40x40?text=G',
     content: 'Luna is recovering well from her surgery. Thank you to everyone who donated! 🐄💖',
-    image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=300&fit=crop&crop=center',
+    image: 'https://i.imgur.com/cfdoymN.jpeg',
     likes: 445,
     comments: 89,
     time: '5h ago',
@@ -64,7 +70,7 @@ const URGENT_CAMPAIGNS = [
     name: 'Stompy',
     species: 'Goat',
     sanctuary: 'Alveus Sanctuary',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=200&fit=crop&crop=center',
+    image: StompyProfilePic,
     raised: 815,
     goal: 2000,
     urgency: 'Medical treatment needed',
@@ -76,7 +82,7 @@ const URGENT_CAMPAIGNS = [
     name: 'Luna',
     species: 'Cow',
     sanctuary: 'Gentle Barn',
-    image: 'https://picsum.photos/200/200?random=1',
+    image: LunaProfilePic,
     raised: 1200,
     goal: 2500,
     urgency: 'Surgery required',
@@ -129,10 +135,10 @@ export default function Home() {
     { name: 'Sanctuary Life', avatar: 'https://placehold.co/40x40?text=SL', members: 950 }
   ];
   const trendingContent = [
-    { id: 'stompy', name: 'Stompy', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=100&h=100&fit=crop&crop=center', likes: 1247 },
-    { id: 'luna', name: 'Luna', image: 'https://picsum.photos/100/100?random=1', likes: 892 },
-    { id: 'bella', name: 'Bella', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=100&h=100&fit=crop&crop=center', likes: 456 },
-    { id: 'max', name: 'Max', image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=100&h=100&fit=crop&crop=center', likes: 2034 }
+    { id: 'stompy', name: 'Stompy', image: StompyProfilePic, likes: 1247 },
+    { id: 'luna', name: 'Luna', image: LunaProfilePic, likes: 892 },
+    { id: 'bella', name: 'Bella', image: 'https://i.imgur.com/FmUAOsH.jpeg', likes: 456 },
+    { id: 'max', name: 'Max', image: MaxProfilePic, likes: 2034 }
   ];
 
   return (

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import StompyBanner from '../assets/StompyBanner.png';
+import StompyProfilePic from '../assets/StompyProfilePic.png';
+import LunaBanner from '../assets/LunaBanner.png';
+import LunaProfilePic from '../assets/LunaProfilePic.png';
+import MaxBanner from '../assets/MaxBanner.png';
+import MaxProfilePic from '../assets/MaxProfilePic.png';
 
 const ANIMALS = {
   stompy: {
     name: 'Stompy the Goat',
     species: 'Goat',
     sanctuary: 'Alveus Sanctuary',
-    profileImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=100&h=100&fit=crop&crop=center',
-    coverImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center',
+    profileImg: StompyProfilePic,
+    coverImg: StompyBanner,
     donation: { raised: 815, goal: 2000 },
     featured: true,
     story: 'Stompy loves headbutts and to climb and explore!',
@@ -17,8 +23,8 @@ const ANIMALS = {
     name: 'Luna the Cow',
     species: 'Cow',
     sanctuary: 'Gentle Barn',
-    profileImg: 'https://picsum.photos/100/100?random=1',
-    coverImg: 'https://picsum.photos/400/200?random=1',
+    profileImg: LunaProfilePic,
+    coverImg: LunaBanner,
     donation: { raised: 1200, goal: 2500 },
     featured: true,
     story: 'Luna is the gentlest soul you\'ll ever meet.',
@@ -28,8 +34,8 @@ const ANIMALS = {
     name: 'Bella the Pig',
     species: 'Pig',
     sanctuary: 'Sunny Acres',
-    profileImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=100&h=100&fit=crop&crop=center',
-    coverImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=200&fit=crop&crop=center',
+    profileImg: 'https://i.imgur.com/FmUAOsH.jpeg',
+    coverImg: 'https://i.imgur.com/W0pKFcW.jpeg',
     donation: { raised: 600, goal: 1800 },
     featured: false,
     story: 'Bella loves belly rubs and mud baths!',
@@ -39,8 +45,8 @@ const ANIMALS = {
     name: 'Max the Horse',
     species: 'Horse',
     sanctuary: 'Freedom Reins',
-    profileImg: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=100&h=100&fit=crop&crop=center',
-    coverImg: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&h=200&fit=crop&crop=center',
+    profileImg: MaxProfilePic,
+    coverImg: MaxBanner,
     donation: { raised: 2000, goal: 3000 },
     featured: true,
     story: 'Max is a retired racehorse who loves carrots.',
