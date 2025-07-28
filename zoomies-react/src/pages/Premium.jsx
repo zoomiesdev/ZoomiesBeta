@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Premium() {
   const [selectedUserType, setSelectedUserType] = useState('sanctuaries');
+  const [tipsEnabled, setTipsEnabled] = useState(true);
 
   const sanctuaryTiers = [
     {
@@ -85,8 +86,287 @@ export default function Premium() {
       padding: '2rem 1rem',
       background: 'var(--background)'
     }}>
+      {/* Donation Fees Section */}
+      <div className="donation-fees-section" style={{ 
+        padding: '2.5rem',
+        marginBottom: '3rem',
+        position: 'relative'
+      }}>
+        {/* Decorative elements */}
+
+        
+        <h2 style={{ 
+          textAlign: 'center', 
+          marginBottom: '1.5rem',
+          fontFamily: 'Calistoga, serif', 
+          fontSize: '2rem', 
+          color: 'var(--primary)',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          Understanding Donation Fees
+        </h2>
+        <p style={{ 
+          textAlign: 'center', 
+          marginBottom: '2rem',
+          color: 'var(--text)',
+          opacity: 0.8,
+          fontSize: '1rem',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          Zoomies offers free fundraising tools thanks to optional tips from donors. 
+          If you prefer to disable tips, a small platform fee applies instead.
+        </p>
+
+        {/* Toggle Section */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          gap: '1.5rem',
+          marginBottom: '2.5rem',
+          flexWrap: 'wrap',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.75rem 1.5rem',
+            background: 'rgba(252, 151, 202, 0.1)',
+            borderRadius: '25px',
+            border: '1px solid rgba(252, 151, 202, 0.2)'
+          }}>
+            <span style={{ 
+              color: 'var(--text)', 
+              fontWeight: 600,
+              fontSize: '1rem'
+            }}>
+              Optional Tips
+            </span>
+            <div style={{
+              position: 'relative',
+              width: 60,
+              height: 30,
+              background: tipsEnabled ? 'var(--primary)' : 'var(--gray)',
+              borderRadius: 15,
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: tipsEnabled ? '0 4px 12px rgba(252, 151, 202, 0.4)' : '0 2px 4px rgba(0,0,0,0.1)'
+            }} onClick={() => setTipsEnabled(!tipsEnabled)}>
+              <div style={{
+                position: 'absolute',
+                top: 3,
+                left: tipsEnabled ? 33 : 3,
+                width: 24,
+                height: 24,
+                background: '#fff',
+                borderRadius: '50%',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }} />
+            </div>
+            <span style={{ 
+              color: tipsEnabled ? 'var(--primary)' : 'var(--text)', 
+              fontWeight: 600,
+              fontSize: '1rem'
+            }}>
+              {tipsEnabled ? 'On' : 'Off'}
+            </span>
+          </div>
+        </div>
+
+        {/* Fee Breakdown */}
+        <div style={{
+          background: 'linear-gradient(145deg, var(--background) 0%, rgba(252, 151, 202, 0.03) 100%)',
+          borderRadius: '20px',
+          padding: '1.5rem 2.5rem 2.5rem 2.5rem',
+          border: '2px solid rgba(252, 151, 202, 0.15)',
+          position: 'relative',
+          overflow: 'hidden',
+          marginBottom: '2rem'
+        }}>
+
+          
+
+          
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            gap: '2rem'
+          }}>
+            {/* Platform Fees */}
+            <div style={{
+              flex: 1,
+              textAlign: 'center',
+              padding: '1.5rem',
+              background: 'rgba(252, 151, 202, 0.05)',
+              borderRadius: '16px',
+              border: '1px solid rgba(252, 151, 202, 0.1)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h4 style={{ 
+                  fontWeight: 600, 
+                  marginBottom: '0.5rem',
+                  color: 'var(--text)',
+                  fontSize: '1.1rem'
+                }}>
+                  Platform Fees
+                </h4>
+                <p style={{ 
+                  fontSize: '0.9rem', 
+                  color: 'var(--text)', 
+                  opacity: 0.7,
+                  marginBottom: '1rem',
+                  lineHeight: '1.4'
+                }}>
+                  {tipsEnabled 
+                    ? 'When tips are on, platform fees are zero.'
+                    : 'When tips are off, platform fees help cover the cost of everything Zoomies provides.'
+                  }
+                </p>
+              </div>
+              <div style={{
+                fontSize: '1.8rem',
+                fontWeight: 700,
+                color: tipsEnabled ? '#22c55e' : 'var(--primary)',
+                padding: '0.8rem 1.5rem',
+                background: tipsEnabled ? 'rgba(34, 197, 94, 0.1)' : 'rgba(252, 151, 202, 0.1)',
+                borderRadius: '12px',
+                border: `2px solid ${tipsEnabled ? 'rgba(34, 197, 94, 0.2)' : 'rgba(252, 151, 202, 0.2)'}`,
+                display: 'inline-block',
+                minWidth: '100px'
+              }}>
+                {tipsEnabled ? 'FREE' : '3%'}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{
+              width: '2px',
+              background: 'linear-gradient(to bottom, transparent, rgba(252, 151, 202, 0.3), transparent)',
+              alignSelf: 'stretch'
+            }}></div>
+
+            {/* Processing Fees */}
+            <div style={{
+              flex: 1,
+              textAlign: 'center',
+              padding: '1.5rem',
+              background: 'rgba(252, 151, 202, 0.05)',
+              borderRadius: '16px',
+              border: '1px solid rgba(252, 151, 202, 0.1)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h4 style={{ 
+                  fontWeight: 600, 
+                  marginBottom: '0.5rem',
+                  color: 'var(--text)',
+                  fontSize: '1.1rem'
+                }}>
+                  Processing Fees
+                </h4>
+                <p style={{ 
+                  fontSize: '0.9rem', 
+                  color: 'var(--text)', 
+                  opacity: 0.7,
+                  marginBottom: '1rem',
+                  lineHeight: '1.4'
+                }}>
+                  Processing fees are charged by our secure payment processors and apply to all transactions.
+                </p>
+              </div>
+              <div style={{
+                fontSize: '1.8rem',
+                fontWeight: 700,
+                color: 'var(--primary)',
+                padding: '0.8rem 1.5rem',
+                background: 'rgba(252, 151, 202, 0.1)',
+                borderRadius: '12px',
+                border: '2px solid rgba(252, 151, 202, 0.2)',
+                display: 'inline-block',
+                minWidth: '140px'
+              }}>
+                2.9% + 30¢
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Info */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(252, 151, 202, 0.08) 0%, rgba(252, 151, 202, 0.03) 100%)',
+          borderRadius: '16px',
+          padding: '2rem',
+          border: '2px solid rgba(252, 151, 202, 0.2)',
+          textAlign: 'center',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'var(--primary)',
+            color: '#fff',
+            padding: '0.5rem 1.5rem',
+            borderRadius: '20px',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            boxShadow: '0 4px 12px rgba(252, 151, 202, 0.3)'
+          }}>
+            ⭐ Pro Tip
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <p style={{ 
+              fontSize: '1rem', 
+              color: 'var(--text)', 
+              opacity: 0.9,
+              marginBottom: '1rem',
+              lineHeight: '1.6'
+            }}>
+              Donors can opt to cover all fees during the donation process. 
+              {tipsEnabled 
+                ? ' With tips enabled, 95% of donors choose to contribute, keeping your platform fees at zero!'
+                : ' This helps ensure more of your donation goes directly to the animals.'
+              }
+            </p>
+            <div style={{
+              background: 'rgba(252, 151, 202, 0.1)',
+              padding: '1rem',
+              borderRadius: '12px',
+              border: '1px solid rgba(252, 151, 202, 0.2)',
+              marginTop: '1rem'
+            }}>
+              <p style={{ 
+                fontSize: '0.95rem', 
+                color: 'var(--text)', 
+                opacity: 0.8,
+                fontStyle: 'italic',
+                margin: 0,
+                fontWeight: 500
+              }}>
+                <strong></strong> The average Zoomies campaign keeps 99.5% of all funds raised since most donors cover fees!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '4rem' }}>
         <h1 style={{ 
           fontFamily: 'Calistoga, serif', 
           fontSize: '2.5rem', 
@@ -144,6 +424,7 @@ export default function Premium() {
           </button>
         </div>
       </div>
+
 
       {/* Pricing Cards */}
       <div className="pricing-cards" style={{ 

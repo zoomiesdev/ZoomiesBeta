@@ -272,7 +272,7 @@ export default function ZoomiesHeader() {
             const rect = e.target.getBoundingClientRect();
             setTooltip({ 
               show: true, 
-              text: 'Premium', 
+              text: 'Pricing', 
               x: rect.left + rect.width / 2, 
               y: rect.bottom + 8 
             });
@@ -282,8 +282,8 @@ export default function ZoomiesHeader() {
             e.target.style.transform = 'scale(1)';
             setTooltip({ show: false, text: '', x: 0, y: 0 });
           }}
-          title="Premium">
-            <img src={isDark ? premiumIconWhite : premiumIcon} alt="Premium" style={{ width: 40, height: 40 }} />
+                      title="Pricing">
+                          <img src={isDark ? premiumIconWhite : premiumIcon} alt="Pricing" style={{ width: 40, height: 40 }} />
             {currentPage === '/premium' && (
               <div style={{
                 position: 'absolute',

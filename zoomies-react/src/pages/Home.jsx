@@ -158,7 +158,7 @@ export default function Home() {
       }}>
         {/* Thanks to our Sponsors */}
         <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Thanks to our Sponsors</h3>
+          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Thanks to our Sponsors!</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
             {sponsors.map(s => (
               <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -220,7 +220,7 @@ export default function Home() {
           textAlign: 'center', 
           borderRadius: 12,
           marginTop: 24,
-          marginBottom: 22,
+          marginBottom: 18,
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
           position: 'sticky',
           top: 0,

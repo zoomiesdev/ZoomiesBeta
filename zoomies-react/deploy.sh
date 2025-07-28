@@ -36,4 +36,4 @@ git commit -m "Deploy React app to GitHub Pages (clean root first)"
 git push origin main
 
 echo "Deployment complete! Your site should be available at:"
-echo "https://lilsmores.github.io/zoomies-demo/" 
+echo "https://zoomiesdev.github.io/zoomies-demo/" 
