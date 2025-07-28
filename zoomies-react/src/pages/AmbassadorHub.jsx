@@ -107,28 +107,28 @@ export default function AmbassadorHub() {
           }}>
             <button
               onClick={() => setViewMode('featured')}
-              className="button"
+              className="button pixel-header"
               style={{
                 padding: '8px 24px',
                 borderRadius: 8,
                 background: viewMode === 'featured' ? 'var(--primary)' : 'transparent',
                 color: viewMode === 'featured' ? '#fff' : 'var(--text)',
-                fontSize: 14,
-                fontWeight: 600
+                fontSize: 16,
+                fontWeight: normal
               }}
             >
               🌟 Featured
             </button>
             <button
               onClick={() => setViewMode('all')}
-              className="button"
+              className="button pixel-header"
               style={{
                 padding: '8px 24px',
                 borderRadius: 8,
                 background: viewMode === 'all' ? 'var(--primary)' : 'transparent',
                 color: viewMode === 'all' ? '#fff' : 'var(--text)',
-                fontSize: 14,
-                fontWeight: 600
+                fontSize: 16,
+                fontWeight: normal
               }}
             >
               🐾 All Animals
@@ -139,7 +139,7 @@ export default function AmbassadorHub() {
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 24, justifyContent: 'center', flexWrap: 'wrap' }}>
           {/* Search Bar */}
           <div style={{ position: 'relative', maxWidth: 150, marginRight: 48 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, display: 'block', textAlign: 'left' }}>Search</label>
+            <label className="pixel-header" style={{ fontSize: 12, fontWeight: normal, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, display: 'block', textAlign: 'left' }}>Search</label>
             <input
               type="text"
               placeholder="Search animals..."
@@ -177,7 +177,7 @@ export default function AmbassadorHub() {
           </div>
           {/* Species Filter */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 120 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1 }}>Species</label>
+            <label className="pixel-header" style={{ fontSize: 12, fontWeight: normal, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1 }}>Species</label>
             <select
               value={selectedSpecies}
               onChange={(e) => setSelectedSpecies(e.target.value)}
@@ -201,7 +201,7 @@ export default function AmbassadorHub() {
           </div>
           {/* Sanctuary Filter */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 120 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1 }}>Sanctuary</label>
+            <label className="pixel-header" style={{ fontSize: 12, fontWeight: normal, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 1 }}>Sanctuary</label>
             <select
               value={selectedSanctuary}
               onChange={(e) => setSelectedSanctuary(e.target.value)}
@@ -231,12 +231,13 @@ export default function AmbassadorHub() {
                 setSelectedSpecies('all');
                 setSelectedSanctuary('all');
               }}
-              className="button"
+              className="button pixel-header"
               style={{ 
                 padding: '8px 16px', 
                 fontSize: 14,
                 background: isDark ? '#2A2A2A' : '#fff',
-                color: 'var(--text)'
+                color: 'var(--text)',
+                fontWeight: normal
               }}
             >
               Clear Filters
@@ -271,7 +272,7 @@ export default function AmbassadorHub() {
                 }} 
               />
               {animal.featured && (
-                <div style={{
+                <div className="pixel-header" style={{
                   position: 'absolute',
                   top: 12,
                   right: 12,
@@ -280,7 +281,7 @@ export default function AmbassadorHub() {
                   padding: '4px 8px',
                   borderRadius: 6,
                   fontSize: 12,
-                  fontWeight: 600
+                  fontWeight: normal
                 }}>
                   ⭐ Featured
                 </div>
@@ -301,7 +302,7 @@ export default function AmbassadorHub() {
                   }} 
                 />
                 <div>
-                  <h2 style={{ margin: '0 0 4px 0', fontSize: 20, fontWeight: 600 }}>{animal.name}</h2>
+                  <h2 className="pixel-header" style={{ margin: '0 0 4px 0', fontSize: 20, fontWeight: normal }}>{animal.name}</h2>
                   <p style={{ color: 'var(--primary)', margin: 0, fontSize: 14, fontWeight: 600 }}>{animal.species}</p>
                 </div>
               </div>
@@ -359,7 +360,7 @@ export default function AmbassadorHub() {
       {/* No Results Message */}
       {filteredAnimals.length === 0 && (
         <div style={{ textAlign: 'center', padding: 48, color: 'var(--text)' }}>
-          <h3 style={{ marginBottom: 16 }}>No animals found</h3>
+          <h3 className="pixel-header" style={{ marginBottom: 16, fontWeight: normal }}>No animals found</h3>
           <p style={{ opacity: 0.7 }}>Try adjusting your search or filters</p>
         </div>
       )}

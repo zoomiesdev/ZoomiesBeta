@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Calistoga&family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Calistoga&family=Poppins:wght@400;500;600&family=VT323&display=swap');
 
 @font-face {
   font-family: 'Dunkin';
@@ -65,6 +65,27 @@ body {
   font-family: 'Poppins', 'Inter', Arial, sans-serif;
   margin: 0;
   min-height: 100vh;
+}
+
+/* VT323 Pixel Font Classes */
+.pixel-font {
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+}
+
+.pixel-header {
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.zoomies-brand {
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.1em;
+  font-weight: normal;
+  text-transform: uppercase;
 }
 nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions, .tabs, .content, .card, .gallery, .status, .profile-info, .ambassador-profile, .photo-grid, .menu, .menu-item {
   font-family: 'Poppins', Arial, sans-serif;
