@@ -91,8 +91,8 @@ export default function ZoomiesHeader() {
             objectFit: 'cover'
           }} />
           <span style={{ 
-            fontFamily: "'VT323', monospace", 
-            fontSize: 28, 
+            fontFamily: "'Gayo', sans-serif", 
+            fontSize: 18, 
             color: 'var(--primary, #fc97ca)', 
             letterSpacing: 0.1,
             fontWeight: 'normal',
@@ -100,9 +100,9 @@ export default function ZoomiesHeader() {
             alignItems: 'center',
             lineHeight: 1,
             marginTop: '6px',
-            textTransform: 'uppercase'
+            
           }}>
-            ZOOMIES
+            zoomies
           </span>
         </div>
 

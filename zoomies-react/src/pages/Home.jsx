@@ -144,21 +144,21 @@ export default function Home() {
   return (
     <div className="home-grid" style={{
       display: 'grid',
-      gridTemplateColumns: '1fr 2.5fr',
-      gap: 32,
-      maxWidth: 1200,
+      gridTemplateColumns: '1fr 2fr 1fr',
+      gap: 24,
+      maxWidth: 1400,
       margin: '0 auto',
       padding: '0 1rem'
     }}>
-      {/* Sidebar */}
-      <aside className="home-sidebar" style={{
+      {/* Left Sidebar */}
+      <aside className="home-sidebar-left" style={{
         display: 'flex',
         flexDirection: 'column',
         gap: 24,
         position: 'sticky',
         top: 24,
         alignSelf: 'flex-start',
-        minWidth: 260,
+        minWidth: 240,
         marginTop: 24
       }}>
         {/* Thanks to our Sponsors */}
@@ -231,8 +231,9 @@ export default function Home() {
           top: 0,
           zIndex: 10
         }}>
-          <h1 className="pixel-font" style={{ 
-            fontSize: 32, 
+          <h1 style={{ 
+            fontFamily: "'Gayo', sans-serif",
+            fontSize: 25, 
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)',
             fontWeight: 'normal',
@@ -545,6 +546,175 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {/* Right Sidebar */}
+      <aside className="home-sidebar-right" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 24,
+        position: 'sticky',
+        top: 24,
+        alignSelf: 'flex-start',
+        minWidth: 240,
+        marginTop: 24
+      }}>
+        {/* Live Streams */}
+        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Live Streams</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
+            <div style={{ 
+              background: 'var(--background)', 
+              borderRadius: 8, 
+              padding: 12, 
+              border: '2px solid var(--primary)',
+              position: 'relative'
+            }}>
+              <div style={{ 
+                position: 'absolute', 
+                top: 8, 
+                right: 8, 
+                background: '#ff4444', 
+                color: 'white', 
+                padding: '2px 6px', 
+                borderRadius: 4, 
+                fontSize: 10, 
+                fontWeight: 'bold' 
+              }}>
+                LIVE
+              </div>
+              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>stream</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src={LunaProfilePic} alt="Luna" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Luna's Training Session</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>@luna_golden</div>
+                <div style={{ fontSize: 12, color: 'var(--primary)' }}>1.2k watching</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Suggested Animals */}
+        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Suggested Animals</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src={MaxProfilePic} alt="Max" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Max</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>German Shepherd</div>
+              </div>
+              <button className="button" style={{ 
+                padding: '4px 8px', 
+                fontSize: 12, 
+                background: 'var(--primary)', 
+                color: 'white',
+                border: 'none',
+                borderRadius: 6
+              }}>
+                Follow
+              </button>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src="https://placehold.co/40x40?text=M" alt="Mittens" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Mittens</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Persian Cat</div>
+              </div>
+              <button className="button" style={{ 
+                padding: '4px 8px', 
+                fontSize: 12, 
+                background: 'var(--primary)', 
+                color: 'white',
+                border: 'none',
+                borderRadius: 6
+              }}>
+                Follow
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Quick Actions</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
+            <button className="button" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 8, 
+              width: '100%', 
+              padding: '8px 12px', 
+              fontSize: 14,
+              background: 'var(--primary)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8
+            }}>
+              💖 Support Animals
+            </button>
+            <button className="button" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 8, 
+              width: '100%', 
+              padding: '8px 12px', 
+              fontSize: 14,
+              background: 'var(--background)',
+              color: 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 8
+            }}>
+              📤 Share Story
+            </button>
+            <button className="button" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 8, 
+              width: '100%', 
+              padding: '8px 12px', 
+              fontSize: 14,
+              background: 'var(--background)',
+              color: 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 8
+            }}>
+              🏠 Find Sanctuaries
+            </button>
+          </div>
+        </div>
+
+        {/* Trending Animals */}
+        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Trending Animals</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src={LunaProfilePic} alt="Luna" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Luna</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>2.4k followers</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src="https://placehold.co/40x40?text=W" alt="Whiskers" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Whiskers</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>1.8k followers</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src="https://placehold.co/40x40?text=S" alt="Spike" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Spike</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>3.1k followers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }

@@ -1123,7 +1123,7 @@ a:hover {
     border-radius: 0 !important;
     margin-top: 0 !important;
   }
-  .home-sidebar {
+  .home-sidebar-left, .home-sidebar-right {
     order: 2;
     position: static !important;
     min-width: 0 !important;
@@ -1134,16 +1134,16 @@ a:hover {
     flex-direction: column !important;
     gap: 16px !important;
   }
-  .home-sidebar > div {
+  .home-sidebar-left > div, .home-sidebar-right > div {
     align-items: center !important;
     text-align: center !important;
     justify-content: center !important;
   }
-  .home-sidebar > div h3 {
+  .home-sidebar-left > div h3, .home-sidebar-right > div h3 {
     text-align: center !important;
     width: 100%;
   }
-  .home-sidebar > div > div {
+  .home-sidebar-left > div > div, .home-sidebar-right > div > div {
     justify-content: center !important;
   }
   .home-main {
