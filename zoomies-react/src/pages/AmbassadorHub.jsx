@@ -151,7 +151,7 @@ export default function AmbassadorHub() {
                 fontSize: 14,
                 border: '1.5px solid var(--border)',
                 borderRadius: 8,
-                background: 'var(--background)',
+                background: '#f5f5f5',
                 color: 'var(--text)',
                 outline: 'none'
               }}

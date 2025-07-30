@@ -19,14 +19,27 @@ html {
   font-size: 16px;
 }
 
+/* Cute bounce animation for decorative elements */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
 body {
   font-size: 1rem;
   line-height: 1.5;
 }
 
 :root {
-  --background: #f5f5f5;
-  --card: #f8f9fa;
+  --background: #F1E8F1;
+  --card: #ffffff;
   --primary: #FF6B6B;
   --secondary: #FF8E8E;
   --light-pink: #FF9EC4;
@@ -60,7 +73,8 @@ body {
   --border: #FF8E8E;
 }
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #FCF8FC 0%, #F0F8FF 25%, #F8F0FF 50%, #FFF0F8 75%, #FFF0F0 100%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: 'Poppins', 'Inter', Arial, sans-serif;
   margin: 0;
@@ -115,8 +129,30 @@ body {
   letter-spacing: 0.05em;
   font-weight: normal;
 }
-nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions, .tabs, .content, .card, .gallery, .status, .profile-info, .ambassador-profile, .photo-grid, .menu, .menu-item {
+nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions, .tabs, .content, .gallery, .status, .profile-info, .ambassador-profile, .photo-grid, .menu, .menu-item {
   font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* Enhanced Card Styling */
+.card, [style*="background: var(--card)"], [style*="background: var(--card, #fff)"] {
+  background: var(--card) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.card:hover, [style*="background: var(--card)"]:hover, [style*="background: var(--card, #fff)"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 10px 25px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
 }
 a {
   color: var(--primary);
@@ -157,6 +193,13 @@ a:hover {
   background: linear-gradient(90deg, var(--accent), var(--primary));
   color: #fff;
   transition: background 0.2s, color 0.2s;
+}
+
+/* Stats Container - Subtle shadow outline */
+.stats-container {
+  background: #f8f8f8 !important;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2) !important;
+  border: none !important;
 }
 
 @media (max-width: 600px) {

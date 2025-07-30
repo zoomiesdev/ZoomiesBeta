@@ -7,6 +7,7 @@ import StompyBanner from '../assets/StompyBanner.png';
 import LunaProfilePic from '../assets/LunaProfilePic.png';
 import LunaBanner from '../assets/LunaBanner.png';
 
+
 // Mock data for feed posts
 const FEED_POSTS = [
   {
@@ -221,53 +222,69 @@ export default function Home() {
         {/* Welcome Header */}
         <div className="home-hero" style={{ 
           background: 'var(--card)', 
-          padding: '1.5rem 1rem', 
+          padding: '2rem 1.5rem', 
           textAlign: 'center', 
-          borderRadius: 12,
+          borderRadius: 20,
           marginTop: 24,
           marginBottom: 18,
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          position: 'sticky',
+          position: 'relative',
           top: 0,
-          zIndex: 10
+          zIndex: 10,
+          overflow: 'hidden'
         }}>
+
+
           <h1 style={{ 
             fontFamily: "'Gayo', sans-serif",
             fontSize: 25, 
             margin: '0 0 0.5rem 0', 
             color: 'var(--primary)',
             fontWeight: 'normal',
-            letterSpacing: '0.1em'
+            letterSpacing: '0.1em',
+            position: 'relative',
+            zIndex: 2
           }}>
-            Give Animals the Zoomies
+            Give Animals the Zoomies!
           </h1>
 
-          {/* Community Stats */}
-          <div style={{ 
+          <p style={{
+            fontSize: 16,
+            color: 'var(--text-secondary)',
+            margin: '0 0 1.5rem 0',
+            fontStyle: 'italic',
+            position: 'relative',
+            zIndex: 2
+          }}>
+           
+          </p>
+
+          {/* Community Stats with cute styling */}
+          <div className="stats-container" style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(4, 1fr)', 
             gap: 16, 
             marginTop: 16,
-            padding: '12px',
-            background: isDark ? '#000' : '#f5f5f5',
-            borderRadius: 12,
-            border: '1px solid var(--accent)'
+            padding: '16px',
+            borderRadius: 16,
+            position: 'relative',
+            zIndex: 2
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
+              <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
+              <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
+              <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 25, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
+              <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
             </div>
           </div>
         </div>
@@ -304,7 +321,7 @@ export default function Home() {
                   padding: '12px 16px',
                   borderRadius: 20,
                   border: '1px solid var(--border)',
-                  background: 'var(--background)',
+                  background: '#f5f5f5',
                   color: 'var(--text)',
                   fontSize: 14,
                   outline: 'none'

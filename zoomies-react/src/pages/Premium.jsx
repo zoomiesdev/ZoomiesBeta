@@ -136,7 +136,7 @@ export default function Premium() {
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.75rem 1.5rem',
-            background: 'rgba(252, 151, 202, 0.1)',
+            background: '#f5f5f5',
             borderRadius: '25px',
             border: '1px solid rgba(252, 151, 202, 0.2)'
           }}>
@@ -151,7 +151,7 @@ export default function Premium() {
               position: 'relative',
               width: 60,
               height: 30,
-              background: tipsEnabled ? 'var(--primary)' : 'var(--gray)',
+              background: tipsEnabled ? 'var(--primary)' : '#e0e0e0',
               borderRadius: 15,
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -181,7 +181,7 @@ export default function Premium() {
 
         {/* Fee Breakdown */}
         <div style={{
-          background: 'linear-gradient(145deg, var(--background) 0%, rgba(252, 151, 202, 0.03) 100%)',
+          background: '#f5f5f5',
           borderRadius: '20px',
           padding: '1.5rem 2.5rem 2.5rem 2.5rem',
           border: '2px solid rgba(252, 151, 202, 0.15)',
@@ -204,7 +204,7 @@ export default function Premium() {
               flex: 1,
               textAlign: 'center',
               padding: '1.5rem',
-              background: 'rgba(252, 151, 202, 0.05)',
+              background: '#f5f5f5',
               borderRadius: '16px',
               border: '1px solid rgba(252, 151, 202, 0.1)',
               position: 'relative',
@@ -261,7 +261,7 @@ export default function Premium() {
               flex: 1,
               textAlign: 'center',
               padding: '1.5rem',
-              background: 'rgba(252, 151, 202, 0.05)',
+              background: '#f5f5f5',
               borderRadius: '16px',
               border: '1px solid rgba(252, 151, 202, 0.1)',
               position: 'relative',
@@ -307,7 +307,7 @@ export default function Premium() {
 
         {/* Additional Info */}
         <div style={{
-          background: 'linear-gradient(145deg, rgba(252, 151, 202, 0.08) 0%, rgba(252, 151, 202, 0.03) 100%)',
+          background: '#f5f5f5',
           borderRadius: '16px',
           padding: '2rem',
           border: '2px solid rgba(252, 151, 202, 0.2)',
@@ -345,7 +345,7 @@ export default function Premium() {
               }
             </p>
             <div style={{
-              background: 'rgba(252, 151, 202, 0.1)',
+              background: '#f5f5f5',
               padding: '1rem',
               borderRadius: '12px',
               border: '1px solid rgba(252, 151, 202, 0.2)',
@@ -405,7 +405,7 @@ export default function Premium() {
             alignItems: 'center',
             gap: '1rem',
             padding: '0.75rem 1.5rem',
-            background: 'rgba(252, 151, 202, 0.1)',
+            background: '#f5f5f5',
             borderRadius: '25px',
             border: '1px solid rgba(252, 151, 202, 0.2)'
           }}>
@@ -422,7 +422,7 @@ export default function Premium() {
               position: 'relative',
               width: 60,
               height: 30,
-              background: selectedUserType === 'sanctuaries' ? 'var(--primary)' : 'var(--gray)',
+              background: selectedUserType === 'sanctuaries' ? 'var(--primary)' : '#e0e0e0',
               borderRadius: 15,
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -463,7 +463,7 @@ export default function Premium() {
       }}>
         {(selectedUserType === 'sanctuaries' ? sanctuaryTiers : communityTiers).map((tier, index) => (
           <div key={index} className="pricing-card" style={{
-            background: 'rgba(252, 151, 202, 0.05)',
+            background: '#f5f5f5',
             borderRadius: '16px',
             padding: '1.5rem',
             border: tier.popular ? '2px solid var(--primary)' : '1px solid rgba(252, 151, 202, 0.1)',
@@ -568,7 +568,7 @@ export default function Premium() {
 
       {/* FAQ Section */}
       <div className="faq-section" style={{ 
-        background: 'var(--card)', 
+        background: '#f5f5f5', 
         borderRadius: '20px', 
         padding: '2rem',
         marginBottom: '2rem'
@@ -655,7 +655,7 @@ export default function Premium() {
       {/* CTA Section */}
       <div className="cta-section" style={{ 
         textAlign: 'center', 
-        background: 'var(--card)', 
+        background: '#f5f5f5', 
         borderRadius: '20px', 
         padding: '3rem 2rem' 
       }}>

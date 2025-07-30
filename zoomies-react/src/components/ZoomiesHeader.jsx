@@ -314,7 +314,7 @@ export default function ZoomiesHeader() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'var(--background, #F8F6FF)',
+                background: '#f5f5f5',
                 borderRadius: 20,
                 boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
                 padding: '0 0.5rem 0 1rem',
@@ -357,7 +357,7 @@ export default function ZoomiesHeader() {
                 width: 40,
                 height: 40,
                 borderRadius: '50%',
-                background: 'var(--background, #F8F6FF)',
+                background: '#f5f5f5',
                 border: 'none',
                 color: 'var(--text, #18171C)',
                 fontSize: 16,
@@ -379,7 +379,7 @@ export default function ZoomiesHeader() {
             width: 40,
             height: 40,
             borderRadius: '50%',
-            background: 'var(--background, #F8F6FF)',
+            background: '#f5f5f5',
             border: 'none',
             color: 'var(--text, #18171C)',
             fontSize: 16,
@@ -431,26 +431,48 @@ export default function ZoomiesHeader() {
                 }}>▼</span>
               </button>
             ) : (
-              <button
-                onClick={() => setLoginDropdownOpen(v => !v)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  background: 'var(--primary, #fc97ca)',
-                  border: 'none',
-                  color: '#fff',
-                  fontSize: 16,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-                title="Login"
-              >
-                👤
-              </button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={() => setLoginDropdownOpen(v => !v)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    background: 'transparent',
+                    border: '1px solid var(--primary, #fc97ca)',
+                    color: 'var(--primary, #fc97ca)',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  title="Login"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => setLoginDropdownOpen(v => !v)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    background: 'var(--primary, #fc97ca)',
+                    border: 'none',
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  title="Sign Up"
+                >
+                  Sign Up
+                </button>
+              </div>
             )}
             {/* Login Dropdown */}
             {!user && loginDropdownOpen && (

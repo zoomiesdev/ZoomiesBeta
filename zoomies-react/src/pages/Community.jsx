@@ -100,7 +100,7 @@ export default function Community() {
                 padding: '12px 16px 12px 40px',
                 borderRadius: 8,
                 border: '1px solid var(--border)',
-                background: 'var(--background)',
+                background: '#f5f5f5',
                 color: 'var(--text)',
                 fontSize: 14,
                 outline: 'none'
