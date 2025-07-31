@@ -6,6 +6,12 @@ import StompyProfilePic from '../assets/StompyProfilePic.png';
 import StompyBanner from '../assets/StompyBanner.png';
 import LunaProfilePic from '../assets/LunaProfilePic.png';
 import LunaBanner from '../assets/LunaBanner.png';
+import HeartIcon from '../assets/HeartIcon.png';
+import ShareIcon from '../assets/ShareIcon.png';
+import CommentIcon from '../assets/CommentIcon.png';
+import ListIcon from './ListIcon.png';
+import MoviePixel from './MoviePixel.png';
+import CameraPixel from './CameraPixel.png';
 
 
 // Mock data for feed posts
@@ -14,8 +20,8 @@ const FEED_POSTS = [
     id: 1,
     user: 'Clara',
     avatar: 'https://placehold.co/40x40?text=C',
-    content: 'Visited Bella the Pig today! She was so funny in her ball pit! 🐷💕',
-    image: 'https://i.imgur.com/g1ayW9C.mp4',
+    content: 'Visited Bella the Guinea pig today! She loved her flower 💕',
+    image: 'https://i.imgur.com/DVzPhmt.jpeg',
     likes: 124,
     comments: 23,
     time: '2m ago',
@@ -197,7 +203,10 @@ export default function Home() {
               <div key={animal.id} style={{ minWidth: 90, textAlign: 'center' }}>
                 <img src={animal.image} alt={animal.name} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', marginBottom: 6 }} />
                 <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 600 }}>{animal.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>❤️ {animal.likes}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                  <img src={HeartIcon} alt="Heart" style={{ width: 12, height: 12 }} />
+                  {animal.likes}
+                </div>
               </div>
             ))}
           </div>
@@ -219,73 +228,97 @@ export default function Home() {
 
       {/* Main Feed Area */}
       <main className="home-main" style={{ minWidth: 0 }}>
-        {/* Welcome Header */}
+        {/* Welcome Header - Browser Window Style */}
         <div className="home-hero" style={{ 
           background: 'var(--card)', 
-          padding: '2rem 1.5rem', 
-          textAlign: 'center', 
-          borderRadius: 20,
+          borderRadius: 12,
           marginTop: 24,
           marginBottom: 18,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
           position: 'relative',
           top: 0,
           zIndex: 10,
-          overflow: 'hidden'
+          overflow: 'hidden',
+          border: '1px solid #e0e0e0'
         }}>
-
-
-          <h1 style={{ 
-            fontFamily: "'Gayo', sans-serif",
-            fontSize: 25, 
-            margin: '0 0 0.5rem 0', 
-            color: 'var(--primary)',
-            fontWeight: 'normal',
-            letterSpacing: '0.1em',
-            position: 'relative',
-            zIndex: 2
+          {/* Browser Window Title Bar */}
+          <div style={{
+            background: '#f5f5f5',
+            padding: '12px 16px',
+            borderBottom: '1px solid #e0e0e0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}>
-            Give Animals the Zoomies!
-          </h1>
+            {/* Window Controls */}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#ff5f57',
+                border: '1px solid #e0443e'
+              }}></div>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#ffbd2e',
+                border: '1px solid #dea123'
+              }}></div>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#28ca42',
+                border: '1px solid #1aab29'
+              }}></div>
+            </div>
+            {/* Window Title */}
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              fontWeight: '500',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)'
+            }}>
+              GiveAnimalsTheZoomies.app
+            </div>
+            <div style={{ width: '60px' }}></div> {/* Spacer for centering */}
+          </div>
+          
+          {/* Window Content */}
+          <div style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
 
-          <p style={{
-            fontSize: 16,
-            color: 'var(--text-secondary)',
-            margin: '0 0 1.5rem 0',
-            fontStyle: 'italic',
-            position: 'relative',
-            zIndex: 2
-          }}>
-           
-          </p>
-
-          {/* Community Stats with cute styling */}
+          {/* Community Stats with typing animation */}
           <div className="stats-container" style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(4, 1fr)', 
             gap: 16, 
-            marginTop: 16,
+            marginTop: 0,
             padding: '16px',
             borderRadius: 16,
             position: 'relative',
             zIndex: 2
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
+              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
+              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
+              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
+              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
             </div>
+          </div>
           </div>
         </div>
 
@@ -338,7 +371,7 @@ export default function Home() {
               <button style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: 8,
+                gap: 4,
                 background: 'none',
                 border: 'none',
                 color: 'var(--text-secondary)',
@@ -347,12 +380,13 @@ export default function Home() {
                 padding: '8px 12px',
                 borderRadius: 8
               }}>
-                📷 Photo/video
+                <img src={CameraPixel} alt="Camera" style={{ width: 30, height: 30 }} />
+                Photo/video
               </button>
               <button style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: 8,
+                gap: 4,
                 background: 'none',
                 border: 'none',
                 color: 'var(--text-secondary)',
@@ -361,12 +395,13 @@ export default function Home() {
                 padding: '8px 12px',
                 borderRadius: 8
               }}>
-                🎬 GIF
+                <img src={MoviePixel} alt="Movie" style={{ width: 25, height: 25 }} />
+                GIF
               </button>
               <button style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: 8,
+                gap: 10,
                 background: 'none',
                 border: 'none',
                 color: 'var(--text-secondary)',
@@ -375,7 +410,8 @@ export default function Home() {
                 padding: '8px 12px',
                 borderRadius: 8
               }}>
-                📊 Poll
+                <img src={ListIcon} alt="List" style={{ width: 16, height: 16 }} />
+                Poll
               </button>
             </div>
           </div>
@@ -441,7 +477,8 @@ export default function Home() {
                     fontSize: 14
                   }}
                 >
-                  {likedPosts.has(post.id) ? '❤️' : '🤍'} {post.likes}
+                  <img src={HeartIcon} alt="Heart" style={{ width: 14, height: 14, opacity: likedPosts.has(post.id) ? 1 : 0.5 }} />
+                  {post.likes}
                 </button>
                 <button style={{ 
                   display: 'flex', 
@@ -453,7 +490,8 @@ export default function Home() {
                   color: 'var(--text-secondary)',
                   fontSize: 14
                 }}>
-                  💬 {post.comments}
+                  <img src={CommentIcon} alt="Comment" style={{ width: 14, height: 14 }} />
+                  {post.comments}
                 </button>
                 <button style={{ 
                   display: 'flex', 
@@ -465,72 +503,15 @@ export default function Home() {
                   color: 'var(--text-secondary)',
                   fontSize: 14
                 }}>
-                  📤 Share
+                  <img src={ShareIcon} alt="Share" style={{ width: 14, height: 14 }} />
+                  Share
                 </button>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Urgent Campaigns Section */}
-        <div className="home-urgent" style={{ 
-          margin: '1rem', 
-          padding: '1.5rem', 
-          background: 'var(--card)', 
-          borderRadius: 12, 
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)' 
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ fontSize: 20 }}>🚨</span>
-            <h2 style={{ margin: 0, fontFamily: 'Calistoga, serif', fontWeight: 300, color: 'var(--text)' }}>Urgent Campaigns</h2>
-          </div>
-          <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '8px 0' }}>
-            {URGENT_CAMPAIGNS.map(campaign => (
-              <div key={campaign.id} style={{ 
-                minWidth: 280, 
-                background: 'var(--background)', 
-                borderRadius: 12, 
-                padding: 16, 
-                border: '2px solid var(--primary)',
-                position: 'relative'
-              }}>
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <img src={campaign.image} alt={campaign.name} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover' }} />
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: '0 0 4px 0', fontSize: 18, color: 'var(--text)' }}>{campaign.name}</h3>
-                    <p style={{ margin: '0 0 8px 0', fontSize: 14, color: 'var(--primary)', fontWeight: 600 }}>{campaign.species} • {campaign.sanctuary}</p>
-                    <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary)' }}>{campaign.urgency}</p>
-                  </div>
-                </div>
-                <div style={{ marginTop: 12 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
-                    <span style={{ color: 'var(--text-secondary)' }}>${campaign.raised.toLocaleString()} raised</span>
-                    <span style={{ color: 'var(--primary)' }}>{Math.round((campaign.raised/campaign.goal)*100)}%</span>
-                  </div>
-                  <div style={{ background: 'var(--gray)', borderRadius: 6, height: 8, overflow: 'hidden' }}>
-                    <div style={{ 
-                      width: `${Math.round((campaign.raised/campaign.goal)*100)}%`, 
-                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
-                      height: '100%' 
-                    }}></div>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-                    <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>⏰ {campaign.timeLeft} left</span>
-                    <Link to={`/ambassadors/${campaign.id}`} className="button" style={{ 
-                      padding: '6px 12px', 
-                      fontSize: 12,
-                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)',
-                      color: 'var(--white)',
-                      boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)'
-                    }}>
-                      Donate Now
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         {/* Call to Action */}
         <div className="home-cta" style={{ 
@@ -599,14 +580,34 @@ export default function Home() {
               }}>
                 LIVE
               </div>
-              <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>stream</div>
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '20px 0',
+                background: `url('https://i.imgur.com/g1ayW9C.mp4') center/cover`,
+                borderRadius: 6,
+                height: 120,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative'
+              }}>
+                <div style={{ 
+                  fontSize: 14, 
+                  color: 'white', 
+                  fontWeight: 600,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+                  background: 'rgba(0,0,0,0.3)',
+                  padding: '4px 8px',
+                  borderRadius: 4
+                }}>
+                  LIVE STREAM
+                </div>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <img src={LunaProfilePic} alt="Luna" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Luna's Training Session</div>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Bella's Training Session</div>
                 <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>@luna_golden</div>
                 <div style={{ fontSize: 12, color: 'var(--primary)' }}>1.2k watching</div>
               </div>
@@ -614,93 +615,56 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Suggested Animals */}
+        {/* Urgent Campaigns */}
         <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Suggested Animals</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src={MaxProfilePic} alt="Max" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Max</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>German Shepherd</div>
-              </div>
-              <button className="button" style={{ 
-                padding: '4px 8px', 
-                fontSize: 12, 
-                background: 'var(--primary)', 
-                color: 'white',
-                border: 'none',
-                borderRadius: 6
-              }}>
-                Follow
-              </button>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src="https://placehold.co/40x40?text=M" alt="Mittens" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Mittens</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Persian Cat</div>
-              </div>
-              <button className="button" style={{ 
-                padding: '4px 8px', 
-                fontSize: 12, 
-                background: 'var(--primary)', 
-                color: 'white',
-                border: 'none',
-                borderRadius: 6
-              }}>
-                Follow
-              </button>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            <span style={{ fontSize: 16 }}></span>
+            <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Urgent Campaigns</h3>
           </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Quick Actions</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
-            <button className="button" style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 8, 
-              width: '100%', 
-              padding: '8px 12px', 
-              fontSize: 14,
-              background: 'var(--primary)',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8
-            }}>
-              💖 Support Animals
-            </button>
-            <button className="button" style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 8, 
-              width: '100%', 
-              padding: '8px 12px', 
-              fontSize: 14,
-              background: 'var(--background)',
-              color: 'var(--text)',
-              border: '1px solid var(--border)',
-              borderRadius: 8
-            }}>
-              📤 Share Story
-            </button>
-            <button className="button" style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 8, 
-              width: '100%', 
-              padding: '8px 12px', 
-              fontSize: 14,
-              background: 'var(--background)',
-              color: 'var(--text)',
-              border: '1px solid var(--border)',
-              borderRadius: 8
-            }}>
-              🏠 Find Sanctuaries
-            </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {URGENT_CAMPAIGNS.map(campaign => (
+              <div key={campaign.id} style={{ 
+                background: 'var(--background)', 
+                borderRadius: 8, 
+                padding: 12, 
+                border: '1px solid var(--primary)',
+                position: 'relative'
+              }}>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                  <img src={campaign.image} alt={campaign.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>{campaign.name}</div>
+                    <div style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600 }}>{campaign.species} • {campaign.sanctuary}</div>
+                    <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{campaign.urgency}</div>
+                  </div>
+                </div>
+                <div style={{ marginTop: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginBottom: 4 }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>${campaign.raised.toLocaleString()} raised</span>
+                    <span style={{ color: 'var(--primary)' }}>{Math.round((campaign.raised/campaign.goal)*100)}%</span>
+                  </div>
+                  <div style={{ background: 'var(--gray)', borderRadius: 4, height: 6, overflow: 'hidden' }}>
+                    <div style={{ 
+                      width: `${Math.round((campaign.raised/campaign.goal)*100)}%`, 
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
+                      height: '100%' 
+                    }}></div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>⏰ {campaign.timeLeft}</span>
+                    <Link to={`/ambassadors/${campaign.id}`} className="button" style={{ 
+                      padding: '4px 8px', 
+                      fontSize: 10,
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)',
+                      color: 'var(--white)',
+                      boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)'
+                    }}>
+                      Donate
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

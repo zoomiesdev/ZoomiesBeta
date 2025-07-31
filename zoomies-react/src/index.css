@@ -81,26 +81,7 @@ body {
   min-height: 100vh;
 }
 
-/* TV Line Effect Background */
-.tv-line-background {
-  background: 
-    linear-gradient(90deg, transparent 0%, transparent 49%, rgba(0,0,0,0.02) 50%, transparent 51%, transparent 100%),
-    linear-gradient(0deg, transparent 0%, transparent 49%, rgba(0,0,0,0.02) 50%, transparent 51%, transparent 100%);
-  background-size: 2px 2px, 2px 2px;
-  background-position: 0 0, 0 0;
-}
 
-/* Alternative TV line effect with horizontal stripes only */
-.tv-stripes-background {
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0,0,0,0.03) 1px,
-      rgba(0,0,0,0.03) 2px
-    );
-}
 
 /* VT323 Pixel Font Classes */
 .pixel-font {
@@ -146,14 +127,15 @@ nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-.card:hover, [style*="background: var(--card)"]:hover, [style*="background: var(--card, #fff)"]:hover {
+/* Removed hover effect for header cards */
+/* .card:hover, [style*="background: var(--card)"]:hover, [style*="background: var(--card, #fff)"]:hover {
   transform: translateY(-2px) !important;
   box-shadow: 
     0 10px 25px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
     0 0 0 1px rgba(255, 255, 255, 0.9) !important;
   background: rgba(255, 255, 255, 0.95) !important;
-}
+} */
 a {
   color: var(--primary);
   text-decoration: none;
@@ -195,11 +177,41 @@ a:hover {
   transition: background 0.2s, color 0.2s;
 }
 
-/* Stats Container - Subtle shadow outline */
+/* Stats Container - Clean styling */
 .stats-container {
-  background: #f8f8f8 !important;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2) !important;
+  background: transparent !important;
   border: none !important;
+  box-shadow: none !important;
+}
+
+/* Typing animation for stats */
+.typing-animation {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(20, end);
+  position: relative;
+}
+
+.typing-animation::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: var(--primary);
+  animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--primary); }
 }
 
 @media (max-width: 600px) {
