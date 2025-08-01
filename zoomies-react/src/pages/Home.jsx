@@ -223,7 +223,7 @@ export default function Home() {
               <div style={{ fontSize: 12, color: 'var(--primary)' }}>{featured.urgency}</div>
             </div>
           </div>
-          <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)' }}>View Campaign</Link>
+          <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)' }}>View Campaign</Link>
         </div>
       </aside>
 
@@ -526,7 +526,7 @@ export default function Home() {
         <div className="home-cta" style={{ 
           margin: '1rem', 
           padding: '2rem', 
-          background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
+          background: 'var(--cta-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', 
           borderRadius: 12, 
           textAlign: 'center', 
           color: 'var(--white)' 
@@ -611,6 +611,22 @@ export default function Home() {
                 }}>
                   LIVE STREAM
                 </div>
+                <button className="button" style={{
+                  position: 'absolute',
+                  bottom: 8,
+                  right: 8,
+                  background: '#87CEEB',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)'
+                }}>
+                  Join
+                </button>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -655,7 +671,7 @@ export default function Home() {
                   <div style={{ background: 'var(--gray)', borderRadius: 4, height: 6, overflow: 'hidden' }}>
                     <div style={{ 
                       width: `${Math.round((campaign.raised/campaign.goal)*100)}%`, 
-                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
+                      background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', 
                       height: '100%' 
                     }}></div>
                   </div>
@@ -664,9 +680,9 @@ export default function Home() {
                     <Link to={`/ambassadors/${campaign.id}`} className="button" style={{ 
                       padding: '4px 8px', 
                       fontSize: 10,
-                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)',
+                      background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))',
                       color: 'var(--white)',
-                      boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)'
+                      boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)'
                     }}>
                       Donate
                     </Link>

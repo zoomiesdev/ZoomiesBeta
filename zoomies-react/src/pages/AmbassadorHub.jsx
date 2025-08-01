@@ -337,7 +337,7 @@ export default function AmbassadorHub() {
                   flex: 1,
                   textAlign: 'center',
                   background: 'linear-gradient(90deg, var(--accent), var(--primary))',
-                  color: '#fff',
+                  color: 'var(--button-text, #fff)',
                   border: 'none',
                   borderRadius: 20
                 }}>
@@ -347,7 +347,7 @@ export default function AmbassadorHub() {
                   padding: '8px 16px', 
                   fontSize: 16,
                   background: 'var(--primary)',
-                  color: '#fff',
+                  color: 'var(--button-text, #fff)',
                   flex: 1
                 }}>
                   Donate

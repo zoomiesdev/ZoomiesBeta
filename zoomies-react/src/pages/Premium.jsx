@@ -136,7 +136,7 @@ export default function Premium() {
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.75rem 1.5rem',
-            background: '#f5f5f5',
+            background: 'var(--card)',
             borderRadius: '25px',
             border: '1px solid rgba(252, 151, 202, 0.2)'
           }}>
@@ -157,17 +157,17 @@ export default function Premium() {
               transition: 'all 0.3s ease',
               boxShadow: tipsEnabled ? '0 4px 12px rgba(252, 151, 202, 0.4)' : '0 2px 4px rgba(0,0,0,0.1)'
             }} onClick={() => setTipsEnabled(!tipsEnabled)}>
-              <div style={{
-                position: 'absolute',
-                top: 3,
-                left: tipsEnabled ? 33 : 3,
-                width: 24,
-                height: 24,
-                background: '#fff',
-                borderRadius: '50%',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }} />
+                          <div style={{
+              position: 'absolute',
+              top: 3,
+              left: tipsEnabled ? 33 : 3,
+              width: 24,
+              height: 24,
+              background: 'var(--background)',
+              borderRadius: '50%',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }} />
             </div>
             <span style={{ 
               color: tipsEnabled ? 'var(--primary)' : 'var(--text)', 
@@ -181,7 +181,7 @@ export default function Premium() {
 
         {/* Fee Breakdown */}
         <div style={{
-          background: '#f5f5f5',
+          background: 'var(--card)',
           borderRadius: '20px',
           padding: '1.5rem 2.5rem 2.5rem 2.5rem',
           border: '2px solid rgba(252, 151, 202, 0.15)',
@@ -204,7 +204,7 @@ export default function Premium() {
               flex: 1,
               textAlign: 'center',
               padding: '1.5rem',
-              background: '#f5f5f5',
+              background: 'var(--card)',
               borderRadius: '16px',
               border: '1px solid rgba(252, 151, 202, 0.1)',
               position: 'relative',
@@ -261,7 +261,7 @@ export default function Premium() {
               flex: 1,
               textAlign: 'center',
               padding: '1.5rem',
-              background: '#f5f5f5',
+              background: 'var(--card)',
               borderRadius: '16px',
               border: '1px solid rgba(252, 151, 202, 0.1)',
               position: 'relative',
@@ -307,7 +307,7 @@ export default function Premium() {
 
         {/* Additional Info */}
         <div style={{
-          background: '#f5f5f5',
+          background: 'var(--card)',
           borderRadius: '16px',
           padding: '2rem',
           border: '2px solid rgba(252, 151, 202, 0.2)',
@@ -345,7 +345,7 @@ export default function Premium() {
               }
             </p>
             <div style={{
-              background: '#f5f5f5',
+              background: 'var(--card)',
               padding: '1rem',
               borderRadius: '12px',
               border: '1px solid rgba(252, 151, 202, 0.2)',
@@ -405,7 +405,7 @@ export default function Premium() {
             alignItems: 'center',
             gap: '1rem',
             padding: '0.75rem 1.5rem',
-            background: '#f5f5f5',
+            background: 'var(--card)',
             borderRadius: '25px',
             border: '1px solid rgba(252, 151, 202, 0.2)'
           }}>
@@ -434,7 +434,7 @@ export default function Premium() {
                 left: selectedUserType === 'sanctuaries' ? 3 : 33,
                 width: 24,
                 height: 24,
-                background: '#fff',
+                background: 'var(--background)',
                 borderRadius: '50%',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
@@ -463,7 +463,7 @@ export default function Premium() {
       }}>
         {(selectedUserType === 'sanctuaries' ? sanctuaryTiers : communityTiers).map((tier, index) => (
           <div key={index} className="pricing-card" style={{
-            background: '#f5f5f5',
+            background: 'var(--card)',
             borderRadius: '16px',
             padding: '1.5rem',
             border: tier.popular ? '2px solid var(--primary)' : '1px solid rgba(252, 151, 202, 0.1)',
@@ -568,7 +568,7 @@ export default function Premium() {
 
       {/* FAQ Section */}
       <div className="faq-section" style={{ 
-        background: '#f5f5f5', 
+        background: 'var(--card)', 
         borderRadius: '20px', 
         padding: '2rem',
         marginBottom: '2rem'
@@ -655,7 +655,7 @@ export default function Premium() {
       {/* CTA Section */}
       <div className="cta-section" style={{ 
         textAlign: 'center', 
-        background: '#f5f5f5', 
+        background: 'var(--card)', 
         borderRadius: '20px', 
         padding: '3rem 2rem' 
       }}>

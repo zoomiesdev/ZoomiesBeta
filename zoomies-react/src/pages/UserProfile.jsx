@@ -1199,41 +1199,16 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* Profile Stats */}
-      <div className="profile-stats" style={{ marginLeft: 176, marginBottom: 32 }}>
+      {/* Profile Bio */}
+      <div className="profile-bio" style={{ marginLeft: 176, marginBottom: 32 }}>
         <p style={{ color: 'var(--text)', opacity: 0.8, margin: '0 0 32px 0', maxWidth: 600 }}>{profile.bio}</p>
-        <div className="stats-grid" style={{ display: 'flex', gap: 32, flexWrap: 'wrap', marginBottom: 16 }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
-              $<ScrollNumber value={profile.totalDonated} duration={2000} delay={300} />
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Total Donated</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
-              <ScrollNumber value={profile.animalsHelped} duration={2000} delay={500} />
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Animals Helped</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
-              <ScrollNumber value={profile.followers} duration={2000} delay={700} />
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Followers</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
-              <ScrollNumber value={profile.following} duration={2000} delay={900} />
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Following</div>
-          </div>
-        </div>
       </div>
 
       {/* Tabs */}
       <div className="tabs" style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: '1px solid var(--gray)' }}>
         {[
           { id: 'timeline', label: 'Timeline', icon: '📱' },
+          { id: 'stats', label: 'Stats', icon: '📊' },
           { id: 'badges', label: 'Badges', icon: '🏆' },
           { id: 'following', label: 'Following', icon: '👥' },
           { id: 'donations', label: 'Donations', icon: '💖' },
@@ -1396,6 +1371,85 @@ export default function UserProfile() {
                     <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>💬 23</button>
                     <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>🔄 Share</button>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'stats' && (
+            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
+              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Statistics</h2>
+              
+              {/* Stats Grid */}
+              <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, marginBottom: 32 }}>
+                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
+                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
+                    $<ScrollNumber value={profile.totalDonated} duration={2000} delay={300} />
+                  </div>
+                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Total Donated</div>
+                </div>
+                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
+                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
+                    <ScrollNumber value={profile.animalsHelped} duration={2000} delay={500} />
+                  </div>
+                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Animals Helped</div>
+                </div>
+                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
+                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
+                    <ScrollNumber value={profile.followers} duration={2000} delay={700} />
+                  </div>
+                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Followers</div>
+                </div>
+                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
+                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
+                    <ScrollNumber value={profile.following} duration={2000} delay={900} />
+                  </div>
+                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Following</div>
+                </div>
+              </div>
+
+              {/* Level Progress */}
+              <div style={{ background: 'var(--background)', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Level Progress</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ fontWeight: 600 }}>Level {profile.level}</span>
+                  <span style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>
+                    {profile.xp} / {profile.nextLevelXp} XP
+                  </span>
+                </div>
+                {renderProgressBar(profile.xp, profile.nextLevelXp)}
+                <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>
+                  {profile.nextLevelXp - profile.xp} XP to next level
+                </div>
+              </div>
+
+              {/* Leaderboard */}
+              <div style={{ background: 'var(--background)', borderRadius: 12, padding: 24 }}>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Top Donors This Month</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {LEADERBOARD.map((user, index) => (
+                    <div key={user.name} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <div style={{ 
+                        width: 32, 
+                        height: 32, 
+                        borderRadius: '50%', 
+                        background: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : 'var(--gray)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: index < 3 ? '#fff' : 'var(--text)'
+                      }}>
+                        {index + 1}
+                      </div>
+                      <img src={user.avatar} alt={user.name} style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: 14 }}>{user.name}</div>
+                        <div style={{ fontSize: 12, color: 'var(--text)', opacity: 0.7 }}>${user.amount} donated</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

@@ -360,9 +360,11 @@ export default function ZoomiesHeader() {
                 background: '#f5f5f5',
                 border: 'none',
                 color: 'var(--text, #18171C)',
-                fontSize: 16,
+                fontSize: 24,
                 cursor: 'pointer',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s ease',
+                padding: '8px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
               }}
               title="Search"
               onClick={() => setSearchOpen(true)}

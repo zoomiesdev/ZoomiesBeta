@@ -60,30 +60,34 @@ body {
   --gray-light: #F8F6FF;
   --accent: #B6E6FF;
   --pink: #FF9EC4;
+  --button-text: #FFFFFF;
 }
 [data-theme='dark'] {
-  --background: #0F0F23;
-  --card: #1A1A2E;
+  --background: #0A0A0A;
+  --card: #1A1A1A;
   --primary: #4A9EFF;
   --secondary: #6BB6FF;
   --light-pink: #7B68EE;
   --purple: #8A2BE2;
   --light-purple: #9370DB;
-  --text: #E8E8FF;
-  --text-secondary: #B8B8D8;
-  --text-muted: #8A8A9A;
-  --text-dark: #E8E8FF;
-  --border: #2A2A3E;
-  --border-light: #3A3A4E;
+  --text: #E8E8E8;
+  --text-secondary: #B8B8B8;
+  --text-muted: #8A8A8A;
+  --text-dark: #E8E8E8;
+  --border: #2A2A2A;
+  --border-light: #404040;
   --success: #4CAF50;
   --error: #f44336;
   --warning: #FF4444;
-  --white: #1A1A2E;
-  --black: #E8E8FF;
-  --gray: #2A2A3E;
-  --gray-light: #3A3A4E;
+  --white: #1A1A1A;
+  --black: #E8E8E8;
+  --gray: #2A2A2A;
+  --gray-light: #404040;
   --accent: #4A9EFF;
   --pink: #7B68EE;
+  --cta-gradient: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #60A5FA 100%);
+  --button-gradient: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+  --button-text: #FFFFFF;
 }
 
 [data-theme='y2k'] {
@@ -157,7 +161,7 @@ body {
 }
 
 [data-theme='dark'] body {
-  background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 25%, #2A2A3E 50%, #3A3A4E 75%, #4A4A5E 100%);
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 25%, #2A2A2A 50%, #404040 75%, #505050 100%);
 }
 
 [data-theme='y2k'] body {
@@ -299,6 +303,11 @@ a:hover {
   color: var(--primary) !important;
 }
 
+/* Fix button text visibility in dark mode */
+[data-theme='dark'] .button.pixel-font {
+  color: #FFFFFF !important;
+}
+
 [data-theme='dark'] .scroll-number {
   color: var(--primary) !important;
 }
@@ -346,8 +355,8 @@ a:hover {
 
 /* Ensure text visibility in girly theme */
 [data-theme='y2k'] .zoomies-header span {
-  color: #FF1493 !important;
-  text-shadow: 2px 2px 4px rgba(255, 20, 147, 0.5) !important;
+  color: #ffdef9 !important;
+  text-shadow: 2px 2px 4px rgba(255, 222, 249, 0.5) !important;
   font-weight: bold !important;
 }
 
@@ -482,6 +491,47 @@ a:hover {
 
 [data-theme='grunge'] .pixel-font {
   color: #4682B4 !important;
+  text-shadow: 
+    0 0 10px rgba(135, 206, 235, 0.8),
+    0 0 20px rgba(135, 206, 235, 0.4) !important;
+}
+
+/* Make all text pixel font in cybercore mode */
+[data-theme='grunge'] * {
+  font-family: 'VT323', monospace !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 400 !important;
+}
+
+/* Keep headers and titles as pixel-font class for special styling */
+[data-theme='grunge'] h1, [data-theme='grunge'] h2, [data-theme='grunge'] h3, [data-theme='grunge'] h4, [data-theme='grunge'] h5, [data-theme='grunge'] h6 {
+  font-family: 'VT323', monospace !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+}
+
+/* Replace pixel text with Poppins in all modes except cybercore */
+[data-theme='light'] .pixel-font:not(.stats-container .pixel-font),
+[data-theme='dark'] .pixel-font:not(.stats-container .pixel-font),
+[data-theme='y2k'] .pixel-font:not(.stats-container .pixel-font) {
+  font-family: 'Poppins', 'Inter', Arial, sans-serif !important;
+  letter-spacing: normal !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+}
+
+/* Keep pixel font for homepage stats in all modes */
+.stats-container .pixel-font {
+  font-family: 'VT323', monospace !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 400 !important;
+}
+
+/* Make Zoomies text bigger in cybercore mode */
+[data-theme='grunge'] .zoomies-header span {
+  font-size: 24px !important;
+  font-weight: bold !important;
   text-shadow: 
     0 0 10px rgba(135, 206, 235, 0.8),
     0 0 20px rgba(135, 206, 235, 0.4) !important;

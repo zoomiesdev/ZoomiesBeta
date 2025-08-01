@@ -36,8 +36,8 @@ const ThemeSelector = ({ currentTheme, onThemeChange }) => {
           width: '40px',
           height: '40px',
           color: 'var(--text)',
-          background: 'var(--card)',
-          border: '1px solid var(--border)',
+          background: '#f5f5f5',
+          border: 'none',
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
         }}
         title="Theme Settings"
