@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeSelector from './ThemeSelector';
 import logoBlack from '../assets/LogoBlack.png';
 import logoWhite from '../assets/LogoWhite.png';
 import homeIcon from '../assets/HomeIcon.png';
@@ -30,7 +31,6 @@ export default function ZoomiesHeader() {
   const handleUserLogin = () => setUser({ name: 'Lianne', avatar: 'https://placehold.co/32x32?text=L', type: 'user' });
   const handleSanctuaryLogin = () => setUser({ name: 'Alveus Sanctuary', avatar: 'https://placehold.co/32x32?text=A', type: 'sanctuary' });
   const handleLogout = () => setUser(null);
-  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'));
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   // Close search, profile, or login dropdown on outside click
@@ -85,7 +85,7 @@ export default function ZoomiesHeader() {
       }}>
         {/* Left side: Logo and Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img src={isDark ? logoWhite : logoBlack} alt="Zoomies Logo" style={{ 
+          <img src={(isDark || theme === 'y2k' || theme === 'grunge') ? logoWhite : logoBlack} alt="Zoomies Logo" style={{ 
             width: 53, 
             height: 56, 
             objectFit: 'cover'
@@ -147,7 +147,7 @@ export default function ZoomiesHeader() {
             setTooltip({ show: false, text: '', x: 0, y: 0 });
           }}
           title="Home">
-            <img src={isDark ? homeIconWhite : homeIcon} alt="Home" style={{ width: 40, height: 40 }} />
+            <img src={(isDark || theme === 'y2k' || theme === 'grunge') ? homeIconWhite : homeIcon} alt="Home" style={{ width: 40, height: 40 }} />
             {currentPage === '/' && (
               <div style={{
                 position: 'absolute',
@@ -194,7 +194,7 @@ export default function ZoomiesHeader() {
             setTooltip({ show: false, text: '', x: 0, y: 0 });
           }}
           title="Ambassadors">
-            <img src={isDark ? animalsIconWhite : animalsIcon} alt="Animals" style={{ width: 40, height: 40 }} />
+            <img src={(isDark || theme === 'y2k' || theme === 'grunge') ? animalsIconWhite : animalsIcon} alt="Animals" style={{ width: 40, height: 40 }} />
             {currentPage === '/ambassador-hub' && (
               <div style={{
                 position: 'absolute',
@@ -241,7 +241,7 @@ export default function ZoomiesHeader() {
             setTooltip({ show: false, text: '', x: 0, y: 0 });
           }}
           title="Community">
-            <img src={isDark ? communityIconWhite : communityIcon} alt="Community" style={{ width: 40, height: 40 }} />
+            <img src={(isDark || theme === 'y2k' || theme === 'grunge') ? communityIconWhite : communityIcon} alt="Community" style={{ width: 40, height: 40 }} />
             {currentPage === '/community' && (
               <div style={{
                 position: 'absolute',
@@ -288,7 +288,7 @@ export default function ZoomiesHeader() {
             setTooltip({ show: false, text: '', x: 0, y: 0 });
           }}
                       title="Pricing">
-                          <img src={isDark ? premiumIconWhite : premiumIcon} alt="Pricing" style={{ width: 40, height: 40 }} />
+                          <img src={(isDark || theme === 'y2k' || theme === 'grunge') ? premiumIconWhite : premiumIcon} alt="Pricing" style={{ width: 40, height: 40 }} />
             {currentPage === '/premium' && (
               <div style={{
                 position: 'absolute',
@@ -371,23 +371,11 @@ export default function ZoomiesHeader() {
             </button>
           )}
 
-          {/* Theme Toggle Bubble */}
-          <button onClick={toggleTheme} style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            background: '#f5f5f5',
-            border: 'none',
-            color: 'var(--text, #18171C)',
-            fontSize: 16,
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }} title="Toggle theme">
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
+          {/* Theme Selector */}
+          <ThemeSelector 
+            currentTheme={theme} 
+            onThemeChange={setTheme}
+          />
 
           {/* Login/User Profile Bubble with Dropdown */}
           <div ref={user ? profileRef : loginRef} style={{ position: 'relative' }}>
@@ -837,28 +825,44 @@ export default function ZoomiesHeader() {
             )}
           </div>
 
-          {/* Mobile theme toggle - moved down */}
+          {/* Mobile theme selector */}
           <div style={{ marginTop: 32, paddingTop: 16, borderTop: '1px solid var(--gray)' }}>
-            <button 
-              onClick={toggleTheme} 
-              className="button" 
-              style={{ 
-                width: '100%',
-                border: 'none', 
-                borderRadius: 12, 
-                padding: '0.75rem', 
-                fontSize: 16, 
-                cursor: 'pointer',
-                marginBottom: 16,
-                background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)',
-                color: '#fff',
-                boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)',
-                transition: 'all 0.2s'
-              }} 
-              title="Toggle theme"
-            >
-              {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
-            </button>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: '600',
+              color: 'var(--text)',
+              marginBottom: '12px',
+              textAlign: 'center'
+            }}>
+              Theme
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {['light', 'dark', 'y2k', 'grunge'].map((themeId) => (
+                <button
+                  key={themeId}
+                  onClick={() => { setTheme(themeId); toggleMobileMenu(); }}
+                  className="button"
+                  style={{
+                    width: '100%',
+                    background: theme === themeId ? 'var(--primary)' : 'var(--gray)',
+                    color: theme === themeId ? 'white' : 'var(--text)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    textAlign: 'left',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>{themeId === 'light' ? '☀️' : themeId === 'dark' ? '🌙' : themeId === 'y2k' ? '💿' : '🖤'}</span>
+                  <span style={{ textTransform: 'capitalize' }}>{themeId}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

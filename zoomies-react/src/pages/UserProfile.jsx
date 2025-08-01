@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ScrollNumber from '../components/ScrollNumber';
 
 // Mock data for enhanced user profile
 const USER_DATA = {
@@ -1203,19 +1204,27 @@ export default function UserProfile() {
         <p style={{ color: 'var(--text)', opacity: 0.8, margin: '0 0 32px 0', maxWidth: 600 }}>{profile.bio}</p>
         <div className="stats-grid" style={{ display: 'flex', gap: 32, flexWrap: 'wrap', marginBottom: 16 }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>${profile.totalDonated}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+              $<ScrollNumber value={profile.totalDonated} duration={2000} delay={300} />
+            </div>
             <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Total Donated</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{profile.animalsHelped}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+              <ScrollNumber value={profile.animalsHelped} duration={2000} delay={500} />
+            </div>
             <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Animals Helped</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{profile.followers}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+              <ScrollNumber value={profile.followers} duration={2000} delay={700} />
+            </div>
             <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Followers</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{profile.following}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+              <ScrollNumber value={profile.following} duration={2000} delay={900} />
+            </div>
             <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Following</div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ScrollNumber from '../components/ScrollNumber';
 import MaxProfilePic from '../assets/MaxProfilePic.png';
 import MaxBanner from '../assets/MaxBanner.png';
 import StompyProfilePic from '../assets/StompyProfilePic.png';
@@ -303,19 +304,27 @@ export default function Home() {
             zIndex: 2
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>$45,230</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
+                <ScrollNumber value="$45,230" duration={2000} delay={500} />
+              </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>1,247</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
+                <ScrollNumber value="1,247" duration={2000} delay={700} />
+              </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>8,934</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
+                <ScrollNumber value="8,934" duration={2000} delay={900} />
+              </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="pixel-font typing-animation" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>156</div>
+              <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
+                <ScrollNumber value="156" duration={2000} delay={1100} />
+              </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
             </div>
           </div>

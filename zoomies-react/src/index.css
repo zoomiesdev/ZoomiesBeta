@@ -62,15 +62,90 @@ body {
   --pink: #FF9EC4;
 }
 [data-theme='dark'] {
-  --background: #18171C;
-  --card: #232129;
-  --primary: #FF8E8E;
-  --accent: #B6E6FF;
-  --text: #F8F6FF;
-  --pink: #FF9EC4;
-  --gray: #232129;
-  --gray-light: #3A3A3A;
-  --border: #FF8E8E;
+  --background: #0F0F23;
+  --card: #1A1A2E;
+  --primary: #4A9EFF;
+  --secondary: #6BB6FF;
+  --light-pink: #7B68EE;
+  --purple: #8A2BE2;
+  --light-purple: #9370DB;
+  --text: #E8E8FF;
+  --text-secondary: #B8B8D8;
+  --text-muted: #8A8A9A;
+  --text-dark: #E8E8FF;
+  --border: #2A2A3E;
+  --border-light: #3A3A4E;
+  --success: #4CAF50;
+  --error: #f44336;
+  --warning: #FF4444;
+  --white: #1A1A2E;
+  --black: #E8E8FF;
+  --gray: #2A2A3E;
+  --gray-light: #3A3A4E;
+  --accent: #4A9EFF;
+  --pink: #7B68EE;
+}
+
+[data-theme='y2k'] {
+  --background: #FFF0F5;
+  --card: #FFFFFF;
+  --primary: #FF69B4;
+  --secondary: #FFB6C1;
+  --light-pink: #FFC0CB;
+  --purple: #DDA0DD;
+  --light-purple: #E6E6FA;
+  --text: #4A4A4A;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+  --text-dark: #2A2A2A;
+  --border: #FFB6C1;
+  --border-light: #FFC0CB;
+  --success: #32CD32;
+  --error: #FF4500;
+  --warning: #FF6347;
+  --white: #FFFFFF;
+  --black: #4A4A4A;
+  --gray: #F0F8FF;
+  --gray-light: #F8F8FF;
+  --accent: #87CEEB;
+  --pink: #FF69B4;
+  --girly-pink: #FF69B4;
+  --baby-pink: #FFB6C1;
+  --rose-pink: #FFC0CB;
+  --lavender: #E6E6FA;
+  --peach: #FFDAB9;
+  --light-text: #FF69B4;
+  --button-text: #FFFFFF;
+}
+
+[data-theme='grunge'] {
+  --background: #0A0A0F;
+  --card: rgba(16, 16, 32, 0.8);
+  --primary: #00D4FF;
+  --secondary: #0099CC;
+  --light-pink: #FF69B4;
+  --purple: #8A2BE2;
+  --light-purple: #9370DB;
+  --text: #E0F0FF;
+  --text-secondary: #B0C0D0;
+  --text-muted: #8090A0;
+  --text-dark: #F0F8FF;
+  --border: rgba(0, 212, 255, 0.3);
+  --border-light: rgba(0, 153, 204, 0.2);
+  --success: #00FF88;
+  --error: #FF4444;
+  --warning: #FFAA00;
+  --white: rgba(16, 16, 32, 0.8);
+  --black: #E0F0FF;
+  --gray: rgba(32, 32, 48, 0.6);
+  --gray-light: rgba(48, 48, 64, 0.4);
+  --accent: #00D4FF;
+  --pink: #FF69B4;
+  --neon-blue: #00D4FF;
+  --neon-cyan: #00FFFF;
+  --neon-purple: #8A2BE2;
+  --glass-blue: rgba(0, 212, 255, 0.1);
+  --glass-purple: rgba(138, 43, 226, 0.1);
 }
 body {
   background: linear-gradient(135deg, #FCF8FC 0%, #F0F8FF 25%, #F8F0FF 50%, #FFF0F8 75%, #FFF0F0 100%);
@@ -79,6 +154,26 @@ body {
   font-family: 'Poppins', 'Inter', Arial, sans-serif;
   margin: 0;
   min-height: 100vh;
+}
+
+[data-theme='dark'] body {
+  background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 25%, #2A2A3E 50%, #3A3A4E 75%, #4A4A5E 100%);
+}
+
+[data-theme='y2k'] body {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(221, 160, 221, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 192, 203, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #FFF0F5 0%, #F8F8FF 25%, #E6E6FA 50%, #F0F8FF 75%, #FFF0F5 100%);
+}
+
+[data-theme='grunge'] body {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #0A0A0F 0%, #101020 25%, #1A1A2E 50%, #202040 75%, #2A2A4A 100%);
 }
 
 
@@ -127,6 +222,15 @@ nav, .button, input, textarea, select, .comments, .leaderboard, .profile-actions
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
+[data-theme='dark'] .card, [data-theme='dark'] [style*="background: var(--card)"], [data-theme='dark'] [style*="background: var(--card, #fff)"] {
+  background: var(--card) !important;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(74, 158, 255, 0.2) !important;
+  border: 1px solid rgba(74, 158, 255, 0.3) !important;
+}
+
 /* Removed hover effect for header cards */
 /* .card:hover, [style*="background: var(--card)"]:hover, [style*="background: var(--card, #fff)"]:hover {
   transform: translateY(-2px) !important;
@@ -162,12 +266,14 @@ a:hover {
   box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
 }
 [data-theme='dark'] .button {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: var(--text);
+  box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
 }
 [data-theme='dark'] .button:hover, [data-theme='dark'] .button:focus {
-  background: linear-gradient(315deg, var(--light-pink) 0%, var(--primary) 100%);
+  background: linear-gradient(315deg, var(--secondary) 0%, var(--primary) 100%);
   color: var(--background);
+  box-shadow: 0 4px 16px rgba(74, 158, 255, 0.4);
 }
 
 /* SanctuaryDashboard tab hover effect */
@@ -177,6 +283,228 @@ a:hover {
   transition: background 0.2s, color 0.2s;
 }
 
+/* Dark mode improvements */
+[data-theme='dark'] input, [data-theme='dark'] textarea, [data-theme='dark'] select {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme='dark'] input:focus, [data-theme='dark'] textarea:focus, [data-theme='dark'] select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2) !important;
+}
+
+[data-theme='dark'] .pixel-font {
+  color: var(--primary) !important;
+}
+
+[data-theme='dark'] .scroll-number {
+  color: var(--primary) !important;
+}
+
+/* Dark mode browser window styling */
+[data-theme='dark'] [style*="background: #f5f5f5"] {
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+[data-theme='dark'] [style*="color: #666"] {
+  color: var(--text-secondary) !important;
+}
+
+/* Y2K theme styling - Girly Pink Aesthetic */
+[data-theme='y2k'] .card, [data-theme='y2k'] [style*="background: var(--card)"] {
+  border: 2px solid var(--baby-pink) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 24px rgba(255, 182, 193, 0.3) !important;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF0F5 25%, #F8F8FF 50%, #FFF0F5 75%, #FFFFFF 100%) !important;
+  position: relative !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+[data-theme='y2k'] .button {
+  background: linear-gradient(135deg, var(--girly-pink) 0%, var(--baby-pink) 100%) !important;
+  border: 2px solid var(--rose-pink) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 6px 16px rgba(255, 105, 180, 0.4) !important;
+  font-weight: bold !important;
+  color: var(--button-text) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+[data-theme='y2k'] .button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5) !important;
+}
+
+[data-theme='y2k'] .pixel-font {
+  color: var(--light-text) !important;
+  text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.4) !important;
+}
+
+/* Ensure text visibility in girly theme */
+[data-theme='y2k'] .zoomies-header span {
+  color: #FF1493 !important;
+  text-shadow: 2px 2px 4px rgba(255, 20, 147, 0.5) !important;
+  font-weight: bold !important;
+}
+
+[data-theme='y2k'] nav a {
+  color: var(--light-text) !important;
+  text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.3) !important;
+}
+
+[data-theme='y2k'] .button, [data-theme='y2k'] button {
+  color: var(--button-text) !important;
+  font-weight: bold !important;
+}
+
+/* Y2K specific elements */
+[data-theme='y2k'] .zoomies-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  border-bottom: 2px solid var(--primary) !important;
+  box-shadow: 0 2px 8px rgba(255, 20, 147, 0.2) !important;
+}
+
+[data-theme='y2k'] input, [data-theme='y2k'] textarea {
+  border: 2px solid var(--primary) !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 2px 4px rgba(255, 20, 147, 0.1) !important;
+}
+
+[data-theme='y2k'] input:focus, [data-theme='y2k'] textarea:focus {
+  border-color: var(--secondary) !important;
+  box-shadow: 0 0 0 2px rgba(255, 20, 147, 0.2) !important;
+}
+
+/* Y2K scroll numbers */
+[data-theme='y2k'] .scroll-number {
+  color: var(--light-text) !important;
+  text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.4) !important;
+}
+
+/* Y2K browser window styling */
+[data-theme='y2k'] [style*="background: #f5f5f5"] {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  border-bottom: 2px solid var(--primary) !important;
+}
+
+[data-theme='y2k'] [style*="color: #666"] {
+  color: var(--text) !important;
+}
+
+/* Fix community page layout for girly theme */
+[data-theme='y2k'] .community-root > div:first-child {
+  top: 10px !important;
+  height: calc(100vh - 60px) !important;
+}
+
+[data-theme='y2k'] .community-root > div:last-child {
+  margin-left: 50px !important;
+  padding: 16px !important;
+  width: calc(100% - 280px) !important;
+  max-width: calc(100% - 280px) !important;
+}
+
+[data-theme='y2k'] .community-root .trending-scroll {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Cybercore theme styling - Glass Panels & Light Blues */
+[data-theme='grunge'] .card, [data-theme='grunge'] [style*="background: var(--card)"] {
+  background: rgba(173, 216, 230, 0.15) !important;
+  backdrop-filter: blur(25px) !important;
+  border: 1px solid rgba(135, 206, 250, 0.4) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 12px 40px rgba(135, 206, 250, 0.2),
+    0 0 0 1px rgba(135, 206, 250, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  position: relative !important;
+}
+
+[data-theme='grunge'] .card::before, [data-theme='grunge'] [style*="background: var(--card)"]::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: linear-gradient(135deg, 
+    rgba(173, 216, 230, 0.1) 0%, 
+    rgba(135, 206, 250, 0.1) 50%, 
+    rgba(100, 149, 237, 0.1) 100%) !important;
+  border-radius: 20px !important;
+  pointer-events: none !important;
+}
+
+[data-theme='grunge'] .button {
+  background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%) !important;
+  border: 1px solid #87CEEB !important;
+  border-radius: 12px !important;
+  box-shadow: 
+    0 4px 16px rgba(135, 206, 235, 0.4),
+    0 0 0 1px rgba(135, 206, 235, 0.2) !important;
+  font-weight: bold !important;
+  color: #2F4F4F !important;
+  text-shadow: 0 0 8px rgba(135, 206, 235, 0.8) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+[data-theme='grunge'] .button::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  animation: cyber-shine 2s infinite !important;
+}
+
+@keyframes cyber-shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+[data-theme='grunge'] .button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 6px 20px rgba(135, 206, 235, 0.6),
+    0 0 0 2px rgba(135, 206, 235, 0.3) !important;
+}
+
+[data-theme='grunge'] .pixel-font {
+  color: #4682B4 !important;
+  text-shadow: 
+    0 0 10px rgba(135, 206, 235, 0.8),
+    0 0 20px rgba(135, 206, 235, 0.4) !important;
+}
+
+/* Fix community page layout for cybercore theme */
+[data-theme='grunge'] .community-root > div:first-child {
+  top: 20px !important;
+  height: calc(100vh - 60px) !important;
+}
+
+[data-theme='grunge'] .community-root > div:last-child {
+  margin-left: 50px !important;
+  padding: 16px !important;
+  width: calc(100% - 280px) !important;
+  max-width: calc(100% - 280px) !important;
+}
+
+[data-theme='grunge'] .community-root .trending-scroll {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
 /* Stats Container - Clean styling */
 .stats-container {
   background: transparent !important;
@@ -184,34 +512,27 @@ a:hover {
   box-shadow: none !important;
 }
 
-/* Typing animation for stats */
+/* Scroll animation for stats */
 .typing-animation {
   overflow: hidden;
-  white-space: nowrap;
-  animation: typing 2s steps(20, end);
   position: relative;
+  display: inline-block;
 }
 
-.typing-animation::after {
-  content: '';
-  position: absolute;
-  right: -2px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2px;
-  height: 60%;
-  background: var(--primary);
-  animation: blink-caret 0.75s step-end infinite;
+.scroll-number {
+  display: inline-block;
+  animation: scrollUp 2s ease-out forwards;
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent; }
-  50% { border-color: var(--primary); }
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 600px) {
@@ -385,58 +706,62 @@ a:hover {
   }
 
   /* Community page mobile styles */
-  .community-root {
-    flex-direction: column !important;
-    padding: 0 !important;
+  @media (max-width: 600px) {
+    .community-root {
+      flex-direction: column !important;
+      padding: 0 !important;
+    }
+    .community-root > div:first-child {
+      display: none !important; /* Hide sidebar */
+    }
+    .community-root > div:last-child {
+      margin-left: 0 !important;
+      padding: 0.5rem !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
   }
-  .community-root > div:first-child {
-    display: none !important; /* Hide sidebar */
-  }
-  .community-root > div:last-child {
-    margin-left: 0 !important;
-    padding: 0.5rem !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-  .community-root .trending-scroll {
-    flex-direction: column !important;
-    gap: 12px !important;
-    overflow-x: visible !important;
-    padding-bottom: 0 !important;
-  }
-  .community-root .trending-scroll > div {
-    min-width: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-  .community-root .sort-options {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    padding: 0.5rem 0 !important;
-  }
-  .community-root .post-list {
-    gap: 12px !important;
-  }
-  .community-root .post-card {
-    flex-direction: column !important;
-    gap: 8px !important;
-    padding: 12px !important;
-  }
-  .community-root .post-card .button {
-    width: 100% !important;
-    margin-bottom: 4px !important;
-    font-size: 15px !important;
-    padding: 10px 0 !important;
-  }
-  .community-root h3, .community-root h2 {
-    font-size: 1.1rem !important;
-  }
-  .community-root .post-card h3 {
-    font-size: 1rem !important;
-  }
-  .community-root .post-card .button, .community-root .post-card button {
-    min-height: 40px !important;
-    font-size: 15px !important;
+  @media (max-width: 600px) {
+    .community-root .trending-scroll {
+      flex-direction: column !important;
+      gap: 12px !important;
+      overflow-x: visible !important;
+      padding-bottom: 0 !important;
+    }
+    .community-root .trending-scroll > div {
+      min-width: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+    .community-root .sort-options {
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      padding: 0.5rem 0 !important;
+    }
+    .community-root .post-list {
+      gap: 12px !important;
+    }
+    .community-root .post-card {
+      flex-direction: column !important;
+      gap: 8px !important;
+      padding: 12px !important;
+    }
+    .community-root .post-card .button {
+      width: 100% !important;
+      margin-bottom: 4px !important;
+      font-size: 15px !important;
+      padding: 10px 0 !important;
+    }
+    .community-root h3, .community-root h2 {
+      font-size: 1.1rem !important;
+    }
+    .community-root .post-card h3 {
+      font-size: 1rem !important;
+    }
+    .community-root .post-card .button, .community-root .post-card button {
+      min-height: 40px !important;
+      font-size: 15px !important;
+    }
   }
   .category-bar {
     display: flex !important;

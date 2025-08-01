@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ScrollNumber from '../components/ScrollNumber';
 
 // Mock data for sanctuary dashboard
 const SANCTUARY_DATA = {
@@ -83,22 +84,30 @@ export default function SanctuaryDashboard() {
       <div className="quick-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
         <div style={{ background: 'var(--card)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>💰</div>
-          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{formatCurrency(FUNDRAISING_STATS.totalRaised)}</div>
+          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+            <ScrollNumber value={`$${FUNDRAISING_STATS.totalRaised.toLocaleString()}`} duration={2000} delay={300} />
+          </div>
           <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Total Raised</div>
         </div>
         <div style={{ background: 'var(--card)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>🎯</div>
-          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{FUNDRAISING_STATS.activeCampaigns}</div>
+          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+            <ScrollNumber value={FUNDRAISING_STATS.activeCampaigns} duration={2000} delay={500} />
+          </div>
           <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Active Campaigns</div>
         </div>
         <div style={{ background: 'var(--card)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>👥</div>
-          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>{FUNDRAISING_STATS.totalDonors}</div>
+          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+            <ScrollNumber value={FUNDRAISING_STATS.totalDonors} duration={2000} delay={700} />
+          </div>
           <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Total Donors</div>
         </div>
         <div style={{ background: 'var(--card)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>📈</div>
-          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>+{FUNDRAISING_STATS.monthlyGrowth}%</div>
+          <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--primary)' }}>
+            +<ScrollNumber value={FUNDRAISING_STATS.monthlyGrowth} duration={2000} delay={900} />%
+          </div>
           <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>Monthly Growth</div>
         </div>
       </div>
