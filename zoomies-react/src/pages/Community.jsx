@@ -422,9 +422,9 @@ export default function Community() {
           {/* Sort Options */}
           <div className="sort-options" style={{ display: 'flex', gap: 16, marginBottom: 24, padding: '16px 0', borderBottom: '1px solid var(--border)' }}>
             <button className="button" style={{ background: 'var(--primary)', color: 'var(--background)', padding: '8px 16px', fontSize: 14 }}>Best</button>
-            <button className="button" style={{ background: isDark ? '#2A2A2A' : 'transparent', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>New</button>
-            <button className="button" style={{ background: isDark ? '#2A2A2A' : 'transparent', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>Top</button>
-            <button className="button" style={{ background: isDark ? '#2A2A2A' : 'transparent', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>Rising</button>
+            <button className="button" style={{ background: isDark ? '#333333' : '#f5f5f5', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>New</button>
+            <button className="button" style={{ background: isDark ? '#333333' : '#f5f5f5', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>Top</button>
+            <button className="button" style={{ background: isDark ? '#333333' : '#f5f5f5', color: 'var(--text)', padding: '8px 16px', fontSize: 14 }}>Rising</button>
           </div>
 
           {/* Posts */}

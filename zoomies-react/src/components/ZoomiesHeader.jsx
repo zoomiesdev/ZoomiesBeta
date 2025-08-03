@@ -540,6 +540,23 @@ export default function ZoomiesHeader() {
                 }} onClick={() => setProfileDropdownOpen(false)}>
                   {user.type === 'sanctuary' ? 'View Dashboard' : 'View Profile'}
                 </Link>
+                {user.type === 'user' && (
+                  <Link to="/dashboard" style={{
+                    padding: '0.75rem 1.25rem',
+                    color: 'var(--text, #18171C)',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    fontSize: 15,
+                    border: 'none',
+                    background: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                    borderBottom: '1px solid var(--border, #eee)'
+                  }} onClick={() => setProfileDropdownOpen(false)}>
+                    View Dashboard
+                  </Link>
+                )}
                 <button style={{
                   padding: '0.75rem 1.25rem',
                   color: 'var(--text, #18171C)',

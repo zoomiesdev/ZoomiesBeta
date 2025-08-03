@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ScrollNumber from '../components/ScrollNumber';
+import CameraPixel from './CameraPixel.png';
+import MoviePixel from './MoviePixel.png';
 
-// Mock data for enhanced user profile
+// Mock data for user profile
 const USER_DATA = {
-  name: 'Lianne Graham',
+  name: 'Lianna Graham',
   username: '@liannagraham',
   avatar: 'https://picsum.photos/100/100?random=2',
   coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center',
@@ -17,7 +18,10 @@ const USER_DATA = {
   following: 156,
   level: 8,
   xp: 2840,
-  nextLevelXp: 3200
+  nextLevelXp: 3200,
+  feeling: 'Happy',
+  feelingEmoji: '😊',
+  feelingDescription: 'Feeling great today!'
 };
 
 const BADGES = [
@@ -41,19 +45,55 @@ const FOLLOWED_SANCTUARIES = [
   { name: 'Farm Sanctuary', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', location: 'Watkins Glen, NY', animals: 156 }
 ];
 
-const ACTIVITY_FEED = [
-  { type: 'donation', content: 'Donated $50 to Stompy', time: '2 hours ago', icon: '💖' },
-  { type: 'post', content: 'Just visited Alveus Sanctuary! The animals are doing amazing. #sanctuarylife', time: '1 day ago', icon: '📸' },
-  { type: 'achievement', content: 'Earned the "Fundraiser" badge!', time: '3 days ago', icon: '🏆' },
-  { type: 'event', content: 'Registered for "Walk for Animals" event', time: '1 week ago', icon: '🎟️' },
-  { type: 'fundraiser', content: 'Started fundraiser for Luna\'s surgery', time: '2 weeks ago', icon: '💰' }
+const USER_POSTS = [
+  { 
+    id: 1, 
+    content: 'Just visited Alveus Sanctuary today! The animals are doing amazing. Stompy was so happy to see us! 🐐 #sanctuarylife', 
+    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+    time: '2 hours ago',
+    likes: 24,
+    comments: 8,
+    shares: 3
+  },
+  { 
+    id: 2, 
+    content: 'Volunteering at the local animal shelter this weekend. Every little bit helps! 🐕 #volunteer #animalwelfare', 
+    image: null,
+    time: '1 day ago',
+    likes: 18,
+    comments: 5,
+    shares: 2
+  },
+  { 
+    id: 3, 
+    content: 'Look at this adorable kitten I met today! She was so playful and full of energy. Can\'t wait to see her find her forever home! 😺', 
+    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop&crop=center',
+    time: '3 days ago',
+    likes: 42,
+    comments: 12,
+    shares: 7
+  },
+  { 
+    id: 4, 
+    content: 'Started my fundraiser for Luna\'s surgery! Please help if you can. Every donation counts! 💕', 
+    image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400&h=300&fit=crop&crop=center',
+    time: '1 week ago',
+    likes: 56,
+    comments: 15,
+    shares: 12
+  }
 ];
 
-const DONATIONS = [
-  { to: 'Stompy', amount: 50, date: '2024-07-01', type: 'Monthly' },
-  { to: 'Luna', amount: 25, date: '2024-06-15', type: 'One-time' },
-  { to: 'Bella', amount: 100, date: '2024-06-01', type: 'Emergency' },
-  { to: 'Alveus Sanctuary', amount: 75, date: '2024-05-20', type: 'General' }
+const GALLERY_IMAGES = [
+  { id: 1, url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop&crop=center', caption: 'Stompy at Alveus' },
+  { id: 2, url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=center', caption: 'Adorable kitten' },
+  { id: 3, url: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=300&h=300&fit=crop&crop=center', caption: 'Luna the cow' },
+  { id: 4, url: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=300&h=300&fit=crop&crop=center', caption: 'Bella the pig' },
+  { id: 5, url: 'https://images.unsplash.com/photo-1543852786-1cf6624b998d?w=300&h=300&fit=crop&crop=center', caption: 'Volunteering day' },
+  { id: 6, url: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=300&h=300&fit=crop&crop=center', caption: 'Sanctuary visit' },
+  { id: 7, url: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=300&fit=crop&crop=center', caption: 'Dog training' },
+  { id: 8, url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&h=300&fit=crop&crop=center', caption: 'Cat cuddles' },
+  { id: 9, url: 'https://images.unsplash.com/photo-1529429617124-5b1096d02c13?w=300&h=300&fit=crop&crop=center', caption: 'Rescue mission' }
 ];
 
 const FUNDRAISERS = [
@@ -61,18 +101,10 @@ const FUNDRAISERS = [
   { name: 'Stompy\'s Medical Fund', goal: 2000, raised: 815, daysLeft: 12, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=120&fit=crop&crop=center' }
 ];
 
-const LEADERBOARD = [
-  { name: 'Clara', rank: 1, amount: 200, avatar: 'https://placehold.co/32x32?text=C' },
-  { name: 'You', rank: 2, amount: 150, avatar: USER_DATA.avatar },
-  { name: 'Sam', rank: 3, amount: 90, avatar: 'https://placehold.co/32x32?text=S' },
-  { name: 'Jess', rank: 4, amount: 75, avatar: 'https://placehold.co/32x32?text=J' },
-  { name: 'Mike', rank: 5, amount: 60, avatar: 'https://placehold.co/32x32?text=M' }
-];
-
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState('timeline');
-  const [isEditing, setIsEditing] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
   const [profile, setProfile] = useState({
     ...USER_DATA
   });
@@ -82,38 +114,34 @@ export default function UserProfile() {
     avatar: profile.avatar,
     coverPhoto: profile.coverPhoto,
     avatarFile: null,
-    coverFile: null
+    coverFile: null,
+    headerType: 'image', // 'image' or 'color'
+    headerColor: '#6366f1',
+    headerImage: profile.coverPhoto
   });
-
-  // Post creation state
-  const [showPostModal, setShowPostModal] = useState(false);
-  const [showPollCreator, setShowPollCreator] = useState(false);
-  const [pollOptions, setPollOptions] = useState(['', '']);
-  const [pollQuestion, setPollQuestion] = useState('');
   const [newPost, setNewPost] = useState({
     content: '',
     image: null,
     gif: null,
     poll: null
   });
-
-  // Color theme editor state
-  const [showColorEditor, setShowColorEditor] = useState(false);
-  const [customColors, setCustomColors] = useState({
-    primary: '#fc97ca',
-    secondary: '#ff69b4',
-    pink: '#fc97ca',
-    accent: '#fc97ca'
+  const [showFeelingEdit, setShowFeelingEdit] = useState(false);
+  const [feelingEditState, setFeelingEditState] = useState({
+    feeling: profile.feeling,
+    feelingEmoji: profile.feelingEmoji,
+    feelingDescription: profile.feelingDescription
   });
-
-  const renderProgressBar = (current, max) => {
-    const percentage = (current / max) * 100;
-    return (
-      <div style={{ width: '100%', height: 8, background: 'var(--gray)', borderRadius: 4, overflow: 'hidden' }}>
-        <div style={{ width: `${percentage}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary), var(--secondary))', borderRadius: 4 }} />
-      </div>
-    );
-  };
+  const [showCustomizeModal, setShowCustomizeModal] = useState(false);
+  const [customizeState, setCustomizeState] = useState({
+    backgroundType: 'color', // 'color' or 'image'
+    backgroundColor: '#ffffff',
+    backgroundImage: null,
+    textColor: '#18171C',
+    buttonColor: '#6366f1',
+    headerColor: '#18171C',
+    leftSidebarWidgets: ['feelings', 'bestFriends'],
+    rightSidebarWidgets: ['quickStats', 'recentActivity']
+  });
 
   const handleEditProfile = () => {
     setEditState({
@@ -122,7 +150,10 @@ export default function UserProfile() {
       avatar: profile.avatar,
       coverPhoto: profile.coverPhoto,
       avatarFile: null,
-      coverFile: null
+      coverFile: null,
+      headerType: 'image',
+      headerColor: '#6366f1',
+      headerImage: profile.coverPhoto
     });
     setShowEditModal(true);
   };
@@ -140,13 +171,31 @@ export default function UserProfile() {
     }
   };
 
+  const handleHeaderImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setEditState(prev => ({ 
+          ...prev, 
+          headerImage: e.target.result,
+          headerType: 'image'
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveEdit = () => {
     setProfile((prev) => ({
       ...prev,
       name: editState.name,
       bio: editState.bio,
       avatar: editState.avatar,
-      coverPhoto: editState.coverPhoto
+      coverPhoto: editState.coverPhoto,
+      headerType: editState.headerType,
+      headerColor: editState.headerColor,
+      headerImage: editState.headerImage
     }));
     setShowEditModal(false);
   };
@@ -192,13 +241,69 @@ export default function UserProfile() {
     }
   };
 
-  const handleColorChange = (colorType, value) => {
-    setCustomColors(prev => ({ ...prev, [colorType]: value }));
-    document.documentElement.style.setProperty(`--${colorType}`, value);
+  const handleEmojiSelect = (emoji) => {
+    setFeelingEditState(prev => ({ ...prev, feelingEmoji: emoji }));
+  };
+
+  const handleSaveFeeling = () => {
+    setProfile(prev => ({
+      ...prev,
+      feeling: feelingEditState.feeling,
+      feelingEmoji: feelingEditState.feelingEmoji,
+      feelingDescription: feelingEditState.feelingDescription
+    }));
+    setShowFeelingEdit(false);
+  };
+
+  const handleCancelFeeling = () => {
+    setFeelingEditState({
+      feeling: profile.feeling,
+      feelingEmoji: profile.feelingEmoji,
+      feelingDescription: profile.feelingDescription
+    });
+    setShowFeelingEdit(false);
+  };
+
+  const handleBackgroundImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCustomizeState(prev => ({ 
+          ...prev, 
+          backgroundImage: e.target.result,
+          backgroundType: 'image'
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveCustomize = () => {
+    // Save the customization settings
+    setShowCustomizeModal(false);
+  };
+
+  const handleCancelCustomize = () => {
+    setCustomizeState({
+      backgroundType: 'color',
+      backgroundColor: '#ffffff',
+      backgroundImage: null,
+      textColor: '#18171C',
+      buttonColor: '#6366f1',
+      headerColor: '#18171C',
+      leftSidebarWidgets: ['feelings', 'bestFriends'],
+      rightSidebarWidgets: ['quickStats', 'recentActivity']
+    });
+    setShowCustomizeModal(false);
   };
 
   return (
-    <div className="user-profile" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1rem' }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'var(--background)',
+      paddingTop: 0
+    }}>
       {/* Edit Profile Modal */}
       {showEditModal && (
         <div className="edit-modal" style={{
@@ -227,14 +332,83 @@ export default function UserProfile() {
             <div style={{ fontWeight: 700, fontSize: 22, marginBottom: 18, color: 'var(--primary)' }}>
               Edit Profile
             </div>
-            {/* Cover Image */}
+            {/* Header Customization */}
             <div style={{ width: '100%', marginBottom: 18 }}>
-              <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Header Image</label>
+              <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Header</label>
+              
+              {/* Header Type Toggle */}
+              <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                <button
+                  onClick={() => setEditState(prev => ({ ...prev, headerType: 'image' }))}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--gray)',
+                    background: editState.headerType === 'image' ? 'var(--primary)' : 'transparent',
+                    color: editState.headerType === 'image' ? 'white' : 'var(--text)',
+                    cursor: 'pointer',
+                    fontSize: 12
+                  }}
+                >
+                  Image
+                </button>
+                <button
+                  onClick={() => setEditState(prev => ({ ...prev, headerType: 'color' }))}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--gray)',
+                    background: editState.headerType === 'color' ? 'var(--primary)' : 'transparent',
+                    color: editState.headerType === 'color' ? 'white' : 'var(--text)',
+                    cursor: 'pointer',
+                    fontSize: 12
+                  }}
+                >
+                  Color
+                </button>
+              </div>
+
+              {/* Image Header Option */}
+              {editState.headerType === 'image' && (
               <div className="cover-preview" style={{ position: 'relative', width: '100%', height: 90, background: '#f8f6ff', borderRadius: 12, overflow: 'hidden', marginBottom: 8, border: '1px solid var(--gray)' }}>
-                <img src={editState.coverPhoto} alt="Header Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <input type="file" accept="image/*" name="coverPhoto" onChange={handleImageChange} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
+                  <img src={editState.headerImage} alt="Header Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <input type="file" accept="image/*" onChange={handleHeaderImageChange} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
                 <span style={{ position: 'absolute', bottom: 6, right: 10, background: 'rgba(255,255,255,0.8)', borderRadius: 8, padding: '2px 8px', fontSize: 12, color: 'var(--primary)' }}>Change</span>
               </div>
+              )}
+
+              {/* Color Header Option */}
+              {editState.headerType === 'color' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: '100%',
+                    height: 90,
+                    background: editState.headerColor,
+                    borderRadius: 12,
+                    border: '1px solid var(--gray)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: 14,
+                    fontWeight: 600
+                  }}>
+                    Header Color
+                  </div>
+                  <input
+                    type="color"
+                    value={editState.headerColor}
+                    onChange={(e) => setEditState(prev => ({ ...prev, headerColor: e.target.value }))}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      border: '1px solid var(--gray)',
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                    }}
+                  />
+                </div>
+              )}
             </div>
             {/* Avatar */}
             <div style={{ width: '100%', marginBottom: 18 }}>
@@ -430,55 +604,6 @@ export default function UserProfile() {
               </div>
             )}
 
-            {/* Poll Preview */}
-            {newPost.poll && (
-              <div style={{ 
-                marginBottom: 20, 
-                padding: '16px',
-                border: '1px solid var(--border)',
-                borderRadius: 8,
-                background: 'var(--background)'
-              }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  marginBottom: 12
-                }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>📊 Poll</span>
-                  <button 
-                    onClick={() => setNewPost(prev => ({ ...prev, poll: null }))}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#ff4444',
-                      cursor: 'pointer',
-                      fontSize: 16
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
-                <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>
-                  {newPost.poll.question}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {newPost.poll.options.map((option, index) => (
-                    <div key={index} style={{
-                      padding: '8px 12px',
-                      border: '1px solid var(--border)',
-                      borderRadius: 6,
-                      fontSize: 14,
-                      color: 'var(--text-secondary)',
-                      background: 'var(--card)'
-                    }}>
-                      {option}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Add to your post section */}
             <div style={{ 
               padding: '16px 0',
@@ -545,34 +670,6 @@ export default function UserProfile() {
                   <span style={{ color: '#1877f2', fontSize: 18 }}>🎬</span>
                   GIF
                 </button>
-                
-                <button 
-                  onClick={() => setShowPollCreator(true)}
-                  style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = 'var(--background)';
-                    e.target.style.color = 'var(--text)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = 'none';
-                    e.target.style.color = 'var(--text-secondary)';
-                  }}
-                >
-                  <span style={{ color: '#f7b928', fontSize: 18 }}>📊</span>
-                  Poll
-                </button>
               </div>
             </div>
 
@@ -614,212 +711,8 @@ export default function UserProfile() {
         </div>
       )}
 
-      {/* Poll Creator Modal */}
-      {showPollCreator && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            background: 'var(--card)',
-            borderRadius: 24,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            padding: '2rem',
-            maxWidth: 500,
-            width: '90%',
-            maxHeight: '80vh',
-            overflow: 'auto'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Create Poll</h3>
-              <button 
-                onClick={() => setShowPollCreator(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: 24,
-                  cursor: 'pointer',
-                  color: 'var(--text-secondary)',
-                  padding: 0,
-                  width: 32,
-                  height: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                ×
-              </button>
-            </div>
-            
-            {/* Poll Question */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Poll Question
-              </label>
-              <input
-                type="text"
-                value={pollQuestion}
-                onChange={(e) => setPollQuestion(e.target.value)}
-                placeholder="Ask a question..."
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '1px solid var(--border)',
-                  borderRadius: 8,
-                  fontSize: 16,
-                  background: 'var(--background)',
-                  color: 'var(--text)',
-                  outline: 'none'
-                }}
-              />
-            </div>
-            
-            {/* Poll Options */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
-                Poll Options
-              </label>
-              {pollOptions.map((option, index) => (
-                <div key={index} style={{ marginBottom: 12, display: 'flex', gap: 8 }}>
-                  <input
-                    type="text"
-                    value={option}
-                    onChange={(e) => {
-                      const newOptions = [...pollOptions];
-                      newOptions[index] = e.target.value;
-                      setPollOptions(newOptions);
-                    }}
-                    placeholder={`Option ${index + 1}`}
-                    style={{
-                      flex: 1,
-                      padding: '8px 12px',
-                      border: '1px solid var(--border)',
-                      borderRadius: 6,
-                      fontSize: 14,
-                      background: 'var(--background)',
-                      color: 'var(--text)',
-                      outline: 'none'
-                    }}
-                  />
-                  {pollOptions.length > 2 && (
-                    <button
-                      onClick={() => {
-                        const newOptions = pollOptions.filter((_, i) => i !== index);
-                        setPollOptions(newOptions);
-                      }}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#ff4444',
-                        cursor: 'pointer',
-                        padding: '8px',
-                        fontSize: 16
-                      }}
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              ))}
-              {pollOptions.length < 6 && (
-                <button
-                  onClick={() => setPollOptions([...pollOptions, ''])}
-                  style={{
-                    background: 'none',
-                    border: '1px dashed var(--border)',
-                    color: 'var(--text-secondary)',
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    cursor: 'pointer',
-                    width: '100%'
-                  }}
-                >
-                  + Add Option
-                </button>
-              )}
-            </div>
-            
-            {/* Action Buttons */}
-            <div style={{ 
-              display: 'flex', 
-              gap: 12, 
-              justifyContent: 'flex-end',
-              marginTop: 20,
-              paddingTop: 20,
-              borderTop: '1px solid var(--border)'
-            }}>
-              <button 
-                onClick={() => setShowPollCreator(false)}
-                style={{
-                  background: 'none',
-                  border: '1px solid var(--border)',
-                  color: 'var(--text-secondary)',
-                  padding: '10px 20px',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: 'pointer'
-                }}
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={() => {
-                  if (pollQuestion.trim() && pollOptions.some(opt => opt.trim())) {
-                    setNewPost(prev => ({ 
-                      ...prev, 
-                      poll: {
-                        question: pollQuestion,
-                        options: pollOptions.filter(opt => opt.trim()),
-                        votes: pollOptions.filter(opt => opt.trim()).map(() => 0)
-                      }
-                    }));
-                    setShowPollCreator(false);
-                    setPollQuestion('');
-                    setPollOptions(['', '']);
-                  }
-                }}
-                disabled={!pollQuestion.trim() || !pollOptions.some(opt => opt.trim())}
-                style={{
-                  background: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'linear-gradient(90deg, var(--primary), var(--pink))' : 'var(--border)',
-                  border: 'none',
-                  color: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'white' : 'var(--text-secondary)',
-                  padding: '10px 20px',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: pollQuestion.trim() && pollOptions.some(opt => opt.trim()) ? 'pointer' : 'not-allowed'
-                }}
-              >
-                Add Poll
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Color Editor Modal */}
-      {showColorEditor && (
+      {/* Feeling Edit Modal */}
+      {showFeelingEdit && (
         <div style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
@@ -841,9 +734,9 @@ export default function UserProfile() {
             overflow: 'auto'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Color Theme Editor</h3>
+              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Edit Feeling</h3>
               <button 
-                onClick={() => setShowColorEditor(false)}
+                onClick={handleCancelFeeling}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -862,181 +755,7 @@ export default function UserProfile() {
               </button>
             </div>
             
-            <div style={{ marginBottom: 20 }}>
-              <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>
-                Experiment with different coral color themes. Changes are temporary and will reset on page refresh.
-              </p>
-            </div>
-
-            {/* Primary Color */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Primary Color
-              </label>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <input
-                  type="color"
-                  value={customColors.primary}
-                  onChange={(e) => handleColorChange('primary', e.target.value)}
-                  style={{
-                    width: 50,
-                    height: 40,
-                    border: 'none',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                <input
-                  type="text"
-                  value={customColors.primary}
-                  onChange={(e) => handleColorChange('primary', e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    background: 'var(--background)',
-                    color: 'var(--text)',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Secondary Color */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Secondary Color
-              </label>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <input
-                  type="color"
-                  value={customColors.secondary}
-                  onChange={(e) => handleColorChange('secondary', e.target.value)}
-                  style={{
-                    width: 50,
-                    height: 40,
-                    border: 'none',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                <input
-                  type="text"
-                  value={customColors.secondary}
-                  onChange={(e) => handleColorChange('secondary', e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    background: 'var(--background)',
-                    color: 'var(--text)',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Pink Color */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Pink Color
-              </label>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <input
-                  type="color"
-                  value={customColors.pink}
-                  onChange={(e) => handleColorChange('pink', e.target.value)}
-                  style={{
-                    width: 50,
-                    height: 40,
-                    border: 'none',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                <input
-                  type="text"
-                  value={customColors.pink}
-                  onChange={(e) => handleColorChange('pink', e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    background: 'var(--background)',
-                    color: 'var(--text)',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Accent Color */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Accent Color
-              </label>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <input
-                  type="color"
-                  value={customColors.accent}
-                  onChange={(e) => handleColorChange('accent', e.target.value)}
-                  style={{
-                    width: 50,
-                    height: 40,
-                    border: 'none',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                <input
-                  type="text"
-                  value={customColors.accent}
-                  onChange={(e) => handleColorChange('accent', e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    background: 'var(--background)',
-                    color: 'var(--text)',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Preset Colors */}
+            {/* Feeling Emoji Section */}
             <div style={{ marginBottom: 24 }}>
               <label style={{ 
                 display: 'block', 
@@ -1045,50 +764,119 @@ export default function UserProfile() {
                 color: 'var(--text)', 
                 marginBottom: 12 
               }}>
-                Quick Presets
+                Feeling Emoji
               </label>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {[
-                  { name: 'Coral', primary: '#fc97ca', secondary: '#ff69b4', pink: '#fc97ca', accent: '#fc97ca' },
-                  { name: 'Rose', primary: '#e91e63', secondary: '#c2185b', pink: '#e91e63', accent: '#e91e63' },
-                  { name: 'Peach', primary: '#ff8a65', secondary: '#ff7043', pink: '#ff8a65', accent: '#ff8a65' },
-                  { name: 'Salmon', primary: '#ff6b6b', secondary: '#ff5252', pink: '#ff6b6b', accent: '#ff6b6b' },
-                  { name: 'Lavender', primary: '#ab47bc', secondary: '#8e24aa', pink: '#ab47bc', accent: '#ab47bc' },
-                  { name: 'Teal', primary: '#26a69a', secondary: '#00897b', pink: '#26a69a', accent: '#26a69a' }
-                ].map((preset, index) => (
-                  <button
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 16, 
+                marginBottom: 16
+              }}>
+                <span style={{ fontSize: 32 }}>{feelingEditState.feelingEmoji}</span>
+              </div>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(6, 1fr)', 
+                gap: 8,
+                maxHeight: '200px',
+                overflow: 'auto',
+                width: '100%'
+              }}>
+                {['🤪', '😊', '😄', '😍', '🥰', '😴', '😎', '🤗', '😌', '🤩', '😋', '😝', '🤔', '😏', '😇', '🤠', '👻', '🤖', '🐱', '🐶', '🐰', '🐼', '🐨', '🐯'].map((emoji, index) => (
+                  <button 
                     key={index}
-                    onClick={() => {
-                      setCustomColors(preset);
-                      Object.entries(preset).forEach(([key, value]) => {
-                        document.documentElement.style.setProperty(`--${key}`, value);
-                      });
-                    }}
-                    style={{
-                      background: preset.primary,
-                      border: 'none',
-                      color: 'white',
-                      padding: '8px 12px',
-                      borderRadius: 6,
-                      fontSize: 12,
-                      fontWeight: 600,
+                    onClick={() => handleEmojiSelect(emoji)}
+                    style={{ 
+                      background: feelingEditState.feelingEmoji === emoji ? 'var(--primary)' : 'none',
+                      border: feelingEditState.feelingEmoji === emoji ? 'none' : '1px solid var(--border)',
+                      borderRadius: 8,
+                      fontSize: 20,
                       cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      padding: 8,
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      transition: 'all 0.2s',
+                      color: feelingEditState.feelingEmoji === emoji ? 'white' : 'var(--text)'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'scale(1.05)';
+                      if (feelingEditState.feelingEmoji !== emoji) {
+                        e.target.style.background = 'var(--primary)';
+                        e.target.style.color = '#fff';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'scale(1)';
+                      if (feelingEditState.feelingEmoji !== emoji) {
+                        e.target.style.background = 'none';
+                        e.target.style.color = 'var(--text)';
+                      }
                     }}
                   >
-                    {preset.name}
+                    {emoji}
                   </button>
                 ))}
               </div>
             </div>
-
-            {/* Action Buttons */}
+            
+            {/* Feeling Description Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Feeling
+              </label>
+              <input
+                type="text"
+                value={feelingEditState.feeling}
+                onChange={(e) => setFeelingEditState(prev => ({ ...prev, feeling: e.target.value }))}
+                placeholder="How are you feeling?"
+                style={{
+                  width: '90%',
+                  padding: '12px 16px',
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  fontSize: 16,
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  outline: 'none'
+                }}
+              />
+            </div>
+            
+            {/* Feeling Description Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 8 
+              }}>
+                Description
+              </label>
+                  <input
+                    type="text"
+                value={feelingEditState.feelingDescription}
+                onChange={(e) => setFeelingEditState(prev => ({ ...prev, feelingDescription: e.target.value }))}
+                placeholder="Add a description..."
+                    style={{
+                  width: '90%',
+                  padding: '12px 16px',
+                      border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  fontSize: 16,
+                      background: 'var(--background)',
+                      color: 'var(--text)',
+                      outline: 'none'
+                    }}
+                  />
+            </div>
+            
+            {/* Save Button */}
             <div style={{ 
               display: 'flex', 
               gap: 12, 
@@ -1098,19 +886,7 @@ export default function UserProfile() {
               borderTop: '1px solid var(--border)'
             }}>
               <button 
-                onClick={() => {
-                  // Reset to default colors
-                  const defaultColors = {
-                    primary: '#fc97ca',
-                    secondary: '#ff69b4',
-                    pink: '#fc97ca',
-                    accent: '#fc97ca'
-                  };
-                  setCustomColors(defaultColors);
-                  Object.entries(defaultColors).forEach(([key, value]) => {
-                    document.documentElement.style.setProperty(`--${key}`, value);
-                  });
-                }}
+                onClick={handleCancelFeeling}
                 style={{
                   background: 'none',
                   border: '1px solid var(--border)',
@@ -1122,12 +898,12 @@ export default function UserProfile() {
                   cursor: 'pointer'
                 }}
               >
-                Reset
+                Cancel
               </button>
               <button 
-                onClick={() => setShowColorEditor(false)}
+                onClick={handleSaveFeeling}
                 style={{
-                  background: 'var(--primary)',
+                  background: 'linear-gradient(90deg, var(--primary), var(--pink))',
                   border: 'none',
                   color: 'white',
                   padding: '10px 20px',
@@ -1137,133 +913,990 @@ export default function UserProfile() {
                   cursor: 'pointer'
                 }}
               >
-                Done
+                Save Changes
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Cover and Profile Header */}
-      <div className="profile-header" style={{ position: 'relative', height: 180, background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${profile.coverPhoto})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 24, marginBottom: 24 }}>
-        {/* Avatar and name/username positioned together */}
-        <div className="avatar-name" style={{ position: 'absolute', bottom: -60, left: 32, display: 'flex', alignItems: 'flex-end', gap: 24 }}>
-          <img src={profile.avatar} alt="User Avatar" style={{ border: '4px solid var(--background)', borderRadius: '50%', width: 100, height: 100, objectFit: 'cover' }} />
-          <div style={{ marginBottom: 60 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <h1 style={{ margin: 0, fontFamily: 'Calistoga, serif', color: '#fff', fontSize: 28 }}>{profile.name}</h1>
-              <span style={{ color: '#fff', opacity: 0.7, fontSize: 16, fontWeight: 400, marginLeft: 4 }}>{profile.username}</span>
+      {/* Customize Modal */}
+      {showCustomizeModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '2rem',
+            maxWidth: 500,
+            width: '90%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Customize Profile</h3>
+              <button 
+                onClick={handleCancelCustomize}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            {/* Background Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Background
+              </label>
+              
+              {/* Background Type Toggle */}
+              <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+                <button
+                  onClick={() => setCustomizeState(prev => ({ ...prev, backgroundType: 'color' }))}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: 6,
+                    border: '1px solid var(--border)',
+                    background: customizeState.backgroundType === 'color' ? 'var(--primary)' : 'transparent',
+                    color: customizeState.backgroundType === 'color' ? 'white' : 'var(--text)',
+                    cursor: 'pointer',
+                    fontSize: 14
+                  }}
+                >
+                  Color
+                </button>
+                <button
+                  onClick={() => setCustomizeState(prev => ({ ...prev, backgroundType: 'image' }))}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: 6,
+                    border: '1px solid var(--border)',
+                    background: customizeState.backgroundType === 'image' ? 'var(--primary)' : 'transparent',
+                    color: customizeState.backgroundType === 'image' ? 'white' : 'var(--text)',
+                    cursor: 'pointer',
+                    fontSize: 14
+                  }}
+                >
+                  Image
+                </button>
+              </div>
+
+              {/* Color Background Option */}
+              {customizeState.backgroundType === 'color' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{
+                    width: 120,
+                    height: 60,
+                    background: customizeState.backgroundColor,
+                    borderRadius: 8,
+                    border: '2px solid var(--border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--text-secondary)',
+                    fontSize: 12
+                  }}>
+                    Background
+                  </div>
+                <input
+                  type="color"
+                    value={customizeState.backgroundColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
+                  style={{
+                      width: 60,
+                    height: 40,
+                      border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                </div>
+              )}
+
+              {/* Image Background Option */}
+              {customizeState.backgroundType === 'image' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{
+                    width: 120,
+                    height: 60,
+                    background: customizeState.backgroundImage ? `url(${customizeState.backgroundImage})` : 'var(--border)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: 8,
+                    border: '2px solid var(--border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--text-secondary)',
+                    fontSize: 12
+                  }}>
+                    {!customizeState.backgroundImage && 'Upload Image'}
+                  </div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBackgroundImageChange}
+                    style={{ display: 'none' }}
+                    id="background-image-input"
+                  />
+                  <label
+                    htmlFor="background-image-input"
+                  style={{
+                      background: 'var(--primary)',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: 8,
+                    fontSize: 14,
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'inline-block'
+                    }}
+                  >
+                    Upload Image
+                  </label>
+              </div>
+              )}
+            </div>
+
+            {/* Color Customization Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Colors
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                    Button Color
+                  </label>
+                <input
+                  type="color"
+                    value={customizeState.buttonColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, buttonColor: e.target.value }))}
+                  style={{
+                      width: '100%',
+                    height: 40,
+                      border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                    Header Text
+                  </label>
+                <input
+                    type="color"
+                    value={customizeState.headerColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, headerColor: e.target.value }))}
+                  style={{
+                      width: '100%',
+                      height: 40,
+                    border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                  }}
+                />
+              </div>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                    Content Text
+              </label>
+                <input
+                  type="color"
+                    value={customizeState.textColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, textColor: e.target.value }))}
+                  style={{
+                      width: '100%',
+                    height: 40,
+                      border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                </div>
+              </div>
+            </div>
+
+            {/* Color Customization Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Profile Colors
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                    Primary Color
+                  </label>
+                  <input
+                    type="color"
+                    value={customizeState.primaryColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, primaryColor: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                Accent Color
+              </label>
+                <input
+                  type="color"
+                    value={customizeState.accentColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, accentColor: e.target.value }))}
+                  style={{
+                      width: '100%',
+                    height: 40,
+                      border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                    Background
+                  </label>
+                <input
+                    type="color"
+                    value={customizeState.backgroundColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
+                  style={{
+                      width: '100%',
+                      height: 40,
+                    border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Preview Section */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: 14, 
+                fontWeight: 600, 
+                color: 'var(--text)', 
+                marginBottom: 12 
+              }}>
+                Preview
+              </label>
+              <div style={{
+                background: customizeState.backgroundType === 'color' 
+                  ? customizeState.backgroundColor 
+                  : customizeState.backgroundImage 
+                    ? `url(${customizeState.backgroundImage})` 
+                    : '#ffffff',
+                backgroundSize: customizeState.backgroundType === 'image' ? 'cover' : 'auto',
+                backgroundPosition: customizeState.backgroundType === 'image' ? 'center' : 'auto',
+                borderRadius: 12,
+                padding: 16,
+                border: '1px solid var(--border)',
+                minHeight: 120
+              }}>
+                <div style={{ 
+                  background: 'var(--card)', 
+                  borderRadius: 8, 
+                  padding: 12,
+                  marginBottom: 8
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: 'var(--background)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 16
+                    }}>
+                      👤
+                    </div>
+                    <div>
+                      <div style={{ 
+                        color: customizeState.headerColor, 
+                        fontWeight: 600, 
+                        fontSize: 12 
+                      }}>
+                        {profile.name}
+                      </div>
+                      <div style={{ 
+                        color: customizeState.textColor, 
+                        fontSize: 10 
+                      }}>
+                        {profile.username}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ 
+                  background: 'var(--card)', 
+                  borderRadius: 8, 
+                  padding: 12,
+                  fontSize: 11,
+                  color: customizeState.textColor
+                }}>
+                  Content area preview
+                </div>
+                <button style={{
+                  background: customizeState.buttonColor,
+                      color: 'white',
+                  border: 'none',
+                      borderRadius: 6,
+                  padding: '6px 12px',
+                  fontSize: 10,
+                      cursor: 'pointer',
+                  marginTop: 8
+                }}>
+                  Sample Button
+                  </button>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 12, 
+              justifyContent: 'flex-end',
+              marginTop: 20,
+              paddingTop: 20,
+              borderTop: '1px solid var(--border)'
+            }}>
+              <button 
+                onClick={handleCancelCustomize}
+                style={{
+                  background: 'none',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-secondary)',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveCustomize}
+                style={{
+                  background: 'linear-gradient(90deg, var(--primary), var(--pink))',
+                  border: 'none',
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          {/* Sidebar Customization Section */}
+          <div style={{ marginBottom: 24 }}>
+            <label style={{ 
+              display: 'block', 
+              fontSize: 14, 
+              fontWeight: 600, 
+              color: 'var(--text)', 
+              marginBottom: 12 
+            }}>
+              Sidebar Widgets
+            </label>
+            
+            {/* Left Sidebar Widgets */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                Left Sidebar (after About section)
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                {[
+                  { id: 'feelings', label: 'Feelings Widget', icon: '😊' },
+                  { id: 'bestFriends', label: 'Best Friends', icon: '👥' },
+                  { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
+                  { id: 'showcaseGif', label: 'Showcase GIF', icon: '🎬' },
+                  { id: 'showcasePicture', label: 'Showcase Picture', icon: '🖼️' },
+                  { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
+                ].map(widget => (
+                  <label key={widget.id} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 8,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    background: customizeState.leftSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'transparent',
+                    color: customizeState.leftSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                    fontSize: 12
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={customizeState.leftSidebarWidgets.includes(widget.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCustomizeState(prev => ({
+                            ...prev,
+                            leftSidebarWidgets: [...prev.leftSidebarWidgets, widget.id]
+                          }));
+                        } else {
+                          setCustomizeState(prev => ({
+                            ...prev,
+                            leftSidebarWidgets: prev.leftSidebarWidgets.filter(id => id !== widget.id)
+                          }));
+                        }
+                      }}
+                      style={{ margin: 0 }}
+                    />
+                    <span>{widget.icon}</span>
+                    {widget.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Sidebar Widgets */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                Right Sidebar
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                {[
+                  { id: 'quickStats', label: 'Quick Stats', icon: '📊' },
+                  { id: 'recentActivity', label: 'Recent Activity', icon: '📝' },
+                  { id: 'followingList', label: 'Following List', icon: '👥' },
+                  { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
+                  { id: 'showcaseGif', label: 'Showcase GIF', icon: '🎬' },
+                  { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
+                ].map(widget => (
+                  <label key={widget.id} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 8,
+                    padding: '8px 12px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    background: customizeState.rightSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'transparent',
+                    color: customizeState.rightSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                    fontSize: 12
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={customizeState.rightSidebarWidgets.includes(widget.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCustomizeState(prev => ({
+                            ...prev,
+                            rightSidebarWidgets: [...prev.rightSidebarWidgets, widget.id]
+                          }));
+                        } else {
+                          setCustomizeState(prev => ({
+                            ...prev,
+                            rightSidebarWidgets: prev.rightSidebarWidgets.filter(id => id !== widget.id)
+                          }));
+                        }
+                      }}
+                      style={{ margin: 0 }}
+                    />
+                    <span>{widget.icon}</span>
+                    {widget.label}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="actions" style={{ position: 'absolute', top: 12, right: 24, display: 'flex', gap: 12 }}>
-          <button className="button" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} onClick={handleEditProfile}>
+      )}
+
+      {/* Cover Photo */}
+      <div style={{ 
+        height: 200, 
+        background: profile.headerType === 'color' 
+          ? profile.headerColor 
+          : `url(${profile.headerImage || profile.coverPhoto})`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center',
+        position: 'relative'
+      }}>
+        <div style={{ 
+          position: 'absolute', 
+          bottom: 20, 
+          left: 20, 
+          display: 'flex', 
+          alignItems: 'flex-end', 
+          gap: 20 
+        }}>
+          <img 
+            src={profile.avatar} 
+            alt={profile.name}
+            style={{ 
+              width: 120, 
+              height: 120, 
+              borderRadius: '50%', 
+              border: '4px solid var(--card)',
+              objectFit: 'cover'
+            }} 
+          />
+          <div style={{ color: 'white', marginBottom: 10 }}>
+            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>{profile.name}</h1>
+            <p style={{ margin: '4px 0', fontSize: 16, opacity: 0.9 }}>{profile.username}</p>
+            <p style={{ margin: '4px 0', fontSize: 14, opacity: 0.8 }}>{profile.location} • Joined {profile.joinedDate}</p>
+            </div>
+          </div>
+        
+        {/* Action Buttons */}
+        <div style={{ 
+          position: 'absolute', 
+          bottom: 20, 
+          right: 20, 
+          display: 'flex', 
+          gap: 12 
+        }}>
+          <button 
+            onClick={handleEditProfile}
+            className="button" 
+            style={{ 
+              background: 'rgba(255,255,255,0.2)', 
+              color: 'white', 
+              border: '1px solid rgba(255,255,255,0.3)',
+              padding: '8px 16px',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.2s'
+            }}
+          >
             Edit Profile
           </button>
           <button 
+            onClick={() => setShowCustomizeModal(true)}
             className="button" 
             style={{ 
-              background: 'rgba(255,255,255,0.1)', 
-              color: '#fff', 
-              border: '1px solid rgba(255,255,255,0.2)',
+              background: 'rgba(255,255,255,0.2)', 
+              color: 'white', 
+              border: '1px solid rgba(255,255,255,0.3)',
+              padding: '8px 16px',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
               transition: 'all 0.2s'
-            }} 
-            onClick={() => window.open('/sample-user-profile', '_blank')}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255,255,255,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255,255,255,0.1)';
             }}
           >
-            View Profile
+            Customize
           </button>
-          <button 
-            className="button" 
-            style={{ 
-              background: 'rgba(255,255,255,0.1)', 
-              color: '#fff', 
-              border: '1px solid rgba(255,255,255,0.2)',
-              transition: 'all 0.2s'
-            }} 
-            onClick={() => setShowColorEditor(true)}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255,255,255,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255,255,255,0.1)';
-            }}
-          >
-            🎨 Colors
+          <button className="button" style={{ 
+            background: 'rgba(255,255,255,0.2)', 
+            color: 'white', 
+            border: '1px solid rgba(255,255,255,0.3)',
+            padding: '8px 16px',
+            borderRadius: 8,
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: 'pointer',
+            backdropFilter: 'blur(10px)',
+            transition: 'all 0.2s'
+          }}>
+            Share
           </button>
         </div>
       </div>
 
-      {/* Profile Bio */}
-      <div className="profile-bio" style={{ marginLeft: 176, marginBottom: 32 }}>
-        <p style={{ color: 'var(--text)', opacity: 0.8, margin: '0 0 32px 0', maxWidth: 600 }}>{profile.bio}</p>
+            {/* Profile Content */}
+      <div style={{ 
+        maxWidth: 1200, 
+        margin: '0 auto', 
+        padding: '24px',
+        display: 'grid',
+        gridTemplateColumns: '300px 1fr 300px',
+        gap: 24,
+        background: customizeState.backgroundType === 'color' 
+          ? customizeState.backgroundColor 
+          : customizeState.backgroundImage 
+            ? `url(${customizeState.backgroundImage})` 
+            : '#ffffff',
+        backgroundSize: customizeState.backgroundType === 'image' ? 'cover' : 'auto',
+        backgroundPosition: customizeState.backgroundType === 'image' ? 'center' : 'auto'
+      }}>
+        {/* Left Sidebar */}
+        <div>
+          {/* About Section */}
+          <div style={{ 
+            background: 'var(--card)', 
+            borderRadius: 12, 
+            padding: 24, 
+            marginBottom: 24,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>
+            <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 18 }}>About</h3>
+            <p style={{ 
+              color: customizeState.textColor, 
+              fontSize: 14, 
+              lineHeight: 1.6, 
+              margin: '0 0 20px 0' 
+            }}>
+              {profile.bio}
+            </p>
+            
+            {/* Stats */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(2, 1fr)', 
+              gap: 16, 
+              paddingTop: 20,
+              borderTop: '1px solid var(--border)'
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 20, fontWeight: 600, color: customizeState.buttonColor }}>{profile.followers}</div>
+                <div style={{ fontSize: 12, color: customizeState.textColor }}>Followers</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 20, fontWeight: 600, color: customizeState.buttonColor }}>{profile.following}</div>
+                <div style={{ fontSize: 12, color: customizeState.textColor }}>Following</div>
+              </div>
+            </div>
+          </div>
+
+                    {/* Feelings Widget */}
+          {customizeState.leftSidebarWidgets.includes('feelings') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <h3 style={{ margin: 0, color: customizeState.headerColor, fontSize: 16 }}>{profile.name.split(' ')[0]} Is Feeling:</h3>
+                <button 
+                  onClick={() => setShowFeelingEdit(true)}
+                  style={{ 
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    color: 'var(--text-secondary)',
+                    padding: 4,
+                    borderRadius: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s'
+                  }} 
+                  onMouseEnter={(e) => {
+                    e.target.style.color = 'var(--text)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  ✏️
+                </button>
+              </div>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 12,
+                padding: '12px',
+                background: 'var(--background)',
+                borderRadius: 8,
+                border: '1px solid var(--border)'
+              }}>
+                <div style={{ fontSize: 24 }}>{profile.feelingEmoji}</div>
+                <div>
+                  <div style={{ color: customizeState.textColor, fontWeight: 500, fontSize: 12 }}>{profile.feeling}</div>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>{profile.feelingDescription}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Best Friends Widget */}
+          {customizeState.leftSidebarWidgets.includes('bestFriends') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Best Friends</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {['Sarah', 'Mike', 'Emma'].map((friend, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: `hsl(${index * 120}, 70%, 60%)`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: 14,
+                      fontWeight: 600
+                    }}>
+                      {friend.charAt(0)}
+                    </div>
+                    <span style={{ color: customizeState.textColor, fontSize: 14 }}>{friend}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Music Player Widget */}
+          {customizeState.leftSidebarWidgets.includes('musicPlayer') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎵 Now Playing</h3>
+              <div style={{ 
+                background: 'var(--background)', 
+                borderRadius: 8, 
+                padding: 12,
+                border: '1px solid var(--border)'
+              }}>
+                <div style={{ color: customizeState.textColor, fontWeight: 600, fontSize: 12 }}>Animal Sanctuary Vibes</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>Peaceful Nature Sounds</div>
+                <div style={{ 
+                  width: '100%', 
+                  height: 4, 
+                  background: 'var(--border)', 
+                  borderRadius: 2, 
+                  marginTop: 8,
+                  overflow: 'hidden'
+                }}>
+                  <div style={{ 
+                    width: '65%', 
+                    height: '100%', 
+                    background: customizeState.buttonColor,
+                    borderRadius: 2
+                  }}></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Showcase GIF Widget */}
+          {customizeState.leftSidebarWidgets.includes('showcaseGif') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎬 Showcase GIF</h3>
+              <div style={{ 
+                width: '100%', 
+                height: 120, 
+                background: 'var(--background)', 
+                borderRadius: 8,
+                border: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text-secondary)',
+                fontSize: 12
+              }}>
+                Upload GIF
+              </div>
+            </div>
+          )}
+
+          {/* Showcase Picture Widget */}
+          {customizeState.leftSidebarWidgets.includes('showcasePicture') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🖼️ Showcase Picture</h3>
+              <div style={{ 
+                width: '100%', 
+                height: 120, 
+                background: 'var(--background)', 
+                borderRadius: 8,
+                border: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text-secondary)',
+                fontSize: 12
+              }}>
+                Upload Picture
+              </div>
+            </div>
+          )}
+
+          {/* Custom HTML Widget */}
+          {customizeState.leftSidebarWidgets.includes('customHtml') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>⚙️ Custom Widget</h3>
+              <div style={{ 
+                background: 'var(--background)', 
+                borderRadius: 8, 
+                padding: 12,
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+                fontSize: 12
+              }}>
+                <div style={{ marginBottom: 8 }}>Add your custom HTML here</div>
+                <textarea 
+                  placeholder="Enter custom HTML..."
+                  style={{
+                    width: '100%',
+                    height: 80,
+                    border: 'none',
+                    background: 'transparent',
+                    color: customizeState.textColor,
+                    fontSize: 10,
+                    resize: 'none',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+          )}
       </div>
 
+        {/* Main Timeline */}
+        <div>
+
       {/* Tabs */}
-      <div className="tabs" style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: '1px solid var(--gray)' }}>
-        {[
-          { id: 'timeline', label: 'Timeline', icon: '📱' },
-          { id: 'stats', label: 'Stats', icon: '📊' },
-          { id: 'badges', label: 'Badges', icon: '🏆' },
-          { id: 'following', label: 'Following', icon: '👥' },
-          { id: 'donations', label: 'Donations', icon: '💖' },
-          { id: 'fundraisers', label: 'Fundraisers', icon: '💰' }
-        ].map(tab => (
+          <div style={{ 
+            display: 'flex', 
+            gap: 0, 
+            marginBottom: 24,
+            background: 'var(--card)',
+            borderRadius: 12,
+            padding: 4,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>
+            {['timeline', 'badges', 'gallery', 'fundraisers'].map(tab => (
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+                key={tab}
+                onClick={() => setActiveTab(tab)}
             style={{
-              background: activeTab === tab.id ? 'var(--primary)' : 'transparent',
-              color: activeTab === tab.id ? '#fff' : 'var(--text)',
+                  flex: 1,
+                  padding: '12px 16px',
+                  background: activeTab === tab ? customizeState.buttonColor : 'transparent',
+                  color: activeTab === tab ? 'white' : customizeState.textColor,
               border: 'none',
-              padding: '12px 20px',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
+                  borderRadius: 8,
+                  fontSize: 14,
               fontWeight: 500,
-              fontSize: 16,
-              transition: 'background 0.2s, color 0.2s'
-            }}
-            onMouseEnter={e => {
-              if (activeTab !== tab.id) {
-                e.currentTarget.style.background = 'linear-gradient(90deg, var(--accent), var(--primary))';
-                e.currentTarget.style.color = '#fff';
-              }
-            }}
-            onMouseLeave={e => {
-              if (activeTab !== tab.id) {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'var(--text)';
-              }
-            }}
-          >
-            {tab.icon} {tab.label}
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
 
       {/* Tab Content */}
-      <div className="tab-content" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
-        {/* Main Content */}
-        <div>
+          <div style={{ 
+            background: 'var(--card)', 
+            borderRadius: 12, 
+            padding: 24,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>
           {activeTab === 'timeline' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Timeline</h2>
-              
-              {/* Post Creation */}
-              <div className="post-creation" style={{ background: 'var(--background)', borderRadius: 12, padding: 20, marginBottom: 24, border: '1px solid var(--gray)' }}>
+              <div>
+                {/* Post Creation Area */}
+                <div style={{ 
+                  background: 'var(--background)', 
+                  borderRadius: 12, 
+                  padding: 20, 
+                  marginBottom: 24, 
+                  border: '1px solid var(--border)'
+                }}>
                 <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                  <img src={profile.avatar} alt={profile.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                    <img 
+                      src={profile.avatar} 
+                      alt={profile.name} 
+                      style={{ 
+                        width: 40, 
+                        height: 40, 
+                        borderRadius: '50%',
+                        objectFit: 'cover'
+                      }} 
+                    />
                   <div style={{ flex: 1 }}>
                     <div 
                       onClick={() => setShowPostModal(true)}
                       style={{
-                        width: '100%',
-                        minHeight: 80,
+                        width: '95%',
+                                    minHeight: 40,
                         border: 'none',
                         background: 'transparent',
                         fontSize: 16,
@@ -1272,249 +1905,265 @@ export default function UserProfile() {
                         fontFamily: 'inherit',
                         display: 'flex',
                         alignItems: 'center',
-                        color: 'var(--text-secondary)',
+                                    color: customizeState.textColor,
                         cursor: 'pointer',
-                        padding: '12px 0'
+                                    padding: '8px 12px',
+                                    borderRadius: 8,
+                                    border: '1px solid var(--border)'
                       }}
                     >
-                      What's on your mind? Share your animal sanctuary experiences, donations, or thoughts...
+                                  What's on your mind, {profile.name.split(' ')[0]}?
                     </div>
                   </div>
                 </div>
-                <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', gap: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: 16 }}>
                     <button 
                       onClick={() => setShowPostModal(true)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
-                      title="Add photo"
-                    >
-                      📸
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          cursor: 'pointer', 
+                          fontSize: 16,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          color: 'var(--text-secondary)',
+                          padding: '8px 12px',
+                          borderRadius: 6,
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'var(--card)';
+                          e.target.style.color = 'var(--text)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'none';
+                          e.target.style.color = 'var(--text-secondary)';
+                        }}
+                      >
+                        <img 
+                          src={CameraPixel} 
+                          alt="Camera" 
+                          style={{ width: 24, height: 24 }}
+                        />
+                        Photo/Video
                     </button>
                     <button 
                       onClick={() => setShowPostModal(true)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
-                      title="Add video"
-                    >
-                      🎥
-                    </button>
-                    <button 
-                      onClick={() => setShowPostModal(true)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
-                      title="Tag animal"
-                    >
-                      🐾
-                    </button>
-                    <button 
-                      onClick={() => setShowPostModal(true)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} 
-                      title="Add location"
-                    >
-                      📍
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          cursor: 'pointer', 
+                          fontSize: 16,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          color: 'var(--text-secondary)',
+                          padding: '8px 12px',
+                          borderRadius: 6,
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'var(--card)';
+                          e.target.style.color = 'var(--text)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'none';
+                          e.target.style.color = 'var(--text-secondary)';
+                        }}
+                      >
+                        <img 
+                          src={MoviePixel} 
+                          alt="Movie" 
+                          style={{ width: 20, height: 20 }}
+                        />
+                        GIF
                     </button>
                   </div>
                   <button 
                     onClick={() => setShowPostModal(true)}
                     className="button" 
-                    style={{ padding: '8px 20px', fontSize: 14 }}
+                      style={{ 
+                        padding: '8px 16px', 
+                        fontSize: 14,
+                        background: customizeState.buttonColor,
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        fontWeight: 500
+                      }}
                   >
                     Post
                   </button>
                 </div>
               </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {/* Timeline posts similar to animal profiles */}
-                <div className="post-card" style={{ border: '1px solid var(--gray)', borderRadius: 12, padding: 20 }}>
-                  <div className="post-header" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                    <img src={profile.avatar} alt={profile.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
-                    <div className="post-info">
-                      <div style={{ fontWeight: 600 }}>{profile.name}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>2 hours ago</div>
-                    </div>
-                  </div>
-                  <p style={{ margin: '0 0 16px 0', lineHeight: 1.6 }}>Just donated $50 to Stompy! 🐐 So happy to help this little guy get the care he needs. #sanctuarylife #animalwelfare</p>
-                  <div className="post-actions" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>❤️ 24</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>💬 8</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>🔄 Share</button>
-                  </div>
-                </div>
-
-                <div className="post-card" style={{ border: '1px solid var(--gray)', borderRadius: 12, padding: 20 }}>
-                  <div className="post-header" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                    <img src={profile.avatar} alt={profile.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
-                    <div className="post-info">
-                      <div style={{ fontWeight: 600 }}>{profile.name}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>1 day ago</div>
-                    </div>
-                  </div>
-                  <p style={{ margin: '0 0 16px 0', lineHeight: 1.6 }}>Visited Alveus Sanctuary today! The animals are doing amazing and the staff is incredible. Luna is recovering so well! 🐄✨</p>
-                  <img src="https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400&h=300&fit=crop&crop=center" alt="Sanctuary visit" style={{ width: '100%', borderRadius: 8, marginBottom: 16 }} />
-                  <div className="post-actions" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>❤️ 42</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>💬 15</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>🔄 Share</button>
-                  </div>
-                </div>
-
-                <div className="post-card" style={{ border: '1px solid var(--gray)', borderRadius: 12, padding: 20 }}>
-                  <div className="post-header" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                    <img src={profile.avatar} alt={profile.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
-                    <div className="post-info">
-                      <div style={{ fontWeight: 600 }}>{profile.name}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>3 days ago</div>
-                    </div>
-                  </div>
-                  <p style={{ margin: '0 0 16px 0', lineHeight: 1.6 }}>Earned the "Fundraiser" badge! 🏆 So proud to have raised over $500 for animal causes. Every little bit helps! #fundraiser #animaladvocate</p>
-                  <div className="post-actions" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>❤️ 67</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>💬 23</button>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>🔄 Share</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'stats' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Statistics</h2>
-              
-              {/* Stats Grid */}
-              <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, marginBottom: 32 }}>
-                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
-                    $<ScrollNumber value={profile.totalDonated} duration={2000} delay={300} />
-                  </div>
-                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Total Donated</div>
-                </div>
-                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
-                    <ScrollNumber value={profile.animalsHelped} duration={2000} delay={500} />
-                  </div>
-                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Animals Helped</div>
-                </div>
-                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
-                    <ScrollNumber value={profile.followers} duration={2000} delay={700} />
-                  </div>
-                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Followers</div>
-                </div>
-                <div style={{ textAlign: 'center', background: 'var(--background)', borderRadius: 12, padding: 24 }}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: 'var(--primary)' }}>
-                    <ScrollNumber value={profile.following} duration={2000} delay={900} />
-                  </div>
-                  <div style={{ fontSize: 16, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>Following</div>
-                </div>
-              </div>
-
-              {/* Level Progress */}
-              <div style={{ background: 'var(--background)', borderRadius: 12, padding: 24, marginBottom: 24 }}>
-                <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Level Progress</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ fontWeight: 600 }}>Level {profile.level}</span>
-                  <span style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>
-                    {profile.xp} / {profile.nextLevelXp} XP
-                  </span>
-                </div>
-                {renderProgressBar(profile.xp, profile.nextLevelXp)}
-                <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7, marginTop: 8 }}>
-                  {profile.nextLevelXp - profile.xp} XP to next level
-                </div>
-              </div>
-
-              {/* Leaderboard */}
-              <div style={{ background: 'var(--background)', borderRadius: 12, padding: 24 }}>
-                <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Top Donors This Month</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {LEADERBOARD.map((user, index) => (
-                    <div key={user.name} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <h3 style={{ margin: '0 0 20px 0', color: customizeState.headerColor }}>Posts</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {USER_POSTS.map((post) => (
+                    <div key={post.id} style={{ 
+                      background: 'var(--background)', 
+                      borderRadius: 12, 
+                      padding: 16,
+                      border: '1px solid var(--border)'
+                    }}>
+                      {/* Post Header */}
                       <div style={{ 
-                        width: 32, 
-                        height: 32, 
-                        borderRadius: '50%', 
-                        background: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : 'var(--gray)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: index < 3 ? '#fff' : 'var(--text)'
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 12, 
+                        marginBottom: 12 
                       }}>
-                        {index + 1}
-                      </div>
-                      <img src={user.avatar} alt={user.name} style={{ width: 32, height: 32, borderRadius: '50%' }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600, fontSize: 14 }}>{user.name}</div>
-                        <div style={{ fontSize: 12, color: 'var(--text)', opacity: 0.7 }}>${user.amount} donated</div>
-                      </div>
-                    </div>
-                  ))}
+                        <img 
+                          src={profile.avatar} 
+                          alt={profile.name}
+                          style={{ 
+                            width: 40, 
+                            height: 40, 
+                            borderRadius: '50%',
+                            objectFit: 'cover'
+                          }} 
+                        />
+                        <div>
+                          <div style={{ color: customizeState.headerColor, fontWeight: 600, fontSize: 14 }}>{profile.name}</div>
+                          <div style={{ color: customizeState.textColor, fontSize: 12 }}>{post.time}</div>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                      {/* Post Content */}
+                      <p style={{ 
+                        color: customizeState.textColor, 
+                        fontSize: 14, 
+                        lineHeight: 1.5, 
+                        margin: '0 0 12px 0' 
+                      }}>
+                        {post.content}
+                      </p>
+                      
+                      {/* Post Image */}
+                      {post.image && (
+                        <img 
+                          src={post.image} 
+                          alt="Post"
+                          style={{ 
+                            width: '100%', 
+                            height: 200, 
+                            objectFit: 'cover',
+                            borderRadius: 8,
+                            marginBottom: 12
+                          }} 
+                        />
+                      )}
+                      
+                      {/* Post Actions */}
+                      <div style={{ 
+                        display: 'flex',
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        paddingTop: 12,
+                        borderTop: '1px solid var(--border)'
+                      }}>
+                        <button className="button" style={{ 
+                          background: 'transparent', 
+                          color: 'var(--text)', 
+                          padding: '8px 12px', 
+                        fontSize: 14,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6
+                        }}>
+                          ❤️ {post.likes}
+                        </button>
+                        <button className="button" style={{ 
+                          background: 'transparent', 
+                          color: 'var(--text)', 
+                          padding: '8px 12px', 
+                          fontSize: 14,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6
+                        }}>
+                          💬 {post.comments}
+                        </button>
+                        <button className="button" style={{ 
+                          background: 'transparent', 
+                          color: 'var(--text)', 
+                          padding: '8px 12px', 
+                          fontSize: 14,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6
+                        }}>
+                          🔄 {post.shares}
+                        </button>
+                    </div>
+                  </div>
+                  ))}
+                  </div>
+                </div>
           )}
 
           {activeTab === 'badges' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Earned Badges</h2>
-              <div className="badges-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-                {BADGES.map(badge => (
-                  <div key={badge.name} className="badge-card" style={{ background: 'var(--background)', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-                    <div style={{ fontSize: 32, marginBottom: 8 }}>{badge.icon}</div>
-                    <div style={{ fontWeight: 600, marginBottom: 4 }}>{badge.name}</div>
-                    <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7, marginBottom: 8 }}>{badge.description}</div>
-                    <div style={{ fontSize: 12, color: 'var(--text)', opacity: 0.5 }}>Earned {badge.earned}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'following' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Following</h2>
-              
-              <h3 style={{ margin: '20px 0 12px 0', fontSize: 18 }}>Animals</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-                {FOLLOWED_ANIMALS.map(animal => (
-                  <div key={animal.name} className="following-item" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <img src={animal.image} alt={animal.name} style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }} />
-                    <div className="item-info" style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600 }}>{animal.name}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>{animal.type} • {animal.sanctuary}</div>
-                    </div>
-                    <span style={{ fontSize: 12, padding: '4px 8px', background: 'var(--primary)', color: '#fff', borderRadius: 12 }}>{animal.status}</span>
-                  </div>
-                ))}
-              </div>
-
-              <h3 style={{ margin: '20px 0 12px 0', fontSize: 18 }}>Sanctuaries</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {FOLLOWED_SANCTUARIES.map(sanctuary => (
-                  <div key={sanctuary.name} className="following-item" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <img src={sanctuary.image} alt={sanctuary.name} style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }} />
-                    <div className="item-info" style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600 }}>{sanctuary.name}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>{sanctuary.location} • {sanctuary.animals} animals</div>
+              <div>
+                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Badges Earned</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                  {BADGES.map((badge, index) => (
+                    <div key={index} style={{ 
+                      background: 'var(--background)', 
+                      borderRadius: 8, 
+                      padding: 16,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12
+                    }}>
+                      <div style={{ fontSize: 32 }}>{badge.icon}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: 14, marginBottom: 4 }}>{badge.name}</div>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: 12, marginBottom: 4 }}>{badge.description}</div>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: 11 }}>Earned {badge.earned}</div>
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
+                  </div>
+                </div>
           )}
 
-          {activeTab === 'donations' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>Donation History</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {DONATIONS.map((donation, index) => (
-                  <div key={index} className="donation-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--gray)' }}>
+            {activeTab === 'gallery' && (
                     <div>
-                      <div style={{ fontWeight: 600 }}>${donation.amount} to {donation.to}</div>
-                      <div style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>{donation.date}</div>
+                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Photo Gallery</h3>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+                  gap: 16 
+                }}>
+                  {GALLERY_IMAGES.map((image) => (
+                    <div key={image.id} style={{ 
+                      background: 'var(--background)', 
+                      borderRadius: 8, 
+                      overflow: 'hidden',
+                      border: '1px solid var(--border)'
+                    }}>
+                      <img 
+                        src={image.url} 
+                        alt={image.caption}
+                        style={{ 
+                          width: '100%', 
+                          height: 200, 
+                          objectFit: 'cover'
+                        }} 
+                      />
+                      <div style={{ padding: 12 }}>
+                        <p style={{ 
+                          color: 'var(--text)', 
+                          fontSize: 14, 
+                          margin: 0,
+                          textAlign: 'center'
+                        }}>
+                          {image.caption}
+                        </p>
                     </div>
-                    <span style={{ fontSize: 12, padding: '4px 8px', background: 'var(--accent)', color: '#fff', borderRadius: 12 }}>{donation.type}</span>
                   </div>
                 ))}
               </div>
@@ -1522,65 +2171,258 @@ export default function UserProfile() {
           )}
 
           {activeTab === 'fundraisers' && (
-            <div style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-              <h2 style={{ margin: '0 0 20px 0', fontSize: 24 }}>My Fundraisers</h2>
+              <div>
+                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Active Fundraisers</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {FUNDRAISERS.map((fundraiser, index) => (
-                  <div key={index} className="fundraiser-item" style={{ background: 'var(--background)', borderRadius: 12, padding: 16 }}>
-                    <div className="fundraiser-content" style={{ display: 'flex', gap: 16 }}>
-                      <img src={fundraiser.image} alt={fundraiser.name} style={{ width: 80, height: 60, borderRadius: 8, objectFit: 'cover' }} />
-                      <div className="fundraiser-info" style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600, marginBottom: 8 }}>{fundraiser.name}</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                          <span style={{ fontSize: 14, color: 'var(--text)', opacity: 0.7 }}>${fundraiser.raised} raised of ${fundraiser.goal}</span>
-                          <span style={{ fontSize: 12, color: 'var(--text)', opacity: 0.7 }}>{fundraiser.daysLeft} days left</span>
-                        </div>
-                        {renderProgressBar(fundraiser.raised, fundraiser.goal)}
-                      </div>
+                    <div key={index} style={{ 
+                      display: 'flex', 
+                      gap: 16,
+                      padding: '16px',
+                      background: 'var(--background)',
+                      borderRadius: 8
+                    }}>
+                      <img 
+                        src={fundraiser.image} 
+                        alt={fundraiser.name}
+                        style={{ 
+                          width: 80, 
+                          height: 60, 
+                          borderRadius: 8,
+                          objectFit: 'cover'
+                        }} 
+                      />
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{ margin: '0 0 8px 0', color: 'var(--text)' }}>{fundraiser.name}</h4>
+                        <div style={{ marginBottom: 8 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 4 }}>
+                            <span style={{ color: 'var(--text-secondary)' }}>Progress</span>
+                            <span style={{ color: 'var(--text)' }}>${fundraiser.raised} / ${fundraiser.goal}</span>
+                  </div>
+                          <div style={{ 
+                            width: '100%', 
+                            height: 6, 
+                            background: 'var(--gray)', 
+                            borderRadius: 3,
+                            overflow: 'hidden'
+                          }}>
+                            <div style={{ 
+                              width: `${(fundraiser.raised / fundraiser.goal) * 100}%`, 
+                              height: '100%', 
+                              background: 'var(--primary)',
+                              borderRadius: 3
+                            }} />
+                </div>
+                  </div>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
+                          {fundraiser.daysLeft} days left
+                </div>
+                  </div>
+                </div>
+                ))}
+                  </div>
+            </div>
+          )}
+                </div>
+              </div>
+
+
+
+        {/* Right Sidebar */}
+        <div>
+          {/* Quick Stats Widget */}
+          {customizeState.rightSidebarWidgets.includes('quickStats') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20, 
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Quick Stats</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Level</span>
+                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.level}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>XP</span>
+                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.xp}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Total Donated</span>
+                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>${profile.totalDonated}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Animals Helped</span>
+                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.animalsHelped}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Recent Activity Widget */}
+          {customizeState.rightSidebarWidgets.includes('recentActivity') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Recent Activity</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
+                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Donated to Luna's surgery</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
+                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Visited Alveus Sanctuary</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
+                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Shared a post</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
+                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Earned "Donor" badge</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Following List Widget */}
+          {customizeState.rightSidebarWidgets.includes('followingList') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Following</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {FOLLOWED_ANIMALS.slice(0, 3).map((animal, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img 
+                      src={animal.image} 
+                      alt={animal.name}
+                      style={{ 
+                        width: 32, 
+                        height: 32, 
+                        borderRadius: '50%',
+                        objectFit: 'cover'
+                      }} 
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ color: customizeState.textColor, fontWeight: 500, fontSize: 12 }}>{animal.name}</div>
+                      <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>{animal.type}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
-        </div>
 
-        {/* Sidebar */}
-        <div className="sidebar">
-          {/* Activity Feed */}
-          <div className="activity-feed" style={{ background: 'var(--card)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Recent Activity</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {ACTIVITY_FEED.map((activity, index) => (
-                <div key={index} className="activity-item" style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '8px 0', borderBottom: '1px solid var(--gray)' }}>
-                  <div style={{ fontSize: 16 }}>{activity.icon}</div>
-                  <div className="activity-content" style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, marginBottom: 2 }}>{activity.content}</div>
-                    <div style={{ fontSize: 12, color: 'var(--text)', opacity: 0.6 }}>{activity.time}</div>
-                  </div>
+          {/* Music Player Widget */}
+          {customizeState.rightSidebarWidgets.includes('musicPlayer') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎵 Now Playing</h3>
+              <div style={{ 
+                background: 'var(--background)', 
+                borderRadius: 8, 
+                padding: 12,
+                border: '1px solid var(--border)'
+              }}>
+                <div style={{ color: customizeState.textColor, fontWeight: 600, fontSize: 12 }}>Animal Sanctuary Vibes</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>Peaceful Nature Sounds</div>
+                <div style={{ 
+                  width: '100%', 
+                  height: 4, 
+                  background: 'var(--border)', 
+                  borderRadius: 2, 
+                  marginTop: 8,
+                  overflow: 'hidden'
+                }}>
+                  <div style={{ 
+                    width: '65%', 
+                    height: '100%', 
+                    background: customizeState.buttonColor,
+                    borderRadius: 2
+                  }}></div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Quick Actions */}
-          <div className="quick-actions" style={{ background: 'var(--card)', borderRadius: 16, padding: 24 }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: 20 }}>Quick Actions</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <Link to="/ambassador-hub" className="button" style={{ textAlign: 'center', textDecoration: 'none' }}>
-                🐾 Support an Animal
-              </Link>
-              <Link to="/community" className="button" style={{ textAlign: 'center', textDecoration: 'none' }}>
-                👥 Join Community
-              </Link>
-              <button className="button" style={{ textAlign: 'center' }}>
-                💰 Start Fundraiser
-              </button>
-              <button className="button" style={{ textAlign: 'center' }}>
-                📸 Share Story
-              </button>
+          {/* Showcase GIF Widget */}
+          {customizeState.rightSidebarWidgets.includes('showcaseGif') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <div style={{ 
+                width: '100%', 
+                height: 120, 
+                background: 'var(--background)', 
+                borderRadius: 8,
+                border: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text-secondary)',
+                fontSize: 12
+              }}>
+                Upload GIF
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Custom HTML Widget */}
+          {customizeState.rightSidebarWidgets.includes('customHtml') && (
+            <div style={{ 
+              background: 'var(--card)', 
+              borderRadius: 12, 
+              padding: 20,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>⚙️ Custom Widget</h3>
+              <div style={{ 
+                background: 'var(--background)', 
+                borderRadius: 8, 
+                padding: 12,
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+                fontSize: 12
+              }}>
+                <div style={{ marginBottom: 8 }}>Add your custom HTML here</div>
+                <textarea 
+                  placeholder="Enter custom HTML..."
+                  style={{
+                    width: '100%',
+                    height: 80,
+                    border: 'none',
+                    background: 'transparent',
+                    color: customizeState.textColor,
+                    fontSize: 10,
+                    resize: 'none',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
