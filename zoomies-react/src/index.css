@@ -152,7 +152,7 @@ body {
   --glass-purple: rgba(138, 43, 226, 0.1);
 }
 body {
-  background: linear-gradient(135deg, #FCF8FC 0%, #F0F8FF 25%, #F8F0FF 50%, #FFF0F8 75%, #FFF0F0 100%);
+  background: linear-gradient(135deg, #f0f8ff 0%, #f8f4ff 25%, #fff0f5 50%, #fff8dc 75%, #f0fff0 100%);
   background-attachment: fixed;
   color: var(--text);
   font-family: 'Poppins', 'Inter', Arial, sans-serif;
@@ -406,7 +406,7 @@ a:hover {
 }
 
 /* Fix community page layout for girly theme */
-[data-theme='y2k'] .community-root > div:first-child {
+[data-theme='y2k'] .community-root > div:first-child:not([style*="position: relative"]):not([style*="z-index"]) {
   top: 10px !important;
   height: calc(100vh - 60px) !important;
 }
@@ -538,7 +538,7 @@ a:hover {
 }
 
 /* Fix community page layout for cybercore theme */
-[data-theme='grunge'] .community-root > div:first-child {
+[data-theme='grunge'] .community-root > div:first-child:not([style*="position: relative"]):not([style*="z-index"]) {
   top: 20px !important;
   height: calc(100vh - 60px) !important;
 }
@@ -553,6 +553,13 @@ a:hover {
 [data-theme='grunge'] .community-root .trending-scroll {
   margin-left: 0 !important;
   padding-left: 0 !important;
+}
+
+/* Fix theme selector positioning in girly and cybercore themes */
+[data-theme='y2k'] div[style*="position: relative"][style*="z-index: 1000"],
+[data-theme='grunge'] div[style*="position: relative"][style*="z-index: 1000"] {
+  top: auto !important;
+  height: auto !important;
 }
 
 /* Stats Container - Clean styling */

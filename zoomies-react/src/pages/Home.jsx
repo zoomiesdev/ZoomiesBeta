@@ -102,8 +102,6 @@ const URGENT_CAMPAIGNS = [
 export default function Home() {
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [isDark, setIsDark] = useState(false);
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [customPrimaryColor, setCustomPrimaryColor] = useState('#797eb5');
 
   useEffect(() => {
     const updateTheme = () => {
@@ -131,10 +129,7 @@ export default function Home() {
     });
   };
 
-  const handleColorChange = (color) => {
-    setCustomPrimaryColor(color);
-    document.documentElement.style.setProperty('--primary', color);
-  };
+
 
   // Sidebar content
   const sponsors = [
@@ -158,88 +153,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Color Picker Button */}
-      <div style={{
-        position: 'fixed',
-        top: 100,
-        right: 20,
-        zIndex: 1000,
-        background: 'var(--card)',
-        borderRadius: 12,
-        padding: 12,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        border: '1px solid var(--border)'
-      }}>
-        <button
-          onClick={() => setShowColorPicker(!showColorPicker)}
-          style={{
-            background: 'var(--primary)',
-            color: 'white',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 12px',
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6
-          }}
-        >
-          🎨 Test Color
-        </button>
-        
-        {showColorPicker && (
-          <div style={{
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            marginTop: 8,
-            background: 'var(--card)',
-            borderRadius: 12,
-            padding: 16,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            border: '1px solid var(--border)',
-            minWidth: 200
-          }}>
-            <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>
-                Primary Color
-              </label>
-              <input
-                type="color"
-                value={customPrimaryColor}
-                onChange={(e) => handleColorChange(e.target.value)}
-                style={{
-                  width: '100%',
-                  height: 40,
-                  border: '1px solid var(--border)',
-                  borderRadius: 8,
-                  cursor: 'pointer'
-                }}
-              />
-            </div>
-            <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-              Current: {customPrimaryColor}
-            </div>
-            <button
-              onClick={() => setShowColorPicker(false)}
-              style={{
-                background: 'none',
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-                padding: '6px 12px',
-                borderRadius: 6,
-                fontSize: 12,
-                cursor: 'pointer'
-              }}
-            >
-              Close
-            </button>
-          </div>
-        )}
-      </div>
-
       <div className="home-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 2fr 1fr',
