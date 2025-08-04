@@ -40,7 +40,7 @@ body {
 :root {
   --background: #F1E8F1;
   --card: #ffffff;
-  --primary: #FF6B6B;
+  --primary: #6c64cd;
   --secondary: #FF8E8E;
   --light-pink: #FF9EC4;
   --purple: #E6B6FF;
@@ -85,8 +85,8 @@ body {
   --gray-light: #404040;
   --accent: #4A9EFF;
   --pink: #7B68EE;
-  --cta-gradient: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #60A5FA 100%);
-  --button-gradient: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+  --cta-gradient: linear-gradient(135deg, #6c64cd 0%, #a855f7 50%, #3b82f6 100%);
+  --button-gradient: linear-gradient(135deg, #6c64cd 0%, #a855f7 100%);
   --button-text: #FFFFFF;
 }
 
@@ -253,21 +253,21 @@ a:hover {
   color: var(--accent);
 }
 .button {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%);
+  background: var(--button-gradient);
   color: var(--text);
   border: none;
   border-radius: 20px;
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+  box-shadow: 0 2px 8px rgba(108, 100, 205, 0.2);
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, color 0.2s;
 }
 .button:hover, .button:focus {
-  background: linear-gradient(315deg, var(--light-pink) 0%, var(--primary) 100%);
+  background: linear-gradient(315deg, #a855f7 0%, #6c64cd 100%);
   color: var(--background);
-  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 16px rgba(108, 100, 205, 0.3);
 }
 [data-theme='dark'] .button {
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);

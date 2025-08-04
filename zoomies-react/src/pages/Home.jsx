@@ -102,6 +102,8 @@ const URGENT_CAMPAIGNS = [
 export default function Home() {
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [isDark, setIsDark] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [customPrimaryColor, setCustomPrimaryColor] = useState('#797eb5');
 
   useEffect(() => {
     const updateTheme = () => {
@@ -129,6 +131,11 @@ export default function Home() {
     });
   };
 
+  const handleColorChange = (color) => {
+    setCustomPrimaryColor(color);
+    document.documentElement.style.setProperty('--primary', color);
+  };
+
   // Sidebar content
   const sponsors = [
     { name: 'PetCo', logo: 'https://placehold.co/80x40?text=PetCo' },
@@ -150,14 +157,97 @@ export default function Home() {
   ];
 
   return (
-    <div className="home-grid" style={{
-      display: 'grid',
-      gridTemplateColumns: '1fr 2fr 1fr',
-      gap: 24,
-      maxWidth: 1400,
-      margin: '0 auto',
-      padding: '0 1rem'
-    }}>
+    <>
+      {/* Color Picker Button */}
+      <div style={{
+        position: 'fixed',
+        top: 100,
+        right: 20,
+        zIndex: 1000,
+        background: 'var(--card)',
+        borderRadius: 12,
+        padding: 12,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        border: '1px solid var(--border)'
+      }}>
+        <button
+          onClick={() => setShowColorPicker(!showColorPicker)}
+          style={{
+            background: 'var(--primary)',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 12px',
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+          }}
+        >
+          🎨 Test Color
+        </button>
+        
+        {showColorPicker && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            right: 0,
+            marginTop: 8,
+            background: 'var(--card)',
+            borderRadius: 12,
+            padding: 16,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            border: '1px solid var(--border)',
+            minWidth: 200
+          }}>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>
+                Primary Color
+              </label>
+              <input
+                type="color"
+                value={customPrimaryColor}
+                onChange={(e) => handleColorChange(e.target.value)}
+                style={{
+                  width: '100%',
+                  height: 40,
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  cursor: 'pointer'
+                }}
+              />
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+              Current: {customPrimaryColor}
+            </div>
+            <button
+              onClick={() => setShowColorPicker(false)}
+              style={{
+                background: 'none',
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+                padding: '6px 12px',
+                borderRadius: 6,
+                fontSize: 12,
+                cursor: 'pointer'
+              }}
+            >
+              Close
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="home-grid" style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 2fr 1fr',
+        gap: 24,
+        maxWidth: 1400,
+        margin: '0 auto',
+        padding: '0 1rem'
+      }}>
       {/* Left Sidebar */}
       <aside className="home-sidebar-left" style={{
         display: 'flex',
@@ -223,7 +313,7 @@ export default function Home() {
               <div style={{ fontSize: 12, color: 'var(--primary)' }}>{featured.urgency}</div>
             </div>
           </div>
-          <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)' }}>View Campaign</Link>
+          <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(108, 100, 205, 0.3)' }}>View Campaign</Link>
         </div>
       </aside>
 
@@ -526,7 +616,7 @@ export default function Home() {
         <div className="home-cta" style={{ 
           margin: '1rem', 
           padding: '2rem', 
-          background: 'var(--cta-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', 
+          background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 50%, #3b82f6 100%)', 
           borderRadius: 12, 
           textAlign: 'center', 
           color: 'var(--white)' 
@@ -615,7 +705,7 @@ export default function Home() {
                   position: 'absolute',
                   bottom: 8,
                   right: 8,
-                  background: '#87CEEB',
+                  background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)',
                   color: 'white',
                   border: 'none',
                   padding: '6px 12px',
@@ -623,7 +713,7 @@ export default function Home() {
                   fontSize: 12,
                   fontWeight: 600,
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)'
+                  boxShadow: '0 2px 8px rgba(108, 100, 205, 0.3)'
                 }}>
                   Join
                 </button>
@@ -671,7 +761,7 @@ export default function Home() {
                   <div style={{ background: 'var(--gray)', borderRadius: 4, height: 6, overflow: 'hidden' }}>
                     <div style={{ 
                       width: `${Math.round((campaign.raised/campaign.goal)*100)}%`, 
-                      background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))', 
+                      background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)', 
                       height: '100%' 
                     }}></div>
                   </div>
@@ -680,9 +770,9 @@ export default function Home() {
                     <Link to={`/ambassadors/${campaign.id}`} className="button" style={{ 
                       padding: '4px 8px', 
                       fontSize: 10,
-                      background: 'var(--button-gradient, linear-gradient(135deg, #87CEEB 0%, #FF6B6B 100%))',
+                      background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)',
                       color: 'var(--white)',
-                      boxShadow: '0 2px 8px rgba(135, 206, 235, 0.3)'
+                      boxShadow: '0 2px 8px rgba(108, 100, 205, 0.3)'
                     }}>
                       Donate
                     </Link>
@@ -722,5 +812,6 @@ export default function Home() {
         </div>
       </aside>
     </div>
+    </>
   );
 }
