@@ -1006,7 +1006,7 @@ export default function UserProfile() {
                 >
                   Image
                 </button>
-              </div>
+            </div>
 
               {/* Color Background Option */}
               {customizeState.backgroundType === 'color' && (
@@ -1025,18 +1025,18 @@ export default function UserProfile() {
                   }}>
                     Background
                   </div>
-                  <input
-                    type="color"
+                <input
+                  type="color"
                     value={customizeState.backgroundColor}
                     onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
-                    style={{
+                  style={{
                       width: 60,
-                      height: 40,
+                    height: 40,
                       border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                    }}
-                  />
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
                 </div>
               )}
 
@@ -1059,20 +1059,20 @@ export default function UserProfile() {
                   }}>
                     {customizeState.backgroundImage ? '' : 'Upload Image'}
                   </div>
-                  <input
+                <input
                     type="file"
                     accept="image/*"
                     onChange={handleBackgroundImageChange}
-                    style={{
+                  style={{
                       width: 200,
                       height: 40,
-                      border: '1px solid var(--border)',
+                    border: '1px solid var(--border)',
                       borderRadius: 8,
                       padding: '8px',
                       fontSize: 12
-                    }}
-                  />
-                </div>
+                  }}
+                />
+              </div>
               )}
             </div>
 
@@ -1094,18 +1094,18 @@ export default function UserProfile() {
                   <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
                     Button Color
                   </label>
-                  <input
-                    type="color"
+                <input
+                  type="color"
                     value={customizeState.buttonColor}
                     onChange={(e) => setCustomizeState(prev => ({ ...prev, buttonColor: e.target.value }))}
-                    style={{
+                  style={{
                       width: '100%',
-                      height: 40,
+                    height: 40,
                       border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                    }}
-                  />
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
                 </div>
                 
                 {/* Header Text Color */}
@@ -1113,37 +1113,37 @@ export default function UserProfile() {
                   <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
                     Header Text
                   </label>
-                  <input
+                <input
                     type="color"
                     value={customizeState.headerColor}
                     onChange={(e) => setCustomizeState(prev => ({ ...prev, headerColor: e.target.value }))}
-                    style={{
+                  style={{
                       width: '100%',
                       height: 40,
-                      border: '1px solid var(--border)',
+                    border: '1px solid var(--border)',
                       borderRadius: 8,
                       cursor: 'pointer'
                     }}
                   />
-                </div>
-                
+            </div>
+
                 {/* Body Text Color */}
                 <div>
                   <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
                     Body Text
-                  </label>
-                  <input
-                    type="color"
+              </label>
+                <input
+                  type="color"
                     value={customizeState.textColor}
                     onChange={(e) => setCustomizeState(prev => ({ ...prev, textColor: e.target.value }))}
-                    style={{
+                  style={{
                       width: '100%',
-                      height: 40,
+                    height: 40,
                       border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                    }}
-                  />
+                    borderRadius: 8,
+                    cursor: 'pointer'
+                  }}
+                />
                 </div>
               </div>
             </div>
@@ -1230,10 +1230,10 @@ export default function UserProfile() {
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 8,
-                        padding: '8px 12px',
+                      padding: '8px 12px',
                         border: '1px solid var(--border)',
-                        borderRadius: 6,
-                        cursor: 'pointer',
+                      borderRadius: 6,
+                      cursor: 'pointer',
                         background: customizeState.rightSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'var(--card)',
                         color: customizeState.rightSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
                         fontSize: 12
@@ -1472,9 +1472,9 @@ export default function UserProfile() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <h3 style={{ margin: 0, color: customizeState.headerColor, fontSize: 16 }}>{profile.name.split(' ')[0]} Is Feeling:</h3>
-                <button 
+          <button 
                   onClick={() => setShowFeelingEdit(true)}
-                  style={{ 
+            style={{ 
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
@@ -1485,18 +1485,18 @@ export default function UserProfile() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    transition: 'all 0.2s'
-                  }} 
-                  onMouseEnter={(e) => {
+              transition: 'all 0.2s'
+            }} 
+            onMouseEnter={(e) => {
                     e.target.style.color = 'var(--text)';
-                  }}
-                  onMouseLeave={(e) => {
+            }}
+            onMouseLeave={(e) => {
                     e.target.style.color = 'var(--text-secondary)';
-                  }}
-                >
+            }}
+          >
                   ✏️
-                </button>
-              </div>
+          </button>
+        </div>
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -1510,7 +1510,7 @@ export default function UserProfile() {
                 <div>
                   <div style={{ color: customizeState.textColor, fontWeight: 500, fontSize: 12 }}>{profile.feeling}</div>
                   <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>{profile.feelingDescription}</div>
-                </div>
+      </div>
               </div>
             </div>
           )}
@@ -1541,7 +1541,7 @@ export default function UserProfile() {
                       fontWeight: 600
                     }}>
                       {friend.charAt(0)}
-                    </div>
+      </div>
                     <span style={{ color: customizeState.textColor, fontSize: 14 }}>{friend}</span>
                   </div>
                 ))}
@@ -1975,8 +1975,8 @@ export default function UserProfile() {
                     </div>
                   </div>
                 ))}
-                  </div>
-                </div>
+              </div>
+            </div>
           )}
 
             {activeTab === 'gallery' && (
@@ -2012,11 +2012,11 @@ export default function UserProfile() {
                         }}>
                           {image.caption}
                         </p>
-                    </div>
                   </div>
+                </div>
                 ))}
-              </div>
-            </div>
+                  </div>
+                </div>
           )}
 
           {activeTab === 'fundraisers' && (
@@ -2066,7 +2066,7 @@ export default function UserProfile() {
                         <div style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
                           {fundraiser.daysLeft} days left
                 </div>
-                  </div>
+              </div>
                 </div>
                 ))}
                   </div>
@@ -2081,7 +2081,7 @@ export default function UserProfile() {
         <div>
           {/* Quick Stats Widget */}
           {customizeState.rightSidebarWidgets.includes('quickStats') && (
-            <div style={{ 
+                      <div style={{ 
               background: 'var(--card)', 
               borderRadius: 12, 
               padding: 20,
@@ -2093,15 +2093,15 @@ export default function UserProfile() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: customizeState.textColor, fontSize: 14 }}>Level</span>
                   <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.level}</span>
-                </div>
+                      </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: customizeState.textColor, fontSize: 14 }}>XP</span>
                   <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.xp}</span>
-                </div>
+                      </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: customizeState.textColor, fontSize: 14 }}>Total Donated</span>
                   <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>${profile.totalDonated}</span>
-                </div>
+                    </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: customizeState.textColor, fontSize: 14 }}>Animals Helped</span>
                   <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.animalsHelped}</span>
@@ -2124,21 +2124,21 @@ export default function UserProfile() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
                   <span style={{ color: customizeState.textColor, fontSize: 12 }}>Donated to Luna's surgery</span>
-                </div>
+                  </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
                   <span style={{ color: customizeState.textColor, fontSize: 12 }}>Visited Alveus Sanctuary</span>
-                </div>
+              </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
                   <span style={{ color: customizeState.textColor, fontSize: 12 }}>Shared a post</span>
-                </div>
+            </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
                   <span style={{ color: customizeState.textColor, fontSize: 12 }}>Earned "Donor" badge</span>
-                </div>
+                    </div>
+                  </div>
               </div>
-            </div>
           )}
 
           {/* Following List Widget */}
@@ -2206,7 +2206,7 @@ export default function UserProfile() {
                     background: customizeState.buttonColor,
                     borderRadius: 2
                   }}></div>
-                </div>
+                    </div>
               </div>
             </div>
           )}
@@ -2269,8 +2269,8 @@ export default function UserProfile() {
                     outline: 'none'
                   }}
                 />
-              </div>
-            </div>
+                  </div>
+                </div>
           )}
         </div>
       </div>

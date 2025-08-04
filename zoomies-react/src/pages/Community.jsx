@@ -29,11 +29,11 @@ const RECENT_COMMUNITIES = [
 ];
 
 const TRENDING_POSTS = [
-  { id: 1, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', image: 'https://i.imgur.com/1LD5mHH.jpeg', upvotes: 15, source: 'r/RescueHeroes' },
-  { id: 2, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', image: 'https://i.imgur.com/1Gh6zcQ.jpeg', upvotes: 20, source: 'r/SanctuaryLife' },
-  { id: 3, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', image: 'https://i.imgur.com/YeLIvnw.jpeg', upvotes: 8, source: 'r/PetPics' },
-  { id: 4, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', image: 'https://i.imgur.com/OH2ORCK.jpeg', upvotes: 18, source: 'r/AnimalCare' },
-  { id: 5, section: 'Training Tips', title: 'Teaching my dog to sit properly', user: 'Alex', time: '6h ago', image: 'https://placehold.co/300x200?text=Dog+Training', upvotes: 9, source: 'r/TrainingTips' },
+  { id: 1, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', image: 'https://i.imgur.com/1LD5mHH.jpeg', upvotes: 15, source: 'RescueHeroes' },
+  { id: 2, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', image: 'https://i.imgur.com/1Gh6zcQ.jpeg', upvotes: 20, source: 'SanctuaryLife' },
+  { id: 3, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', image: 'https://i.imgur.com/YeLIvnw.jpeg', upvotes: 8, source: 'PetPics' },
+  { id: 4, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', image: 'https://i.imgur.com/OH2ORCK.jpeg', upvotes: 18, source: 'AnimalCare' },
+  { id: 5, section: 'Training Tips', title: 'Teaching my dog to sit properly', user: 'Alex', time: '6h ago', image: 'https://placehold.co/300x200?text=Dog+Training', upvotes: 9, source: 'TrainingTips' },
 ];
 
 const POSTS = [
@@ -179,7 +179,7 @@ export default function Community() {
                 key={index}
                 className="button" 
                 style={{ 
-                  justifyContent: 'flex-start', 
+                  justifyContent: 'center', 
                   background: 'transparent',
                   color: 'var(--text)',
                   borderRadius: 8,
@@ -189,7 +189,7 @@ export default function Community() {
                 }}
               >
                 <span style={{ fontSize: 16, marginRight: 8 }}>{community.avatar}</span>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{ fontWeight: 600 }}>{community.name}</span>
                   <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{community.members} members</span>
                 </div>
@@ -352,7 +352,7 @@ export default function Community() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                       <span style={{ 
                         background: 'var(--primary)', 
-                        color: 'var(--background)', 
+                        color: 'white', 
                         borderRadius: 6, 
                         padding: '2px 8px', 
                         fontSize: 12, 
