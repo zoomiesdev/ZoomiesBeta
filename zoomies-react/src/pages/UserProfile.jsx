@@ -455,7 +455,7 @@ export default function UserProfile() {
             borderRadius: 24,
             boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
             padding: '2rem',
-            maxWidth: 500,
+            maxWidth: 800,
             width: '90%',
             maxHeight: '80vh',
             overflow: 'auto'
@@ -937,7 +937,7 @@ export default function UserProfile() {
             borderRadius: 24,
             boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
             padding: '2rem',
-            maxWidth: 500,
+            maxWidth: 800,
             width: '90%',
             maxHeight: '80vh',
             overflow: 'auto'
@@ -1025,18 +1025,18 @@ export default function UserProfile() {
                   }}>
                     Background
                   </div>
-                <input
-                  type="color"
+                  <input
+                    type="color"
                     value={customizeState.backgroundColor}
                     onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
-                  style={{
+                    style={{
                       width: 60,
-                    height: 40,
+                      height: 40,
                       border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                    }}
+                  />
                 </div>
               )}
 
@@ -1046,7 +1046,7 @@ export default function UserProfile() {
                   <div style={{
                     width: 120,
                     height: 60,
-                    background: customizeState.backgroundImage ? `url(${customizeState.backgroundImage})` : 'var(--border)',
+                    background: customizeState.backgroundImage ? `url(${customizeState.backgroundImage})` : 'var(--background)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     borderRadius: 8,
@@ -1057,35 +1057,26 @@ export default function UserProfile() {
                     color: 'var(--text-secondary)',
                     fontSize: 12
                   }}>
-                    {!customizeState.backgroundImage && 'Upload Image'}
+                    {customizeState.backgroundImage ? '' : 'Upload Image'}
                   </div>
-                <input
+                  <input
                     type="file"
                     accept="image/*"
                     onChange={handleBackgroundImageChange}
-                    style={{ display: 'none' }}
-                    id="background-image-input"
-                  />
-                  <label
-                    htmlFor="background-image-input"
-                  style={{
-                      background: 'var(--primary)',
-                      color: 'white',
-                      padding: '8px 16px',
+                    style={{
+                      width: 200,
+                      height: 40,
+                      border: '1px solid var(--border)',
                       borderRadius: 8,
-                    fontSize: 14,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      display: 'inline-block'
+                      padding: '8px',
+                      fontSize: 12
                     }}
-                  >
-                    Upload Image
-                  </label>
-              </div>
+                  />
+                </div>
               )}
             </div>
 
-            {/* Color Customization Section */}
+            {/* Colors Section */}
             <div style={{ marginBottom: 24 }}>
               <label style={{ 
                 display: 'block', 
@@ -1096,81 +1087,17 @@ export default function UserProfile() {
               }}>
                 Colors
               </label>
+              
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                {/* Button Color */}
                 <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
                     Button Color
-                  </label>
-                <input
-                  type="color"
-                    value={customizeState.buttonColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, buttonColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-                    Header Text
-                  </label>
-                <input
-                    type="color"
-                    value={customizeState.headerColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, headerColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                      height: 40,
-                    border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                  }}
-                />
-              </div>
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-                    Content Text
-              </label>
-                <input
-                  type="color"
-                    value={customizeState.textColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, textColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                </div>
-              </div>
-            </div>
-
-            {/* Color Customization Section */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
-                Profile Colors
-              </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-                    Primary Color
                   </label>
                   <input
                     type="color"
-                    value={customizeState.primaryColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, primaryColor: e.target.value }))}
+                    value={customizeState.buttonColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, buttonColor: e.target.value }))}
                     style={{
                       width: '100%',
                       height: 40,
@@ -1180,35 +1107,39 @@ export default function UserProfile() {
                     }}
                   />
                 </div>
+                
+                {/* Header Text Color */}
                 <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-                Accent Color
-              </label>
-                <input
-                  type="color"
-                    value={customizeState.accentColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, accentColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-                    Background
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                    Header Text
                   </label>
-                <input
+                  <input
                     type="color"
-                    value={customizeState.backgroundColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
-                  style={{
+                    value={customizeState.headerColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, headerColor: e.target.value }))}
+                    style={{
                       width: '100%',
                       height: 40,
-                    border: '1px solid var(--border)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      cursor: 'pointer'
+                    }}
+                  />
+                </div>
+                
+                {/* Body Text Color */}
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                    Body Text
+                  </label>
+                  <input
+                    type="color"
+                    value={customizeState.textColor}
+                    onChange={(e) => setCustomizeState(prev => ({ ...prev, textColor: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      border: '1px solid var(--border)',
                       borderRadius: 8,
                       cursor: 'pointer'
                     }}
@@ -1217,7 +1148,7 @@ export default function UserProfile() {
               </div>
             </div>
 
-            {/* Preview Section */}
+            {/* Sidebar Widgets Section */}
             <div style={{ marginBottom: 24 }}>
               <label style={{ 
                 display: 'block', 
@@ -1226,78 +1157,111 @@ export default function UserProfile() {
                 color: 'var(--text)', 
                 marginBottom: 12 
               }}>
-                Preview
+                Sidebar Widgets
               </label>
-              <div style={{
-                background: customizeState.backgroundType === 'color' 
-                  ? customizeState.backgroundColor 
-                  : customizeState.backgroundImage 
-                    ? `url(${customizeState.backgroundImage})` 
-                    : '#ffffff',
-                backgroundSize: customizeState.backgroundType === 'image' ? 'cover' : 'auto',
-                backgroundPosition: customizeState.backgroundType === 'image' ? 'center' : 'auto',
-                borderRadius: 12,
-                padding: 16,
-                border: '1px solid var(--border)',
-                minHeight: 120
-              }}>
-                <div style={{ 
-                  background: 'var(--card)', 
-                  borderRadius: 8, 
-                  padding: 12,
-                  marginBottom: 8
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      background: 'var(--background)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 16
-                    }}>
-                      👤
-                    </div>
-                    <div>
-                      <div style={{ 
-                        color: customizeState.headerColor, 
-                        fontWeight: 600, 
-                        fontSize: 12 
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                {/* Left Sidebar */}
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                    Left 
+                  </label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {[
+                      { id: 'feelings', label: 'Feelings Widget', icon: '😊' },
+                      { id: 'bestFriends', label: 'Best Friends', icon: '👥' },
+                      { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
+                      { id: 'showcaseGif', label: 'Showcase Gif', icon: '🎬' },
+                      { id: 'showcasePicture', label: 'Showcase Pic', icon: '🖼️' },
+                      { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
+                    ].map(widget => (
+                      <label key={widget.id} style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 8,
+                        padding: '8px 12px',
+                        border: '1px solid var(--border)',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        background: customizeState.leftSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'var(--card)',
+                        color: customizeState.leftSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                        fontSize: 12
                       }}>
-                        {profile.name}
-                      </div>
-                      <div style={{ 
-                        color: customizeState.textColor, 
-                        fontSize: 10 
-                      }}>
-                        {profile.username}
-                      </div>
-                    </div>
+                        <input
+                          type="checkbox"
+                          checked={customizeState.leftSidebarWidgets.includes(widget.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setCustomizeState(prev => ({
+                                ...prev,
+                                leftSidebarWidgets: [...prev.leftSidebarWidgets, widget.id]
+                              }));
+                            } else {
+                              setCustomizeState(prev => ({
+                                ...prev,
+                                leftSidebarWidgets: prev.leftSidebarWidgets.filter(id => id !== widget.id)
+                              }));
+                            }
+                          }}
+                          style={{ margin: 0 }}
+                        />
+                        <span>{widget.icon}</span>
+                        {widget.label}
+                      </label>
+                    ))}
                   </div>
                 </div>
-                <div style={{ 
-                  background: 'var(--card)', 
-                  borderRadius: 8, 
-                  padding: 12,
-                  fontSize: 11,
-                  color: customizeState.textColor
-                }}>
-                  Content area preview
+                
+                {/* Right Sidebar */}
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
+                    Right 
+                  </label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {[
+                      { id: 'feelings', label: 'Feelings Widget', icon: '😊' },
+                      { id: 'recentActivity', label: 'Recent Activity', icon: '📝' },
+                      { id: 'following', label: 'Following', icon: '👥' },
+                      { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
+                      { id: 'showcaseGif', label: 'Showcase Gif', icon: '🎬' },
+                      { id: 'showcasePicture', label: 'Showcase Picture', icon: '🖼️' }
+                    ].map(widget => (
+                      <label key={widget.id} style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 8,
+                        padding: '8px 12px',
+                        border: '1px solid var(--border)',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        background: customizeState.rightSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'var(--card)',
+                        color: customizeState.rightSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                        fontSize: 12
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={customizeState.rightSidebarWidgets.includes(widget.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setCustomizeState(prev => ({
+                                ...prev,
+                                rightSidebarWidgets: [...prev.rightSidebarWidgets, widget.id]
+                              }));
+                            } else {
+                              setCustomizeState(prev => ({
+                                ...prev,
+                                rightSidebarWidgets: prev.rightSidebarWidgets.filter(id => id !== widget.id)
+                              }));
+                            }
+                          }}
+                          style={{ margin: 0 }}
+                        />
+                        <span>{widget.icon}</span>
+                        {widget.label}
+                      </label>
+                    ))}
+                  </div>
                 </div>
-                <button style={{
-                  background: customizeState.buttonColor,
-                      color: 'white',
-                  border: 'none',
-                      borderRadius: 6,
-                  padding: '6px 12px',
-                  fontSize: 10,
-                      cursor: 'pointer',
-                  marginTop: 8
-                }}>
-                  Sample Button
-                  </button>
               </div>
             </div>
 
@@ -1340,121 +1304,6 @@ export default function UserProfile() {
               >
                 Save Changes
               </button>
-            </div>
-          </div>
-
-          {/* Sidebar Customization Section */}
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ 
-              display: 'block', 
-              fontSize: 14, 
-              fontWeight: 600, 
-              color: 'var(--text)', 
-              marginBottom: 12 
-            }}>
-              Sidebar Widgets
-            </label>
-            
-            {/* Left Sidebar Widgets */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                Left Sidebar (after About section)
-              </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-                {[
-                  { id: 'feelings', label: 'Feelings Widget', icon: '😊' },
-                  { id: 'bestFriends', label: 'Best Friends', icon: '👥' },
-                  { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
-                  { id: 'showcaseGif', label: 'Showcase GIF', icon: '🎬' },
-                  { id: 'showcasePicture', label: 'Showcase Picture', icon: '🖼️' },
-                  { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
-                ].map(widget => (
-                  <label key={widget.id} style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 8,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    background: customizeState.leftSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'transparent',
-                    color: customizeState.leftSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
-                    fontSize: 12
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={customizeState.leftSidebarWidgets.includes(widget.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setCustomizeState(prev => ({
-                            ...prev,
-                            leftSidebarWidgets: [...prev.leftSidebarWidgets, widget.id]
-                          }));
-                        } else {
-                          setCustomizeState(prev => ({
-                            ...prev,
-                            leftSidebarWidgets: prev.leftSidebarWidgets.filter(id => id !== widget.id)
-                          }));
-                        }
-                      }}
-                      style={{ margin: 0 }}
-                    />
-                    <span>{widget.icon}</span>
-                    {widget.label}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Sidebar Widgets */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                Right Sidebar
-              </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-                {[
-                  { id: 'quickStats', label: 'Quick Stats', icon: '📊' },
-                  { id: 'recentActivity', label: 'Recent Activity', icon: '📝' },
-                  { id: 'followingList', label: 'Following List', icon: '👥' },
-                  { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
-                  { id: 'showcaseGif', label: 'Showcase GIF', icon: '🎬' },
-                  { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
-                ].map(widget => (
-                  <label key={widget.id} style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 8,
-                    padding: '8px 12px',
-                    border: '1px solid var(--border)',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    background: customizeState.rightSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'transparent',
-                    color: customizeState.rightSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
-                    fontSize: 12
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={customizeState.rightSidebarWidgets.includes(widget.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setCustomizeState(prev => ({
-                            ...prev,
-                            rightSidebarWidgets: [...prev.rightSidebarWidgets, widget.id]
-                          }));
-                        } else {
-                          setCustomizeState(prev => ({
-                            ...prev,
-                            rightSidebarWidgets: prev.rightSidebarWidgets.filter(id => id !== widget.id)
-                          }));
-                        }
-                      }}
-                      style={{ margin: 0 }}
-                    />
-                    <span>{widget.icon}</span>
-                    {widget.label}
-                  </label>
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -2235,7 +2084,7 @@ export default function UserProfile() {
             <div style={{ 
               background: 'var(--card)', 
               borderRadius: 12, 
-              padding: 20, 
+              padding: 20,
               marginBottom: 24,
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
             }}>
