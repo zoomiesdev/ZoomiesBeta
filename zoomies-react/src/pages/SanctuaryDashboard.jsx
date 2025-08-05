@@ -4,49 +4,34 @@ import ScrollNumber from '../components/ScrollNumber';
 
 // Mock data for sanctuary dashboard
 const SANCTUARY_DATA = {
-  name: 'Alveus Sanctuary',
-  location: 'Austin, TX',
-  logo: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center',
-  coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center'
+  name: 'Your Sanctuary',
+  location: 'Your Location',
+  logo: 'https://placehold.co/60x60?text=Logo',
+  coverPhoto: 'https://placehold.co/800x300?text=Cover'
 };
 
 const FUNDRAISING_STATS = {
-  totalRaised: 45230,
-  monthlyGoal: 50000,
-  activeCampaigns: 8,
-  totalDonors: 1247,
-  averageDonation: 36.25,
-  monthlyGrowth: 12.5
+  totalRaised: 0,
+  monthlyGoal: 0,
+  activeCampaigns: 0,
+  totalDonors: 0,
+  averageDonation: 0,
+  monthlyGrowth: 0
 };
 
-const RECENT_DONATIONS = [
-  { donor: 'Clara M.', amount: 50, animal: 'Stompy', time: '2 hours ago', type: 'Monthly' },
-  { donor: 'Sam R.', amount: 25, animal: 'Luna', time: '4 hours ago', type: 'One-time' },
-  { donor: 'Jess K.', amount: 100, animal: 'Bella', time: '1 day ago', type: 'Emergency' },
-  { donor: 'Mike T.', amount: 75, animal: 'General Fund', time: '2 days ago', type: 'General' },
-  { donor: 'Sarah L.', amount: 30, animal: 'Stompy', time: '3 days ago', type: 'Monthly' }
-];
+const RECENT_DONATIONS = [];
 
-const ANIMAL_STATUS = [
-  { name: 'Stompy', species: 'Goat', status: 'Active', followers: 1247, raised: 815, goal: 2000, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center' },
-  { name: 'Luna', species: 'Cow', status: 'Recovering', followers: 892, raised: 1200, goal: 2500, image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center' },
-  { name: 'Bella', species: 'Pig', status: 'Thriving', followers: 456, raised: 300, goal: 1000, image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center' },
-  { name: 'Max', species: 'Horse', status: 'Active', followers: 234, raised: 150, goal: 800, image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=60&h=60&fit=crop&crop=center' }
-];
+const ANIMAL_STATUS = [];
 
-const UPCOMING_EVENTS = [
-  { name: 'Volunteer Day', date: '2024-01-15', time: '9:00 AM', attendees: 24, type: 'Volunteer' },
-  { name: 'Open House', date: '2024-01-20', time: '2:00 PM', attendees: 45, type: 'Public' },
-  { name: 'Fundraising Gala', date: '2024-02-01', time: '7:00 PM', attendees: 120, type: 'Fundraiser' }
-];
+const UPCOMING_EVENTS = [];
 
 const ANALYTICS = {
-  pageViews: 15420,
-  uniqueVisitors: 8920,
-  engagementRate: 68.5,
-  socialShares: 2340,
-  emailSubscribers: 567,
-  volunteerHours: 1240
+  pageViews: 0,
+  uniqueVisitors: 0,
+  engagementRate: 0,
+  socialShares: 0,
+  emailSubscribers: 0,
+  volunteerHours: 0
 };
 
 export default function SanctuaryDashboard() {

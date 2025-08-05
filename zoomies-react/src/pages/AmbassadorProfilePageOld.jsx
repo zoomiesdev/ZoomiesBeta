@@ -1,103 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const ANIMALS = {
-  stompy: {
-    name: 'Stompy the Goat',
-    species: 'Goat',
-    sanctuary: 'Alveus Sanctuary',
-    joined: 'August 2023',
-    about: "Hi I'm Stompy and I'm an ostrich blah blah I was found in blah blah blah. My favorite food is blah blah bugs.",
-    coverImg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=250&fit=crop&crop=center',
-    profileImg: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=100&h=100&fit=crop&crop=center',
-    donation: { raised: 815, goal: 2000 },
-    gallery: [
-      'https://placehold.co/150x100?text=1',
-      'https://placehold.co/150x100?text=2',
-      'https://placehold.co/150x100?text=3',
-    ],
-    comments: [
-      { user: 'Clara', text: 'Stunned by Stompy\'s beauty! ♥' },
-      { user: 'James', text: '👑 1 ♥' },
-      { user: 'Emily', text: 'You go, Stomp!' },
-    ],
-    supporters: [
-      { name: 'Pawfect Coffee Co.', amount: 2000 },
-      { name: 'Linda S.', amount: 1500 },
-      { name: 'CryptoCat DAO', amount: 1250 },
-    ],
-  },
-  luna: {
-    name: 'Luna the Cow',
-    species: 'Cow',
-    sanctuary: 'Gentle Barn',
-    joined: 'May 2022',
-    about: "Luna loves sunbathing and making new friends. She was rescued from a dairy farm and now enjoys a peaceful life.",
-    coverImg: 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=1200&h=250&fit=crop&crop=center',
-    profileImg: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=100&h=100&fit=crop&crop=center',
-    donation: { raised: 1200, goal: 2500 },
-    gallery: [
-      'https://placehold.co/150x100?text=Luna1',
-      'https://placehold.co/150x100?text=Luna2',
-      'https://placehold.co/150x100?text=Luna3',
-    ],
-    comments: [
-      { user: 'Sam', text: 'Luna is the sweetest!' },
-      { user: 'Jess', text: 'So glad she\'s safe now.' },
-    ],
-    supporters: [
-      { name: 'Happy Hooves', amount: 900 },
-      { name: 'Moo Friends', amount: 700 },
-    ],
-  },
-  bella: {
-    name: 'Bella the Pig',
-    species: 'Pig',
-    sanctuary: 'Sunny Acres',
-    joined: 'March 2021',
-    about: "Bella is a playful pig who loves mud baths and belly rubs. She was rescued from a factory farm.",
-    coverImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&h=250&fit=crop&crop=center',
-    profileImg: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=100&h=100&fit=crop&crop=center',
-    donation: { raised: 600, goal: 1800 },
-    gallery: [
-      'https://placehold.co/150x100?text=Bella1',
-      'https://placehold.co/150x100?text=Bella2',
-      'https://placehold.co/150x100?text=Bella3',
-    ],
-    comments: [
-      { user: 'Megan', text: 'Bella is adorable!' },
-    ],
-    supporters: [
-      { name: 'Piggy Pals', amount: 400 },
-    ],
-  },
-  max: {
-    name: 'Max the Horse',
-    species: 'Horse',
-    sanctuary: 'Freedom Reins',
-    joined: 'January 2020',
-    about: "Max is a gentle giant who loves apples and running in open fields. He was rescued from neglect.",
-    coverImg: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=1200&h=250&fit=crop&crop=center',
-    profileImg: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=100&h=100&fit=crop&crop=center',
-    donation: { raised: 2000, goal: 3000 },
-    gallery: [
-      'https://placehold.co/150x100?text=Max1',
-      'https://placehold.co/150x100?text=Max2',
-      'https://placehold.co/150x100?text=Max3',
-    ],
-    comments: [
-      { user: 'Alex', text: 'Max is so majestic!' },
-    ],
-    supporters: [
-      { name: 'Horse Heroes', amount: 1500 },
-    ],
-  },
-  // Add more sample animals here
-};
+const ANIMALS = {};
 
 export default function AmbassadorProfilePageOld() {
   const { id } = useParams();
-  const animal = ANIMALS[id] || ANIMALS['stompy'];
+  const animal = null;
+  
+  // If no animal data, show empty state
+  if (!animal) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'var(--background)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 16
+      }}>
+        <h1 style={{ color: 'var(--text)', margin: 0 }}>No Animal Found</h1>
+        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>This animal profile is not available.</p>
+      </div>
+    );
+  }
   const [custom, setCustom] = useState(false);
   const [customValue, setCustomValue] = useState('');
   const [isDark, setIsDark] = useState(false);

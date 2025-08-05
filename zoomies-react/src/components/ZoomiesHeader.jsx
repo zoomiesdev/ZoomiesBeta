@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import ThemeSelector from './ThemeSelector';
+import AuthModal from './AuthModal';
+import ProfileEditModal from './ProfileEditModal';
 import logoBlack from '../assets/LogoBlack.png';
 import logoWhite from '../assets/LogoWhite.png';
 import homeIcon from '../assets/HomeIcon.png';
@@ -13,8 +16,7 @@ import premiumIcon from '../assets/PremiumIcon.png';
 import premiumIconWhite from '../assets/PremiumIconWhite.png';
 
 export default function ZoomiesHeader() {
-  // Placeholder login state
-  const [user, setUser] = useState(null); // null or { name, avatar, type }
+  const { user, signOut } = useAuth();
   const [theme, setTheme] = useState('light');
   const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,15 +24,18 @@ export default function ZoomiesHeader() {
   const [searchValue, setSearchValue] = useState('');
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [profileEditModalOpen, setProfileEditModalOpen] = useState(false);
   const [tooltip, setTooltip] = useState({ show: false, text: '', x: 0, y: 0 });
   const [currentPage, setCurrentPage] = useState('/');
   const searchRef = useRef(null);
   const profileRef = useRef(null);
   const loginRef = useRef(null);
 
-  const handleUserLogin = () => setUser({ name: 'Lianne', avatar: 'https://placehold.co/32x32?text=L', type: 'user' });
-  const handleSanctuaryLogin = () => setUser({ name: 'Alveus Sanctuary', avatar: 'https://placehold.co/32x32?text=A', type: 'sanctuary' });
-  const handleLogout = () => setUser(null);
+  const handleLogout = async () => {
+    await signOut();
+    setProfileDropdownOpen(false);
+  };
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   // Close search, profile, or login dropdown on outside click
@@ -71,6 +76,14 @@ export default function ZoomiesHeader() {
 
   return (
     <>
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+      <ProfileEditModal 
+        isOpen={profileEditModalOpen} 
+        onClose={() => setProfileEditModalOpen(false)}
+        onSave={() => {
+          setProfileEditModalOpen(false);
+        }}
+      />
       <header className="zoomies-header" style={{
         display: 'flex', 
         alignItems: 'center', 
@@ -491,21 +504,8 @@ export default function ZoomiesHeader() {
                   cursor: 'pointer',
                   transition: 'background 0.2s',
                   borderBottom: '1px solid var(--border, #eee)'
-                }} onClick={() => { handleUserLogin(); setLoginDropdownOpen(false); }}>
-                  Login as User
-                </button>
-                <button style={{
-                  padding: '0.75rem 1.25rem',
-                  color: 'var(--primary, #fc97ca)',
-                  background: 'none',
-                  border: 'none',
-                  fontWeight: 500,
-                  fontSize: 15,
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  transition: 'background 0.2s'
-                }} onClick={() => { handleSanctuaryLogin(); setLoginDropdownOpen(false); }}>
-                  Login as Sanctuary
+                }} onClick={() => { setAuthModalOpen(true); setLoginDropdownOpen(false); }}>
+                  Sign In / Sign Up
                 </button>
               </div>
             )}
@@ -557,6 +557,20 @@ export default function ZoomiesHeader() {
                     View Dashboard
                   </Link>
                 )}
+                <button style={{
+                  padding: '0.75rem 1.25rem',
+                  color: 'var(--text, #18171C)',
+                  background: 'none',
+                  border: 'none',
+                  fontWeight: 500,
+                  fontSize: 15,
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s',
+                  borderBottom: '1px solid var(--border, #eee)'
+                }} onClick={() => { setProfileEditModalOpen(true); setProfileDropdownOpen(false); }}>
+                  Edit Profile
+                </button>
                 <button style={{
                   padding: '0.75rem 1.25rem',
                   color: 'var(--text, #18171C)',
@@ -784,6 +798,22 @@ export default function ZoomiesHeader() {
                   View Profile
                 </Link>
                 <button 
+                  onClick={() => { setProfileEditModalOpen(true); toggleMobileMenu(); }} 
+                  className="button" 
+                  style={{ 
+                    width: '100%',
+                    border: 'none', 
+                    borderRadius: 12, 
+                    padding: '0.75rem', 
+                    fontWeight: 600, 
+                    cursor: 'pointer',
+                    background: 'var(--gray)',
+                    color: 'var(--text)'
+                  }}
+                >
+                  Edit Profile
+                </button>
+                <button 
                   onClick={() => { handleLogout(); toggleMobileMenu(); }} 
                   className="button" 
                   style={{ 
@@ -803,7 +833,7 @@ export default function ZoomiesHeader() {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <button 
-                  onClick={() => { handleUserLogin(); toggleMobileMenu(); }} 
+                  onClick={() => { setAuthModalOpen(true); toggleMobileMenu(); }} 
                   className="button" 
                   style={{ 
                     width: '100%',
@@ -819,26 +849,7 @@ export default function ZoomiesHeader() {
                     transition: 'all 0.2s'
                   }}
                 >
-                  👤 Login as User
-                </button>
-                <button 
-                  onClick={() => { handleSanctuaryLogin(); toggleMobileMenu(); }} 
-                  className="button" 
-                  style={{ 
-                    width: '100%',
-                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--light-pink) 100%)', 
-                    color: '#fff', 
-                    border: 'none', 
-                    borderRadius: 12, 
-                    padding: '0.75rem', 
-                    fontWeight: 600, 
-                    fontSize: 16, 
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(255, 107, 107, 0.2)',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  🏠 Login as Sanctuary
+                  👤 Sign In / Sign Up
                 </button>
               </div>
             )}

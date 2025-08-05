@@ -7,77 +7,35 @@ import LunaProfilePic from '../assets/LunaProfilePic.png';
 
 // Sample data for the ambassador
 const animal = {
-  name: 'Stompy the Goat',
-  species: 'Goat',
-  sanctuary: 'Alveus Sanctuary',
-  profileImg: StompyProfilePic,
-  coverImg: StompyBanner,
-  about: "Hi I'm Stompy and I'm a goat who loves headbutts and snacks. I was rescued from a difficult situation and now I live happily at Alveus Sanctuary where I get all the love and care I need.",
-  joined: 'August 2023',
+  name: 'Your Animal Name',
+  species: 'Species',
+  sanctuary: 'Your Sanctuary',
+  profileImg: 'https://placehold.co/100x100?text=Animal',
+  coverImg: 'https://placehold.co/400x200?text=Cover',
+  about: "Tell your animal's story here...",
+  joined: 'Recently',
   donation: {
-    raised: 815,
-    goal: 2000
+    raised: 0,
+    goal: 0
   },
-  supporters: [
-    { name: 'Pawfect Coffee Co.', amount: 2000 },
-    { name: 'Linda S.', amount: 1500 },
-    { name: 'CryptoCat DAO', amount: 1250 }
-  ],
-  gallery: [
-    'https://placehold.co/300x300?text=Stompy+1',
-    'https://placehold.co/300x300?text=Stompy+2',
-    'https://placehold.co/300x300?text=Stompy+3',
-    'https://placehold.co/300x300?text=Stompy+4',
-    'https://placehold.co/300x300?text=Stompy+5',
-    'https://placehold.co/300x300?text=Stompy+6',
-    'https://placehold.co/300x300?text=Stompy+7',
-    'https://placehold.co/300x300?text=Stompy+8',
-    'https://placehold.co/300x300?text=Stompy+9'
-  ],
-  comments: [
-    { user: 'Clara', text: "Stunned by Stompy's beauty! ♥" },
-    { user: 'James', text: '👑 1 ♥' },
-    { user: 'Emily', text: 'You go, Stomp!' }
-  ]
+  supporters: [],
+  gallery: [],
+  comments: []
 };
 
 const animalStats = {
-  feeling: 'Silly',
-  feelingEmoji: '🤪',
-  feelingUpdate: '2 hours ago',
-  age: '3 years',
-  location: 'Alveus Sanctuary',
-  rescueDate: 'August 2023',
-  followers: 1247,
-  personality: ['Playful', 'Curious', 'Friendly'],
-  needs: ['Medical checkup', 'New toys', 'Special diet']
+  feeling: 'Happy',
+  feelingEmoji: '😊',
+  feelingUpdate: 'Just now',
+  age: 'Unknown',
+  location: 'Your Sanctuary',
+  rescueDate: 'Recently',
+  followers: 0,
+  personality: [],
+  needs: []
 };
 
-const timelinePosts = [
-  {
-    id: 1,
-    user: animal.name,
-    avatar: animal.profileImg,
-    date: '2 hours ago',
-    content: 'Just had a big bowl of insects — thanks Name for the $25 treat!',
-    reactions: { like: 12, love: 8, laugh: 3 },
-    comments: [
-      { user: 'Clara', text: 'So cute! ♥' },
-      { user: 'James', text: 'Love seeing you happy!' }
-    ]
-  },
-  {
-    id: 2,
-    user: animal.name,
-    avatar: animal.profileImg,
-    date: '5 hours ago',
-    content: 'Thanks Name for the $255 donation yabababadaddboooo',
-    reactions: { like: 15, love: 12, laugh: 2 },
-    comments: [
-      { user: 'Emily', text: 'You deserve it!' }
-    ]
-  }
-];
+const timelinePosts = [];
 
 export default function EditableAmbassadorProfile() {
   const [activeTab, setActiveTab] = useState('timeline');

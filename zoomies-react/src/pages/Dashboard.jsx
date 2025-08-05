@@ -1,78 +1,66 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { userService } from '../services/userService';
 import ScrollNumber from '../components/ScrollNumber';
 
-// Mock data for enhanced user profile
-const USER_DATA = {
-  name: 'Lianna Graham',
-  username: '@liannagraham',
-  avatar: 'https://picsum.photos/100/100?random=2',
-  coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center',
-  bio: 'Passionate animal advocate and sanctuary supporter. Making the world better for all creatures, one donation at a time! 🐾',
-  location: 'San Francisco, CA',
-  joinedDate: 'March 2023',
-  totalDonated: 1250,
-  animalsHelped: 47,
-  followers: 892,
-  following: 156,
-  level: 8,
-  xp: 2840,
-  nextLevelXp: 3200
-};
-
-const BADGES = [
-  { name: 'Donor', icon: '💖', description: 'Made first donation', earned: '2024-01-15' },
-  { name: 'Event Attendee', icon: '🎟️', description: 'Attended 5 events', earned: '2024-02-20' },
-  { name: 'Advocate', icon: '📢', description: 'Shared 50+ posts', earned: '2024-03-10' },
-  { name: 'Premium', icon: '🌟', description: 'Premium member', earned: '2024-04-01' },
-  { name: 'Fundraiser', icon: '💰', description: 'Raised $500+', earned: '2024-05-15' },
-  { name: 'Volunteer', icon: '🤝', description: 'Volunteered 20+ hours', earned: '2024-06-01' }
-];
-
-const FOLLOWED_ANIMALS = [
-  { name: 'Stompy', type: 'Goat', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', sanctuary: 'Alveus Sanctuary', status: 'Active' },
-  { name: 'Luna', type: 'Cow', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', sanctuary: 'Gentle Barn', status: 'Recovering' },
-  { name: 'Bella', type: 'Pig', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', sanctuary: 'Farm Sanctuary', status: 'Thriving' }
-];
-
-const FOLLOWED_SANCTUARIES = [
-  { name: 'Alveus Sanctuary', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', location: 'Austin, TX', animals: 47 },
-  { name: 'Gentle Barn', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', location: 'Santa Clarita, CA', animals: 89 },
-  { name: 'Farm Sanctuary', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', location: 'Watkins Glen, NY', animals: 156 }
-];
-
-const ACTIVITY_FEED = [
-  { type: 'donation', content: 'Donated $50 to Stompy', time: '2 hours ago', icon: '💖' },
-  { type: 'post', content: 'Just visited Alveus Sanctuary! The animals are doing amazing. #sanctuarylife', time: '1 day ago', icon: '📸' },
-  { type: 'achievement', content: 'Earned the "Fundraiser" badge!', time: '3 days ago', icon: '🏆' },
-  { type: 'event', content: 'Registered for "Walk for Animals" event', time: '1 week ago', icon: '🎟️' },
-  { type: 'fundraiser', content: 'Started fundraiser for Luna\'s surgery', time: '2 weeks ago', icon: '💰' }
-];
-
-const DONATIONS = [
-  { to: 'Stompy', amount: 50, date: '2024-07-01', type: 'Monthly' },
-  { to: 'Luna', amount: 25, date: '2024-06-15', type: 'One-time' },
-  { to: 'Bella', amount: 100, date: '2024-06-01', type: 'Emergency' },
-  { to: 'Alveus Sanctuary', amount: 75, date: '2024-05-20', type: 'General' }
-];
-
-const FUNDRAISERS = [
-  { name: 'Help Luna Get Surgery', goal: 2500, raised: 1800, daysLeft: 5, image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=200&h=120&fit=crop&crop=center' },
-  { name: 'Stompy\'s Medical Fund', goal: 2000, raised: 815, daysLeft: 12, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=120&fit=crop&crop=center' }
-];
-
-const LEADERBOARD = [
-  { name: 'Clara', rank: 1, amount: 200, avatar: 'https://placehold.co/32x32?text=C' },
-  { name: 'You', rank: 2, amount: 150, avatar: USER_DATA.avatar },
-  { name: 'Sam', rank: 3, amount: 90, avatar: 'https://placehold.co/32x32?text=S' },
-  { name: 'Jess', rank: 4, amount: 75, avatar: 'https://placehold.co/32x32?text=J' },
-  { name: 'Mike', rank: 5, amount: 60, avatar: 'https://placehold.co/32x32?text=M' }
-];
-
 export default function Dashboard() {
+  const { user, updateUserProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('stats');
   const [isEditing, setIsEditing] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+
+  // If no user is authenticated, show a message
+  if (!user) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '60vh',
+        flexDirection: 'column',
+        gap: 20
+      }}>
+        <h2 style={{ color: 'var(--text)', margin: 0 }}>Please log in to view your dashboard</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>Sign in to see your Zoomies dashboard</p>
+      </div>
+    );
+  }
+
+  // Use actual user data or default values for new users
+  const USER_DATA = {
+    name: user.full_name || user.username || 'New User',
+    username: `@${user.username || 'newuser'}`,
+    avatar: user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || 'user'}`,
+    coverPhoto: user.cover_photo || 'https://placehold.co/800x300?text=Cover',
+    bio: user.bio || 'New Zoomies member! 🐾',
+    location: user.location || 'Location not set',
+    joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently',
+    totalDonated: user.total_donated || 0,
+    animalsHelped: user.animals_helped || 0,
+    followers: user.followers || 0,
+    following: user.following || 0,
+    level: user.level || 1,
+    xp: user.xp || 0,
+    nextLevelXp: user.next_level_xp || 100
+  };
+
+const BADGES = [];
+
+const FOLLOWED_ANIMALS = [];
+
+const FOLLOWED_SANCTUARIES = [];
+
+const ACTIVITY_FEED = [];
+
+const DONATIONS = [];
+
+const FUNDRAISERS = [];
+
+const LEADERBOARD = [];
+
   const [profile, setProfile] = useState({
     ...USER_DATA
   });
@@ -104,6 +92,7 @@ export default function Dashboard() {
       coverFile: null
     });
     setShowEditModal(true);
+    setSaveError('');
   };
 
   const handleEditChange = (e) => {
@@ -119,19 +108,56 @@ export default function Dashboard() {
     }
   };
 
-  const handleSaveEdit = () => {
-    setProfile((prev) => ({
-      ...prev,
-      name: editState.name,
-      bio: editState.bio,
-      avatar: editState.avatar,
-      coverPhoto: editState.coverPhoto
-    }));
-    setShowEditModal(false);
+  const handleSaveEdit = async () => {
+    setSaving(true);
+    setSaveError('');
+    
+    try {
+      // Prepare the update data
+      const updateData = {
+        bio: editState.bio
+      };
+      
+      // Add avatar if changed
+      if (editState.avatar && editState.avatar !== profile.avatar) {
+        updateData.avatar = editState.avatar;
+      }
+      
+      // Add cover photo if changed
+      if (editState.coverPhoto && editState.coverPhoto !== profile.coverPhoto) {
+        updateData.cover_photo = editState.coverPhoto;
+      }
+      
+      // Update the user profile in the database
+      const { error } = await userService.updateUser(user.id, updateData);
+      
+      if (error) {
+        setSaveError(error.message);
+        console.error('Error updating profile:', error);
+      } else {
+        // Update the user context with the new data
+        updateUserProfile(updateData);
+        setShowEditModal(false);
+        setEditState({
+          name: profile.name,
+          bio: profile.bio,
+          avatar: profile.avatar,
+          coverPhoto: profile.coverPhoto,
+          avatarFile: null,
+          coverFile: null
+        });
+      }
+    } catch (err) {
+      setSaveError('An unexpected error occurred');
+      console.error('Error updating profile:', err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancelEdit = () => {
     setShowEditModal(false);
+    setSaveError('');
   };
 
   return (
@@ -192,10 +218,56 @@ export default function Dashboard() {
               <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Bio</label>
               <textarea name="bio" value={editState.bio} onChange={handleEditChange} style={{ width: '100%', minHeight: 60, padding: '8px 12px', borderRadius: 8, border: '1px solid var(--gray)', fontSize: 15, resize: 'vertical' }} />
             </div>
+            {/* Error Message */}
+            {saveError && (
+              <div style={{
+                background: 'rgba(255, 107, 107, 0.1)',
+                color: '#ff6b6b',
+                padding: '12px 16px',
+                borderRadius: 8,
+                marginBottom: 16,
+                fontSize: 14,
+                textAlign: 'center'
+              }}>
+                {saveError}
+              </div>
+            )}
+
             {/* Buttons */}
             <div className="modal-buttons" style={{ display: 'flex', gap: 16, width: '100%', justifyContent: 'center' }}>
-              <button onClick={handleCancelEdit} style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, fontSize: 16, cursor: 'pointer' }}>Cancel</button>
-              <button onClick={handleSaveEdit} className="button" style={{ background: 'linear-gradient(90deg, var(--primary), var(--pink))', color: '#fff', fontWeight: 600, fontSize: 16, border: 'none', borderRadius: 20, padding: '10px 32px', boxShadow: '0 2px 8px rgba(252,151,202,0.08)' }}>Save</button>
+              <button 
+                onClick={handleCancelEdit}
+                disabled={saving}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: saving ? 'var(--text-secondary)' : 'var(--primary)', 
+                  fontWeight: 600, 
+                  fontSize: 16, 
+                  cursor: saving ? 'not-allowed' : 'pointer' 
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveEdit}
+                disabled={saving}
+                className="button" 
+                style={{ 
+                  background: saving ? 'var(--gray)' : 'linear-gradient(90deg, var(--primary), var(--pink))', 
+                  color: '#fff', 
+                  fontWeight: 600, 
+                  fontSize: 16, 
+                  border: 'none', 
+                  borderRadius: 20, 
+                  padding: '10px 32px', 
+                  boxShadow: '0 2px 8px rgba(252,151,202,0.08)',
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  opacity: saving ? 0.7 : 1
+                }}
+              >
+                {saving ? 'Saving...' : 'Save'}
+              </button>
             </div>
           </div>
         </div>

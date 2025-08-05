@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollNumber from '../components/ScrollNumber';
+import SupabaseTest from '../components/SupabaseTest';
 import MaxProfilePic from '../assets/MaxProfilePic.png';
 import MaxBanner from '../assets/MaxBanner.png';
 import StompyProfilePic from '../assets/StompyProfilePic.png';
@@ -16,88 +17,12 @@ import CameraPixel from './CameraPixel.png';
 
 
 // Mock data for feed posts
-const FEED_POSTS = [
-  {
-    id: 1,
-    user: 'Clara',
-    avatar: 'https://placehold.co/40x40?text=C',
-    content: 'Visited Bella the Guinea pig today! She loved her flower 💕',
-    image: 'https://i.imgur.com/DVzPhmt.jpeg',
-    likes: 124,
-    comments: 23,
-    time: '2m ago',
-    type: 'donation'
-  },
-  {
-    id: 2,
-    user: 'Alveus Sanctuary',
-    avatar: 'https://placehold.co/40x40?text=A',
-    content: 'Stompy had a great day today! He loves headbutts and to climb and explore! 🐐✨',
-    image: 'https://i.imgur.com/kSanFdP.jpeg',
-    likes: 892,
-    comments: 156,
-    time: '1h ago',
-    type: 'update'
-  },
-  {
-    id: 3,
-    user: 'Sam',
-    avatar: 'https://placehold.co/40x40?text=S',
-    content: 'Shared my rescue story today. Every animal deserves a chance at a happy life! 🐾',
-    image: null,
-    likes: 67,
-    comments: 12,
-    time: '3h ago',
-    type: 'story'
-  },
-  {
-    id: 4,
-    user: 'Gentle Barn',
-    avatar: 'https://placehold.co/40x40?text=G',
-    content: 'Luna is recovering well from her surgery. Thank you to everyone who donated! 🐄💖',
-    image: 'https://i.imgur.com/cfdoymN.jpeg',
-    likes: 445,
-    comments: 89,
-    time: '5h ago',
-    type: 'update'
-  }
-];
+const FEED_POSTS = [];
 
 // Mock data for stories
-const STORIES = [
-  { id: 1, user: 'Clara', avatar: 'https://placehold.co/60x60?text=C', hasNew: true },
-  { id: 2, user: 'Sam', avatar: 'https://placehold.co/60x60?text=S', hasNew: true },
-  { id: 3, user: 'Jess', avatar: 'https://placehold.co/60x60?text=J', hasNew: false },
-  { id: 4, user: 'Mike', avatar: 'https://placehold.co/60x60?text=M', hasNew: true },
-  { id: 5, user: 'Sarah', avatar: 'https://placehold.co/60x60?text=S', hasNew: false },
-];
+const STORIES = [];
 
-const URGENT_CAMPAIGNS = [
-  {
-    id: 'stompy',
-    name: 'Stompy',
-    species: 'Goat',
-    sanctuary: 'Alveus Sanctuary',
-    image: StompyProfilePic,
-    raised: 815,
-    goal: 2000,
-    urgency: 'Medical treatment needed',
-    timeLeft: '3 days',
-    followers: 1247
-  },
-  {
-    id: 'luna',
-    name: 'Luna',
-    species: 'Cow',
-    sanctuary: 'Gentle Barn',
-    image: LunaProfilePic,
-    raised: 1200,
-    goal: 2500,
-    urgency: 'Surgery required',
-    timeLeft: '1 day',
-    followers: 892
-  }
-];
+const URGENT_CAMPAIGNS = [];
 
 export default function Home() {
   const [likedPosts, setLikedPosts] = useState(new Set());
@@ -132,24 +57,10 @@ export default function Home() {
 
 
   // Sidebar content
-  const sponsors = [
-    { name: 'PetCo', logo: 'https://placehold.co/80x40?text=PetCo' },
-    { name: 'Chewy', logo: 'https://placehold.co/80x40?text=Chewy' },
-    { name: 'Local Vet', logo: 'https://placehold.co/80x40?text=Vet' }
-  ];
-  const featured = URGENT_CAMPAIGNS[0];
-  const trendingCommunities = [
-    { name: 'Animal Care', avatar: 'https://placehold.co/40x40?text=AC', members: 3200 },
-    { name: 'Rescue Stories', avatar: 'https://placehold.co/40x40?text=RS', members: 2100 },
-    { name: 'Fundraising Tips', avatar: 'https://placehold.co/40x40?text=FT', members: 1800 },
-    { name: 'Sanctuary Life', avatar: 'https://placehold.co/40x40?text=SL', members: 950 }
-  ];
-  const trendingContent = [
-    { id: 'stompy', name: 'Stompy', image: StompyProfilePic, likes: 1247 },
-    { id: 'luna', name: 'Luna', image: LunaProfilePic, likes: 892 },
-    { id: 'bella', name: 'Bella', image: 'https://i.imgur.com/FmUAOsH.jpeg', likes: 456 },
-    { id: 'max', name: 'Max', image: MaxProfilePic, likes: 2034 }
-  ];
+  const sponsors = [];
+  const featured = null;
+  const trendingCommunities = [];
+  const trendingContent = [];
 
   return (
     <>
@@ -172,6 +83,8 @@ export default function Home() {
         minWidth: 240,
         marginTop: 24
       }}>
+        {/* Supabase Connection Test */}
+        <SupabaseTest />
         {/* Thanks to our Sponsors */}
         <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Thanks to our Sponsors!</h3>
@@ -216,18 +129,20 @@ export default function Home() {
           </div>
         </div>
         {/* Featured Campaign/Animal */}
-        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Featured Campaign</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
-            <img src={featured.image} alt={featured.name} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover' }} />
-            <div>
-              <div style={{ fontWeight: 600, color: 'var(--text)' }}>{featured.name}</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{featured.species} • {featured.sanctuary}</div>
-              <div style={{ fontSize: 12, color: 'var(--primary)' }}>{featured.urgency}</div>
+        {featured && (
+          <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Featured Campaign</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
+              <img src={featured.image} alt={featured.name} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover' }} />
+              <div>
+                <div style={{ fontWeight: 600, color: 'var(--text)' }}>{featured.name}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{featured.species} • {featured.sanctuary}</div>
+                <div style={{ fontSize: 12, color: 'var(--primary)' }}>{featured.urgency}</div>
+              </div>
             </div>
+            <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(108, 100, 205, 0.3)' }}>View Campaign</Link>
           </div>
-          <Link to={`/ambassadors/${featured.id}`} className="button" style={{ marginTop: 12, display: 'inline-block', padding: '6px 12px', fontSize: 12, background: 'linear-gradient(135deg, #6c64cd 0%, #a855f7 100%)', color: 'var(--white)', borderRadius: 6, boxShadow: '0 2px 8px rgba(108, 100, 205, 0.3)' }}>View Campaign</Link>
-        </div>
+        )}
       </aside>
 
       {/* Main Feed Area */}
@@ -308,25 +223,25 @@ export default function Home() {
           }}>
             <div style={{ textAlign: 'center' }}>
               <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
-                <ScrollNumber value="$45,230" duration={2000} delay={500} />
+                <ScrollNumber value="$0" duration={2000} delay={500} />
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Raised Today</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
-                <ScrollNumber value="1,247" duration={2000} delay={700} />
+                <ScrollNumber value="0" duration={2000} delay={700} />
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Animals Helped</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
-                <ScrollNumber value="8,934" duration={2000} delay={900} />
+                <ScrollNumber value="0" duration={2000} delay={900} />
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Supporters</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div className="pixel-font" style={{ fontSize: 22, fontWeight: 'normal', color: 'var(--primary)' }}>
-                <ScrollNumber value="156" duration={2000} delay={1100} />
+                <ScrollNumber value="0" duration={2000} delay={1100} />
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Sanctuaries</div>
             </div>
@@ -632,14 +547,7 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src={LunaProfilePic} alt="Luna" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Bella's Training Session</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>@luna_golden</div>
-                <div style={{ fontSize: 12, color: 'var(--primary)' }}>1.2k watching</div>
-              </div>
-            </div>
+            {/* Live streams will appear here when available */}
           </div>
         </div>
 
@@ -700,27 +608,7 @@ export default function Home() {
         <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Trending Animals</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src={LunaProfilePic} alt="Luna" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Luna</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>2.4k followers</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src="https://placehold.co/40x40?text=W" alt="Whiskers" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Whiskers</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>1.8k followers</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src="https://placehold.co/40x40?text=S" alt="Spike" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>Spike</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>3.1k followers</div>
-              </div>
-            </div>
+            {/* Trending animals will appear here when available */}
           </div>
         </div>
       </aside>

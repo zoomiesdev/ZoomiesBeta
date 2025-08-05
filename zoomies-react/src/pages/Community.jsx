@@ -20,31 +20,11 @@ const TOPICS = [
   { name: 'Behavior Issues', icon: '🤔', color: '#E6B6FF' },
 ];
 
-const RECENT_COMMUNITIES = [
-  { name: '/AnimalCare', members: '12.5k', avatar: '🐾' },
-  { name: '/PetPics', members: '8.2k', avatar: '📸' },
-  { name: '/SanctuaryLife', members: '5.1k', avatar: '🏠' },
-  { name: '/AdoptionStories', members: '3.8k', avatar: '💝' },
-  { name: '/RescueHeroes', members: '7.3k', avatar: '🆘' },
-];
+const RECENT_COMMUNITIES = [];
 
-const TRENDING_POSTS = [
-  { id: 1, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', image: 'https://i.imgur.com/1LD5mHH.jpeg', upvotes: 15, source: 'RescueHeroes' },
-  { id: 2, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', image: 'https://i.imgur.com/1Gh6zcQ.jpeg', upvotes: 20, source: 'SanctuaryLife' },
-  { id: 3, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', image: 'https://i.imgur.com/YeLIvnw.jpeg', upvotes: 8, source: 'PetPics' },
-  { id: 4, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', image: 'https://i.imgur.com/OH2ORCK.jpeg', upvotes: 18, source: 'AnimalCare' },
-  { id: 5, section: 'Training Tips', title: 'Teaching my dog to sit properly', user: 'Alex', time: '6h ago', image: 'https://placehold.co/300x200?text=Dog+Training', upvotes: 9, source: 'TrainingTips' },
-];
+const TRENDING_POSTS = [];
 
-const POSTS = [
-  { id: 1, section: 'Animal Care', title: 'Best food for senior dogs?', user: 'Clara', time: '2h ago', tags: ['care', 'dogs'], upvotes: 12, comments: 3, mod: false },
-  { id: 2, section: 'Pet Pics', title: 'My cat in a box 🐱', user: 'Sam', time: '1h ago', tags: ['pics', 'cats'], upvotes: 8, comments: 2, mod: false },
-  { id: 3, section: 'Sanctuary AMAs', title: 'Ask us anything about goats!', user: 'AlveusSanctuary', time: '3h ago', tags: ['AMA', 'goats'], upvotes: 20, comments: 7, mod: true },
-  { id: 4, section: 'Adoption Tips', title: 'How to introduce a new bunny?', user: 'Jess', time: '4h ago', tags: ['adoption', 'bunnies'], upvotes: 5, comments: 1, mod: false },
-  { id: 5, section: 'Rescue Stories', title: 'We saved 10 ducklings!', user: 'Megan', time: '5h ago', tags: ['rescue', 'ducks'], upvotes: 15, comments: 4, mod: false },
-  { id: 6, section: 'Training Tips', title: 'Teaching my dog to sit properly', user: 'Alex', time: '6h ago', tags: ['training', 'dogs'], upvotes: 9, comments: 2, mod: false },
-  { id: 7, section: 'Health & Wellness', title: 'Vaccination schedule for kittens', user: 'Dr. Sarah', time: '7h ago', tags: ['health', 'cats'], upvotes: 18, comments: 5, mod: true },
-];
+const POSTS = [];
 
 export default function Community() {
   const [selectedSection, setSelectedSection] = useState('all');

@@ -7,52 +7,7 @@ import LunaProfilePic from '../assets/LunaProfilePic.png';
 import MaxBanner from '../assets/MaxBanner.png';
 import MaxProfilePic from '../assets/MaxProfilePic.png';
 
-const ANIMALS = {
-  stompy: {
-    name: 'Stompy the Goat',
-    species: 'Goat',
-    sanctuary: 'Alveus Sanctuary',
-    profileImg: StompyProfilePic,
-    coverImg: StompyBanner,
-    donation: { raised: 815, goal: 2000 },
-    featured: true,
-    story: 'Stompy loves to climb and explore!',
-    followers: 1247
-  },
-  luna: {
-    name: 'Luna the Cow',
-    species: 'Cow',
-    sanctuary: 'Gentle Barn',
-    profileImg: LunaProfilePic,
-    coverImg: LunaBanner,
-    donation: { raised: 1200, goal: 2500 },
-    featured: true,
-    story: 'Luna is the gentlest soul you\'ll ever meet.',
-    followers: 892
-  },
-  bella: {
-    name: 'Bella the Pig',
-    species: 'Pig',
-    sanctuary: 'Sunny Acres',
-    profileImg: 'https://i.imgur.com/FmUAOsH.jpeg',
-    coverImg: 'https://i.imgur.com/W0pKFcW.jpeg',
-    donation: { raised: 600, goal: 1800 },
-    featured: false,
-    story: 'Bella loves belly rubs and mud baths!',
-    followers: 456
-  },
-  max: {
-    name: 'Max the Horse',
-    species: 'Horse',
-    sanctuary: 'Freedom Reins',
-    profileImg: MaxProfilePic,
-    coverImg: MaxBanner,
-    donation: { raised: 2000, goal: 3000 },
-    featured: true,
-    story: 'Max is a retired racehorse who loves carrots.',
-    followers: 2034
-  },
-};
+const ANIMALS = {};
 
 export default function AmbassadorHub() {
   const [searchTerm, setSearchTerm] = useState('');

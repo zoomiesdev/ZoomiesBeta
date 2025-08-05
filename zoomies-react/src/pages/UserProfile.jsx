@@ -1,173 +1,206 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import CameraPixel from './CameraPixel.png';
-import MoviePixel from './MoviePixel.png';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { userService } from '../services/userService';
+import { storageService } from '../services/storageService';
+import { postService } from '../services/postService';
 
-// Mock data for user profile
-const USER_DATA = {
-  name: 'Lianna Graham',
-  username: '@liannagraham',
-  avatar: 'https://picsum.photos/100/100?random=2',
-  coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center',
-  bio: 'Passionate animal advocate and sanctuary supporter. Making the world better for all creatures, one donation at a time! 🐾',
-  location: 'San Francisco, CA',
-  joinedDate: 'March 2023',
-  totalDonated: 1250,
-  animalsHelped: 47,
-  followers: 892,
-  following: 156,
-  level: 8,
-  xp: 2840,
-  nextLevelXp: 3200,
-  feeling: 'Happy',
-  feelingEmoji: '😊',
-  feelingDescription: 'Feeling great today!'
-};
-
-const BADGES = [
-  { name: 'Donor', icon: '💖', description: 'Made first donation', earned: '2024-01-15' },
-  { name: 'Event Attendee', icon: '🎟️', description: 'Attended 5 events', earned: '2024-02-20' },
-  { name: 'Advocate', icon: '📢', description: 'Shared 50+ posts', earned: '2024-03-10' },
-  { name: 'Premium', icon: '🌟', description: 'Premium member', earned: '2024-04-01' },
-  { name: 'Fundraiser', icon: '💰', description: 'Raised $500+', earned: '2024-05-15' },
-  { name: 'Volunteer', icon: '🤝', description: 'Volunteered 20+ hours', earned: '2024-06-01' }
-];
-
-const FOLLOWED_ANIMALS = [
-  { name: 'Stompy', type: 'Goat', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', sanctuary: 'Alveus Sanctuary', status: 'Active' },
-  { name: 'Luna', type: 'Cow', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', sanctuary: 'Gentle Barn', status: 'Recovering' },
-  { name: 'Bella', type: 'Pig', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', sanctuary: 'Farm Sanctuary', status: 'Thriving' }
-];
-
-const FOLLOWED_SANCTUARIES = [
-  { name: 'Alveus Sanctuary', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', location: 'Austin, TX', animals: 47 },
-  { name: 'Gentle Barn', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', location: 'Santa Clarita, CA', animals: 89 },
-  { name: 'Farm Sanctuary', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', location: 'Watkins Glen, NY', animals: 156 }
-];
-
-const USER_POSTS = [
-  { 
-    id: 1, 
-    content: 'Just visited Alveus Sanctuary today! The animals are doing amazing. Stompy was so happy to see us! 🐐 #sanctuarylife', 
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-    time: '2 hours ago',
-    likes: 24,
-    comments: 8,
-    shares: 3
-  },
-  { 
-    id: 2, 
-    content: 'Volunteering at the local animal shelter this weekend. Every little bit helps! 🐕 #volunteer #animalwelfare', 
-    image: null,
-    time: '1 day ago',
-    likes: 18,
-    comments: 5,
-    shares: 2
-  },
-  { 
-    id: 3, 
-    content: 'Look at this adorable kitten I met today! She was so playful and full of energy. Can\'t wait to see her find her forever home! 😺', 
-    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop&crop=center',
-    time: '3 days ago',
-    likes: 42,
-    comments: 12,
-    shares: 7
-  },
-  { 
-    id: 4, 
-    content: 'Started my fundraiser for Luna\'s surgery! Please help if you can. Every donation counts! 💕', 
-    image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400&h=300&fit=crop&crop=center',
-    time: '1 week ago',
-    likes: 56,
-    comments: 15,
-    shares: 12
-  }
-];
-
-const GALLERY_IMAGES = [
-  { id: 1, url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop&crop=center', caption: 'Stompy at Alveus' },
-  { id: 2, url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=center', caption: 'Adorable kitten' },
-  { id: 3, url: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=300&h=300&fit=crop&crop=center', caption: 'Luna the cow' },
-  { id: 4, url: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=300&h=300&fit=crop&crop=center', caption: 'Bella the pig' },
-  { id: 5, url: 'https://images.unsplash.com/photo-1543852786-1cf6624b998d?w=300&h=300&fit=crop&crop=center', caption: 'Volunteering day' },
-  { id: 6, url: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=300&h=300&fit=crop&crop=center', caption: 'Sanctuary visit' },
-  { id: 7, url: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=300&fit=crop&crop=center', caption: 'Dog training' },
-  { id: 8, url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&h=300&fit=crop&crop=center', caption: 'Cat cuddles' },
-  { id: 9, url: 'https://images.unsplash.com/photo-1529429617124-5b1096d02c13?w=300&h=300&fit=crop&crop=center', caption: 'Rescue mission' }
-];
-
-const FUNDRAISERS = [
-  { name: 'Help Luna Get Surgery', goal: 2500, raised: 1800, daysLeft: 5, image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=200&h=120&fit=crop&crop=center' },
-  { name: 'Stompy\'s Medical Fund', goal: 2000, raised: 815, daysLeft: 12, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=120&fit=crop&crop=center' }
-];
+// Empty data for new users
+const FOLLOWED_ANIMALS = [];
+const FOLLOWED_SANCTUARIES = [];
+const FUNDRAISERS = [];
+const POSTS = [];
 
 export default function UserProfile() {
-  const [activeTab, setActiveTab] = useState('timeline');
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showPostModal, setShowPostModal] = useState(false);
-  const [profile, setProfile] = useState({
-    ...USER_DATA
-  });
-  const [editState, setEditState] = useState({
-    name: profile.name,
-    bio: profile.bio,
-    avatar: profile.avatar,
-    coverPhoto: profile.coverPhoto,
-    avatarFile: null,
-    coverFile: null,
-    headerType: 'image', // 'image' or 'color'
-    headerColor: '#6366f1',
-    headerImage: profile.coverPhoto
-  });
-  const [newPost, setNewPost] = useState({
-    content: '',
-    image: null,
-    gif: null,
-    poll: null
-  });
-  const [showFeelingEdit, setShowFeelingEdit] = useState(false);
-  const [feelingEditState, setFeelingEditState] = useState({
-    feeling: profile.feeling,
-    feelingEmoji: profile.feelingEmoji,
-    feelingDescription: profile.feelingDescription
-  });
-  const [showCustomizeModal, setShowCustomizeModal] = useState(false);
-  const [customizeState, setCustomizeState] = useState({
-    backgroundType: 'color', // 'color' or 'image'
-    backgroundColor: '#ffffff',
-    backgroundImage: null,
-    textColor: '#18171C',
-    buttonColor: '#6366f1',
-    headerColor: '#18171C',
-    leftSidebarWidgets: ['feelings', 'bestFriends'],
-    rightSidebarWidgets: ['quickStats', 'recentActivity']
+  const { user, updateUserProfile } = useAuth();
+  
+  // User data state
+  const [userData, setUserData] = useState({
+    name: user?.name || 'New User',
+    username: user?.username || 'newuser',
+    bio: user?.bio || 'Welcome to Zoomies! 🐾',
+    location: user?.location || 'Location not set',
+    joinedDate: user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Recently',
+    avatar: user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=newuser',
+    coverPhoto: user?.cover_photo || 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center'
   });
 
+  // Edit profile states
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    name: userData.name,
+    bio: userData.bio,
+    location: userData.location,
+    headerType: 'image',
+    headerColor: '#4A90E2'
+  });
+
+  // Image states
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [headerImage, setHeaderImage] = useState(userData.coverPhoto);
+  
+  // Showcase image states
+  const [showcasePicture, setShowcasePicture] = useState(user?.showcase_picture || null);
+  const [showcaseGif, setShowcaseGif] = useState(user?.showcase_gif || null);
+  const [uploadingPicture, setUploadingPicture] = useState(false);
+  const [uploadingGif, setUploadingGif] = useState(false);
+
+  // Customize profile states
+  const [isCustomizing, setIsCustomizing] = useState(false);
+  const [customizeData, setCustomizeData] = useState({
+    backgroundType: 'inherit',
+    backgroundColor: 'inherit',
+    backgroundImage: null,
+    buttonColor: 'var(--primary)',
+    headerTextColor: 'var(--text)',
+    bodyTextColor: 'var(--text-secondary)',
+    leftSidebarWidgets: ['feelings'],
+    rightSidebarWidgets: ['following', 'showcasePicture']
+  });
+  const [profileLayout, setProfileLayout] = useState({
+    showAbout: true,
+    showFeeling: true,
+    showFollowedAnimals: true,
+    showFollowedSanctuaries: true
+  });
+
+  // Post states
+  const [posts, setPosts] = useState(POSTS);
+  const [newPost, setNewPost] = useState('');
+  const [postImage, setPostImage] = useState(null);
+  const [isAddingPost, setIsAddingPost] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+
+  // Feeling states
+  const [currentFeeling, setCurrentFeeling] = useState('Happy');
+  const [currentFeelingEmoji, setCurrentFeelingEmoji] = useState('😊');
+  const [currentFeelingDescription, setCurrentFeelingDescription] = useState('Feeling great today!');
+  const [isEditingFeeling, setIsEditingFeeling] = useState(false);
+  const [newFeeling, setNewFeeling] = useState('');
+  const [newFeelingEmoji, setNewFeelingEmoji] = useState('😊');
+  const [newFeelingDescription, setNewFeelingDescription] = useState('');
+
+  // Tab states
+  const [activeTab, setActiveTab] = useState('timeline');
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        name: user.name || 'New User',
+        username: user.username || 'newuser',
+        bio: user.bio || 'Welcome to Zoomies! 🐾',
+        location: user.location || 'Location not set',
+        joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Recently',
+        avatar: user.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=newuser',
+        coverPhoto: user.cover_photo || 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center'
+      });
+      setHeaderImage(user.cover_photo || 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center');
+      
+      // Load showcase images
+      console.log('Loading showcase images from user data:', {
+        showcase_picture: user.showcase_picture,
+        showcase_gif: user.showcase_gif,
+        user_id: user.id
+      });
+      if (user.showcase_picture && user.showcase_picture !== 'test-picture-url') {
+        console.log('Setting showcase picture:', user.showcase_picture);
+        setShowcasePicture(user.showcase_picture);
+      }
+      if (user.showcase_gif && user.showcase_gif !== 'test-gif-url') {
+        console.log('Setting showcase gif:', user.showcase_gif);
+        setShowcaseGif(user.showcase_gif);
+      }
+      
+      // Load customize data if it exists
+      if (user.customize_data) {
+        setCustomizeData(prev => ({
+          ...prev,
+          ...user.customize_data
+        }));
+      } else {
+        // Set default customize data for new users
+        setCustomizeData({
+          backgroundType: 'inherit',
+          backgroundColor: 'inherit',
+          backgroundImage: null,
+          buttonColor: 'var(--primary)',
+          headerTextColor: 'var(--text)',
+          bodyTextColor: 'var(--text-secondary)',
+          leftSidebarWidgets: ['feelings'],
+          rightSidebarWidgets: ['following', 'showcasePicture']
+        });
+      }
+      
+      // Load feeling data if it exists
+      if (user.feeling) {
+        setCurrentFeeling(user.feeling);
+      }
+      if (user.feeling_emoji) {
+        setCurrentFeelingEmoji(user.feeling_emoji);
+      }
+      if (user.feeling_description) {
+        setCurrentFeelingDescription(user.feeling_description);
+      }
+      
+      // Load posts from database
+      loadUserPosts();
+    }
+  }, [user]);
+
+  const loadUserPosts = async () => {
+    try {
+      const { data: postsData, error } = await postService.getUserPosts(user.id);
+      if (error) {
+        console.error('Error loading posts:', error);
+        return;
+      }
+      
+      // Transform database posts to match local format
+      const transformedPosts = postsData.map(post => ({
+        id: post.id,
+        content: post.content,
+        image: post.image_url,
+        likes: post.likes_count || 0,
+        comments: post.comments_count || 0,
+        time: new Date(post.created_at).toLocaleDateString(),
+        user: {
+          name: post.users?.name || userData.name,
+          avatar: post.users?.avatar || userData.avatar
+        }
+      }));
+      
+      setPosts(transformedPosts);
+    } catch (error) {
+      console.error('Error loading posts:', error);
+    }
+  };
+
+  // Edit profile handlers
   const handleEditProfile = () => {
-    setEditState({
-      name: profile.name,
-      bio: profile.bio,
-      avatar: profile.avatar,
-      coverPhoto: profile.coverPhoto,
-      avatarFile: null,
-      coverFile: null,
+    setEditData({
+      name: userData.name,
+      bio: userData.bio,
+      location: userData.location,
       headerType: 'image',
-      headerColor: '#6366f1',
-      headerImage: profile.coverPhoto
+      headerColor: '#4A90E2'
     });
-    setShowEditModal(true);
+    setIsEditing(true);
   };
 
   const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditState((prev) => ({ ...prev, [name]: value }));
+    setEditData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
   };
 
   const handleImageChange = (e) => {
-    const { name, files } = e.target;
-    if (files && files[0]) {
-      const url = URL.createObjectURL(files[0]);
-      setEditState((prev) => ({ ...prev, [name]: url, [`${name}File`]: files[0] }));
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -176,127 +209,336 @@ export default function UserProfile() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setEditState(prev => ({ 
-          ...prev, 
-          headerImage: e.target.result,
-          headerType: 'image'
-        }));
+        setHeaderImage(e.target.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSaveEdit = () => {
-    setProfile((prev) => ({
-      ...prev,
-      name: editState.name,
-      bio: editState.bio,
-      avatar: editState.avatar,
-      coverPhoto: editState.coverPhoto,
-      headerType: editState.headerType,
-      headerColor: editState.headerColor,
-      headerImage: editState.headerImage
-    }));
-    setShowEditModal(false);
+  const handleSaveEdit = async () => {
+    try {
+      const updates = {
+        name: editData.name,
+        bio: editData.bio,
+        location: editData.location,
+        avatar: selectedImage || userData.avatar,
+        cover_photo: headerImage || userData.coverPhoto
+      };
+
+      await userService.updateCurrentUser(updates);
+      
+      setUserData(prev => ({
+        ...prev,
+        ...updates
+      }));
+
+      updateUserProfile(updates);
+      setIsEditing(false);
+      setSelectedImage(null);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
   const handleCancelEdit = () => {
-    setShowEditModal(false);
+    setIsEditing(false);
+    setSelectedImage(null);
+    setHeaderImage(userData.coverPhoto);
   };
 
-  // Post creation handlers
-  const handlePostImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setNewPost(prev => ({ ...prev, image: e.target.result }));
+  // Customize profile handlers
+  const handleCustomizeProfile = () => {
+    setIsCustomizing(true);
+  };
+
+  const handleSaveCustomize = async () => {
+    try {
+      // Prepare updates object
+      const updates = {
+        customize_data: customizeData
       };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePostGifChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setNewPost(prev => ({ ...prev, gif: e.target.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleAddPost = () => {
-    if (newPost.content.trim()) {
-      // Add post to timeline (in a real app, this would save to backend)
-      console.log('New post:', newPost);
-      setNewPost({
-        content: '',
-        image: null,
-        gif: null,
-        poll: null
+      
+      // Also save showcase image URLs if they exist
+      if (showcasePicture) updates.showcase_picture = showcasePicture;
+      if (showcaseGif) updates.showcase_gif = showcaseGif;
+      
+      console.log('Saving showcase images:', {
+        showcase_picture: showcasePicture || 'null',
+        showcase_gif: showcaseGif || 'null',
+        updates
       });
-      setShowPostModal(false);
+      
+      // Save to database
+      await userService.updateCurrentUser(updates);
+
+      // Update context
+      updateUserProfile(updates);
+
+      setIsCustomizing(false);
+    } catch (error) {
+      console.error('Error saving customize data:', error);
     }
   };
 
-  const handleEmojiSelect = (emoji) => {
-    setFeelingEditState(prev => ({ ...prev, feelingEmoji: emoji }));
+  const handleCancelCustomize = () => {
+    setIsCustomizing(false);
   };
 
-  const handleSaveFeeling = () => {
-    setProfile(prev => ({
-      ...prev,
-      feeling: feelingEditState.feeling,
-      feelingEmoji: feelingEditState.feelingEmoji,
-      feelingDescription: feelingEditState.feelingDescription
-    }));
-    setShowFeelingEdit(false);
-  };
-
-  const handleCancelFeeling = () => {
-    setFeelingEditState({
-      feeling: profile.feeling,
-      feelingEmoji: profile.feelingEmoji,
-      feelingDescription: profile.feelingDescription
-    });
-    setShowFeelingEdit(false);
-  };
-
+  // Background image handler
   const handleBackgroundImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setCustomizeState(prev => ({ 
-          ...prev, 
-          backgroundImage: e.target.result,
-          backgroundType: 'image'
+        setCustomizeData(prev => ({
+          ...prev,
+          backgroundImage: e.target.result
         }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSaveCustomize = () => {
-    // Save the customization settings
-    setShowCustomizeModal(false);
+  // Post handlers
+  const handlePostImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPostImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleCancelCustomize = () => {
-    setCustomizeState({
-      backgroundType: 'color',
-      backgroundColor: '#ffffff',
-      backgroundImage: null,
-      textColor: '#18171C',
-      buttonColor: '#6366f1',
-      headerColor: '#18171C',
-      leftSidebarWidgets: ['feelings', 'bestFriends'],
-      rightSidebarWidgets: ['quickStats', 'recentActivity']
-    });
-    setShowCustomizeModal(false);
+  const handleShowcasePictureChange = async (event) => {
+    const file = event.target.files[0];
+    console.log('Picture file selected:', file);
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Picture file is too large. Please select a file smaller than 5MB.');
+        return;
+      }
+      
+      setUploadingPicture(true);
+      try {
+        // Try storage first, fallback to data URL
+        console.log('Attempting to upload picture to storage...');
+        try {
+          const { url } = await storageService.uploadFile(file, 'showcase-images');
+          console.log('Picture uploaded to storage successfully:', url);
+          setShowcasePicture(url);
+          
+          // Save to database immediately
+          console.log('Saving picture URL to database:', url);
+          const result = await userService.updateCurrentUser({ showcase_picture: url });
+          console.log('Picture saved to database:', result);
+          updateUserProfile({ showcase_picture: url });
+        } catch (storageError) {
+          console.error('Storage upload failed, using data URL fallback:', storageError);
+          // Fallback to data URL
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            console.log('Picture loaded as data URL, length:', e.target.result.length);
+            setShowcasePicture(e.target.result);
+            
+            // Save data URL to database
+            console.log('Saving picture data URL to database');
+            const result = await userService.updateCurrentUser({ showcase_picture: e.target.result });
+            console.log('Picture data URL saved to database:', result);
+            updateUserProfile({ showcase_picture: e.target.result });
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (error) {
+        console.error('Error uploading picture:', error);
+        alert('Failed to upload picture. Please try again.');
+      } finally {
+        setUploadingPicture(false);
+      }
+    }
   };
+
+  const handleShowcaseGifChange = async (event) => {
+    const file = event.target.files[0];
+    console.log('GIF file selected:', file);
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('GIF file is too large. Please select a file smaller than 5MB.');
+        return;
+      }
+      
+      setUploadingGif(true);
+      try {
+        // Try storage first, fallback to data URL
+        console.log('Attempting to upload GIF to storage...');
+        try {
+          const { url } = await storageService.uploadFile(file, 'showcase-images');
+          console.log('GIF uploaded to storage successfully:', url);
+          setShowcaseGif(url);
+          
+          // Save to database immediately
+          console.log('Saving GIF URL to database:', url);
+          const result = await userService.updateCurrentUser({ showcase_gif: url });
+          console.log('GIF saved to database:', result);
+          updateUserProfile({ showcase_gif: url });
+        } catch (storageError) {
+          console.error('Storage upload failed, using data URL fallback:', storageError);
+          // Fallback to data URL
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            console.log('GIF loaded as data URL, length:', e.target.result.length);
+            setShowcaseGif(e.target.result);
+            
+            // Save data URL to database
+            console.log('Saving GIF data URL to database');
+            const result = await userService.updateCurrentUser({ showcase_gif: e.target.result });
+            console.log('GIF data URL saved to database:', result);
+            updateUserProfile({ showcase_gif: e.target.result });
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (error) {
+        console.error('Error uploading GIF:', error);
+        alert('Failed to upload GIF. Please try again.');
+      } finally {
+        setUploadingGif(false);
+      }
+    }
+  };
+
+  const handleOpenCreatePost = () => {
+    setShowCreatePostModal(true);
+  };
+
+  const handleCloseCreatePost = () => {
+    setShowCreatePostModal(false);
+    setNewPost('');
+    setPostImage(null);
+  };
+
+  const handleAddPost = async () => {
+    if (newPost.trim() || postImage) {
+      try {
+        // Upload image to storage if exists
+        let imageUrl = null;
+        if (postImage) {
+          // Convert data URL to file if needed
+          let file = postImage;
+          if (postImage.startsWith('data:')) {
+            // Convert data URL to file
+            const response = await fetch(postImage);
+            const blob = await response.blob();
+            file = new File([blob], 'post-image.jpg', { type: 'image/jpeg' });
+          }
+          
+          const { url } = await storageService.uploadFile(file, 'post-images');
+          imageUrl = url;
+        }
+        
+        // Create post in database
+        const postData = {
+          content: newPost,
+          image_url: imageUrl
+        };
+        
+        const { data: newPostData, error } = await postService.createPost(postData);
+        
+        if (error) {
+          console.error('Error creating post:', error);
+          alert('Failed to create post. Please try again.');
+          return;
+        }
+        
+        // Add to local state
+        const post = {
+          id: newPostData.id,
+          content: newPostData.content,
+          image: newPostData.image_url,
+          likes: newPostData.likes_count || 0,
+          comments: newPostData.comments_count || 0,
+          time: 'Just now',
+          user: {
+            name: newPostData.users?.name || userData.name,
+            avatar: newPostData.users?.avatar || userData.avatar
+          }
+        };
+        
+        setPosts([post, ...posts]);
+        setNewPost('');
+        setPostImage(null);
+        setShowCreatePostModal(false);
+      } catch (error) {
+        console.error('Error creating post:', error);
+        alert('Failed to create post. Please try again.');
+      }
+    }
+  };
+
+  // Feeling handlers
+  const handleEditFeeling = () => {
+    setNewFeeling(currentFeeling);
+    setNewFeelingEmoji(currentFeelingEmoji);
+    setNewFeelingDescription(currentFeelingDescription);
+    setIsEditingFeeling(true);
+  };
+
+  const handleSaveFeeling = async () => {
+    try {
+      const feelingData = {
+        feeling: newFeeling,
+        feeling_emoji: newFeelingEmoji,
+        feeling_description: newFeelingDescription
+      };
+
+      // Save feeling data to database
+      await userService.updateCurrentUser(feelingData);
+
+      // Update local state
+      setCurrentFeeling(newFeeling);
+      setCurrentFeelingEmoji(newFeelingEmoji);
+      setCurrentFeelingDescription(newFeelingDescription);
+
+      // Update context
+      updateUserProfile(feelingData);
+
+      setIsEditingFeeling(false);
+      setNewFeeling('');
+      setNewFeelingEmoji('😊');
+      setNewFeelingDescription('');
+    } catch (error) {
+      console.error('Error saving feeling data:', error);
+    }
+  };
+
+  const handleCancelFeeling = () => {
+    setIsEditingFeeling(false);
+    setNewFeeling('');
+    setNewFeelingEmoji('😊');
+    setNewFeelingDescription('');
+  };
+
+  const handleSaveShowcaseImages = async () => {
+    try {
+      const updates = {};
+      if (showcasePicture) updates.showcase_picture = showcasePicture;
+      if (showcaseGif) updates.showcase_gif = showcaseGif;
+      
+      console.log('Saving showcase images to database:', updates);
+      
+      if (Object.keys(updates).length > 0) {
+        const result = await userService.updateCurrentUser(updates);
+        console.log('Database update result:', result);
+        updateUserProfile(updates);
+      }
+    } catch (error) {
+      console.error('Error saving showcase images:', error);
+    }
+  };
+
+
 
   return (
     <div style={{ 
@@ -305,7 +547,7 @@ export default function UserProfile() {
       paddingTop: 0
     }}>
       {/* Edit Profile Modal */}
-      {showEditModal && (
+      {isEditing && (
         <div className="edit-modal" style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
@@ -332,6 +574,146 @@ export default function UserProfile() {
             <div style={{ fontWeight: 700, fontSize: 22, marginBottom: 18, color: 'var(--primary)' }}>
               Edit Profile
             </div>
+            
+            {/* Avatar */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: 8, 
+                color: 'var(--text)',
+                fontWeight: 500 
+              }}>
+                Profile Picture
+              </label>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <img 
+                  src={selectedImage || userData.avatar} 
+                  alt="Avatar" 
+                  style={{ 
+                    width: 80, 
+                    height: 80, 
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '2px solid var(--border)'
+                  }} 
+                />
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageChange}
+                  style={{ 
+                    position: 'absolute', 
+                    top: 0, 
+                    left: 0, 
+                    width: '100%', 
+                    height: '100%', 
+                    opacity: 0, 
+                    cursor: 'pointer' 
+                  }} 
+                />
+              </div>
+              <label style={{ 
+                display: 'block', 
+                marginTop: 8, 
+                fontSize: 12, 
+                color: 'var(--text-secondary)',
+                cursor: 'pointer'
+              }}>
+                Change Avatar
+              </label>
+            </div>
+
+            {/* Name */}
+            <div style={{ marginBottom: 20, width: '100%' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: 8, 
+                color: 'var(--text)',
+                fontWeight: 500 
+              }}>
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={editData.name}
+                onChange={handleEditChange}
+                style={{
+                  width: 'calc(100% - 32px)',
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 16,
+                  fontFamily: 'inherit'
+                }}
+                placeholder="Enter your name..."
+                maxLength={50}
+              />
+            </div>
+
+            {/* Bio */}
+            <div style={{ marginBottom: 20, width: '100%' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: 8, 
+                color: 'var(--text)',
+                fontWeight: 500 
+              }}>
+                Bio
+              </label>
+              <textarea
+                name="bio"
+                value={editData.bio}
+                onChange={handleEditChange}
+                style={{
+                  width: 'calc(100% - 32px)',
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 16,
+                  fontFamily: 'inherit',
+                  minHeight: 80,
+                  resize: 'vertical'
+                }}
+                placeholder="Tell us about yourself..."
+                maxLength={200}
+              />
+            </div>
+
+            {/* Location */}
+            <div style={{ marginBottom: 20, width: '100%' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: 8, 
+                color: 'var(--text)',
+                fontWeight: 500 
+              }}>
+                Location
+              </label>
+              <input
+                type="text"
+                name="location"
+                value={editData.location}
+                onChange={handleEditChange}
+                style={{
+                  width: 'calc(100% - 32px)',
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 16,
+                  fontFamily: 'inherit'
+                }}
+                placeholder="Enter your location..."
+                maxLength={50}
+              />
+            </div>
+
             {/* Header Customization */}
             <div style={{ width: '100%', marginBottom: 18 }}>
               <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Header</label>
@@ -339,13 +721,13 @@ export default function UserProfile() {
               {/* Header Type Toggle */}
               <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                 <button
-                  onClick={() => setEditState(prev => ({ ...prev, headerType: 'image' }))}
+                  onClick={() => setEditData(prev => ({ ...prev, headerType: 'image' }))}
                   style={{
                     padding: '6px 12px',
                     borderRadius: 6,
                     border: '1px solid var(--gray)',
-                    background: editState.headerType === 'image' ? 'var(--primary)' : 'transparent',
-                    color: editState.headerType === 'image' ? 'white' : 'var(--text)',
+                    background: editData.headerType === 'image' ? 'var(--primary)' : 'transparent',
+                    color: editData.headerType === 'image' ? 'white' : 'var(--text)',
                     cursor: 'pointer',
                     fontSize: 12
                   }}
@@ -353,13 +735,13 @@ export default function UserProfile() {
                   Image
                 </button>
                 <button
-                  onClick={() => setEditState(prev => ({ ...prev, headerType: 'color' }))}
+                  onClick={() => setEditData(prev => ({ ...prev, headerType: 'color' }))}
                   style={{
                     padding: '6px 12px',
                     borderRadius: 6,
                     border: '1px solid var(--gray)',
-                    background: editState.headerType === 'color' ? 'var(--primary)' : 'transparent',
-                    color: editState.headerType === 'color' ? 'white' : 'var(--text)',
+                    background: editData.headerType === 'color' ? 'var(--primary)' : 'transparent',
+                    color: editData.headerType === 'color' ? 'white' : 'var(--text)',
                     cursor: 'pointer',
                     fontSize: 12
                   }}
@@ -369,21 +751,21 @@ export default function UserProfile() {
               </div>
 
               {/* Image Header Option */}
-              {editState.headerType === 'image' && (
-              <div className="cover-preview" style={{ position: 'relative', width: '100%', height: 90, background: '#f8f6ff', borderRadius: 12, overflow: 'hidden', marginBottom: 8, border: '1px solid var(--gray)' }}>
-                  <img src={editState.headerImage} alt="Header Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              {editData.headerType === 'image' && (
+                <div className="cover-preview" style={{ position: 'relative', width: '100%', height: 90, background: '#f8f6ff', borderRadius: 12, overflow: 'hidden', marginBottom: 8, border: '1px solid var(--gray)' }}>
+                  <img src={headerImage} alt="Header Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <input type="file" accept="image/*" onChange={handleHeaderImageChange} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
-                <span style={{ position: 'absolute', bottom: 6, right: 10, background: 'rgba(255,255,255,0.8)', borderRadius: 8, padding: '2px 8px', fontSize: 12, color: 'var(--primary)' }}>Change</span>
-              </div>
+                  <span style={{ position: 'absolute', bottom: 6, right: 10, background: 'rgba(255,255,255,0.8)', borderRadius: 8, padding: '2px 8px', fontSize: 12, color: 'var(--primary)' }}>Change</span>
+                </div>
               )}
 
               {/* Color Header Option */}
-              {editState.headerType === 'color' && (
+              {editData.headerType === 'color' && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{
                     width: '100%',
                     height: 90,
-                    background: editState.headerColor,
+                    background: editData.headerColor,
                     borderRadius: 12,
                     border: '1px solid var(--gray)',
                     display: 'flex',
@@ -397,501 +779,24 @@ export default function UserProfile() {
                   </div>
                   <input
                     type="color"
-                    value={editState.headerColor}
-                    onChange={(e) => setEditState(prev => ({ ...prev, headerColor: e.target.value }))}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      border: '1px solid var(--gray)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                    }}
+                    value={editData.headerColor}
+                    onChange={(e) => setEditData(prev => ({ ...prev, headerColor: e.target.value }))}
+                    style={{ width: 40, height: 40, border: 'none', borderRadius: 8, cursor: 'pointer' }}
                   />
                 </div>
               )}
             </div>
-            {/* Avatar */}
-            <div style={{ width: '100%', marginBottom: 18 }}>
-              <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Profile Picture</label>
-              <div className="avatar-preview" style={{ position: 'relative', width: 70, height: 70, margin: '0 auto', borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--primary)' }}>
-                <img src={editState.avatar} alt="Avatar Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <input type="file" accept="image/*" name="avatar" onChange={handleImageChange} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
-                <span style={{ position: 'absolute', bottom: 2, right: 6, background: 'rgba(255,255,255,0.8)', borderRadius: 8, padding: '2px 8px', fontSize: 12, color: 'var(--primary)' }}>Change</span>
-              </div>
-            </div>
-            {/* Name */}
-            <div style={{ width: '100%', marginBottom: 18 }}>
-              <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Name</label>
-              <input type="text" name="name" value={editState.name} onChange={handleEditChange} style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid var(--gray)', fontSize: 16 }} />
-            </div>
-            {/* Bio */}
-            <div style={{ width: '100%', marginBottom: 24 }}>
-              <label style={{ fontWeight: 500, fontSize: 15, marginBottom: 6, display: 'block' }}>Bio</label>
-              <textarea name="bio" value={editState.bio} onChange={handleEditChange} style={{ width: '100%', minHeight: 60, padding: '8px 12px', borderRadius: 8, border: '1px solid var(--gray)', fontSize: 15, resize: 'vertical' }} />
-            </div>
+
             {/* Buttons */}
-            <div className="modal-buttons" style={{ display: 'flex', gap: 16, width: '100%', justifyContent: 'center' }}>
-              <button onClick={handleCancelEdit} style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, fontSize: 16, cursor: 'pointer' }}>Cancel</button>
-              <button onClick={handleSaveEdit} className="button" style={{ background: 'linear-gradient(90deg, var(--primary), var(--pink))', color: '#fff', fontWeight: 600, fontSize: 16, border: 'none', borderRadius: 20, padding: '10px 32px', boxShadow: '0 2px 8px rgba(252,151,202,0.08)' }}>Save</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Post Modal */}
-      {showPostModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            background: 'var(--card)',
-            borderRadius: 24,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            padding: '2rem',
-            maxWidth: 800,
-            width: '90%',
-            maxHeight: '80vh',
-            overflow: 'auto'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Create Post</h3>
+            <div style={{ display: 'flex', gap: 12, width: '100%' }}>
               <button 
-                onClick={() => setShowPostModal(false)}
+                onClick={handleCancelEdit}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: 24,
-                  cursor: 'pointer',
-                  color: 'var(--text-secondary)',
-                  padding: 0,
-                  width: 32,
-                  height: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                ×
-              </button>
-            </div>
-            
-            {/* User Info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-              <img 
-                src={profile.avatar} 
-                alt={profile.name} 
-                style={{ 
-                  width: 40, 
-                  height: 40, 
-                  borderRadius: '50%', 
-                  objectFit: 'cover' 
-                }} 
-              />
-              <div>
-                <div style={{ fontWeight: 600, color: 'var(--text)' }}>{profile.name}</div>
-                <button style={{
-                  background: 'var(--background)',
-                  borderRadius: 6,
-                  padding: '4px 8px',
-                  color: 'var(--text-secondary)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  border: '1px solid var(--border)',
-                  fontSize: 12
-                }}>
-                  🌐 Public ▼
-                </button>
-              </div>
-            </div>
-
-            {/* Post Content */}
-            <textarea
-              value={newPost.content}
-              onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
-              placeholder={`What's on your mind, ${profile.name.split(' ')[0]}?`}
-              style={{
-                width: '100%',
-                minHeight: 120,
-                border: 'none',
-                background: 'transparent',
-                color: 'var(--text)',
-                fontSize: 16,
-                resize: 'none',
-                outline: 'none',
-                fontFamily: 'inherit',
-                marginBottom: 20
-              }}
-            />
-            
-            {/* Post Image Preview */}
-            {newPost.image && (
-              <div style={{ marginBottom: 20, position: 'relative' }}>
-                <img 
-                  src={newPost.image} 
-                  alt="Post preview" 
-                  style={{ 
-                    width: '100%', 
-                    maxHeight: 300, 
-                    borderRadius: 8,
-                    objectFit: 'cover'
-                  }} 
-                />
-                <button 
-                  onClick={() => setNewPost(prev => ({ ...prev, image: null }))}
-                  style={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    background: 'rgba(0,0,0,0.7)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 32,
-                    height: 32,
-                    color: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            )}
-
-            {/* Post GIF Preview */}
-            {newPost.gif && (
-              <div style={{ marginBottom: 20, position: 'relative' }}>
-                <img 
-                  src={newPost.gif} 
-                  alt="GIF preview" 
-                  style={{ 
-                    width: '100%', 
-                    maxHeight: 300, 
-                    borderRadius: 8,
-                    objectFit: 'cover'
-                  }} 
-                />
-                <button 
-                  onClick={() => setNewPost(prev => ({ ...prev, gif: null }))}
-                  style={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    background: 'rgba(0,0,0,0.7)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 32,
-                    height: 32,
-                    color: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            )}
-
-            {/* Add to your post section */}
-            <div style={{ 
-              padding: '16px 0',
-              borderTop: '1px solid var(--border)',
-              borderBottom: '1px solid var(--border)',
-              marginBottom: 20
-            }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>
-                Add to your post
-              </div>
-              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <button 
-                  onClick={() => document.getElementById('user-post-image-upload').click()}
-                  style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = 'var(--background)';
-                    e.target.style.color = 'var(--text)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = 'none';
-                    e.target.style.color = 'var(--text-secondary)';
-                  }}
-                >
-                  <span style={{ color: '#45bd62', fontSize: 18 }}>📷</span>
-                  Photo/Video
-                </button>
-                
-                <button 
-                  onClick={() => document.getElementById('user-post-gif-upload').click()}
-                  style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = 'var(--background)';
-                    e.target.style.color = 'var(--text)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = 'none';
-                    e.target.style.color = 'var(--text-secondary)';
-                  }}
-                >
-                  <span style={{ color: '#1877f2', fontSize: 18 }}>🎬</span>
-                  GIF
-                </button>
-              </div>
-            </div>
-
-            {/* Hidden file inputs */}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePostImageChange}
-              style={{ display: 'none' }}
-              id="user-post-image-upload"
-            />
-            <input
-              type="file"
-              accept="image/gif,video/*"
-              onChange={handlePostGifChange}
-              style={{ display: 'none' }}
-              id="user-post-gif-upload"
-            />
-
-            {/* Post Button */}
-            <button
-              onClick={handleAddPost}
-              disabled={!newPost.content.trim()}
-              style={{ 
-                width: '100%',
-                padding: '12px',
-                background: newPost.content.trim() ? 'var(--primary)' : 'var(--border)',
-                color: newPost.content.trim() ? 'white' : 'var(--text-secondary)',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 16,
-                fontWeight: 600,
-                cursor: newPost.content.trim() ? 'pointer' : 'not-allowed'
-              }}
-            >
-              Post
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Feeling Edit Modal */}
-      {showFeelingEdit && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            background: 'var(--card)',
-            borderRadius: 24,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            padding: '2rem',
-            maxWidth: 400,
-            width: '90%',
-            maxHeight: '80vh',
-            overflow: 'auto'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Edit Feeling</h3>
-              <button 
-                onClick={handleCancelFeeling}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: 24,
-                  cursor: 'pointer',
-                  color: 'var(--text-secondary)',
-                  padding: 0,
-                  width: 32,
-                  height: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                ×
-              </button>
-            </div>
-            
-            {/* Feeling Emoji Section */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
-                Feeling Emoji
-              </label>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 16, 
-                marginBottom: 16
-              }}>
-                <span style={{ fontSize: 32 }}>{feelingEditState.feelingEmoji}</span>
-              </div>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(6, 1fr)', 
-                gap: 8,
-                maxHeight: '200px',
-                overflow: 'auto',
-                width: '100%'
-              }}>
-                {['🤪', '😊', '😄', '😍', '🥰', '😴', '😎', '🤗', '😌', '🤩', '😋', '😝', '🤔', '😏', '😇', '🤠', '👻', '🤖', '🐱', '🐶', '🐰', '🐼', '🐨', '🐯'].map((emoji, index) => (
-                  <button 
-                    key={index}
-                    onClick={() => handleEmojiSelect(emoji)}
-                    style={{ 
-                      background: feelingEditState.feelingEmoji === emoji ? 'var(--primary)' : 'none',
-                      border: feelingEditState.feelingEmoji === emoji ? 'none' : '1px solid var(--border)',
-                      borderRadius: 8,
-                      fontSize: 20,
-                      cursor: 'pointer',
-                      padding: 8,
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      transition: 'all 0.2s',
-                      color: feelingEditState.feelingEmoji === emoji ? 'white' : 'var(--text)'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (feelingEditState.feelingEmoji !== emoji) {
-                        e.target.style.background = 'var(--primary)';
-                        e.target.style.color = '#fff';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (feelingEditState.feelingEmoji !== emoji) {
-                        e.target.style.background = 'none';
-                        e.target.style.color = 'var(--text)';
-                      }
-                    }}
-                  >
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* Feeling Description Section */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Feeling
-              </label>
-              <input
-                type="text"
-                value={feelingEditState.feeling}
-                onChange={(e) => setFeelingEditState(prev => ({ ...prev, feeling: e.target.value }))}
-                placeholder="How are you feeling?"
-                style={{
-                  width: '90%',
-                  padding: '12px 16px',
-                  border: '1px solid var(--border)',
-                  borderRadius: 8,
-                  fontSize: 16,
-                  background: 'var(--background)',
-                  color: 'var(--text)',
-                  outline: 'none'
-                }}
-              />
-            </div>
-            
-            {/* Feeling Description Section */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 8 
-              }}>
-                Description
-              </label>
-                  <input
-                    type="text"
-                value={feelingEditState.feelingDescription}
-                onChange={(e) => setFeelingEditState(prev => ({ ...prev, feelingDescription: e.target.value }))}
-                placeholder="Add a description..."
-                    style={{
-                  width: '90%',
-                  padding: '12px 16px',
-                      border: '1px solid var(--border)',
-                  borderRadius: 8,
-                  fontSize: 16,
-                      background: 'var(--background)',
-                      color: 'var(--text)',
-                      outline: 'none'
-                    }}
-                  />
-            </div>
-            
-            {/* Save Button */}
-            <div style={{ 
-              display: 'flex', 
-              gap: 12, 
-              justifyContent: 'flex-end',
-              marginTop: 20,
-              paddingTop: 20,
-              borderTop: '1px solid var(--border)'
-            }}>
-              <button 
-                onClick={handleCancelFeeling}
-                style={{
+                  flex: 1,
                   background: 'none',
                   border: '1px solid var(--border)',
                   color: 'var(--text-secondary)',
-                  padding: '10px 20px',
+                  padding: '12px',
                   borderRadius: 8,
                   fontSize: 14,
                   fontWeight: 600,
@@ -901,12 +806,13 @@ export default function UserProfile() {
                 Cancel
               </button>
               <button 
-                onClick={handleSaveFeeling}
+                onClick={handleSaveEdit}
                 style={{
+                  flex: 1,
                   background: 'linear-gradient(90deg, var(--primary), var(--pink))',
                   border: 'none',
                   color: 'white',
-                  padding: '10px 20px',
+                  padding: '12px',
                   borderRadius: 8,
                   fontSize: 14,
                   fontWeight: 600,
@@ -920,12 +826,12 @@ export default function UserProfile() {
         </div>
       )}
 
-      {/* Customize Modal */}
-      {showCustomizeModal && (
-        <div style={{
+      {/* Customize Profile Modal */}
+      {isCustomizing && (
+        <div className="customize-modal" style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
+          background: 'rgba(0, 0, 0, 0.5)',
           backdropFilter: 'blur(4px)',
           zIndex: 1000,
           display: 'flex',
@@ -936,14 +842,17 @@ export default function UserProfile() {
             background: 'var(--card)',
             borderRadius: 24,
             boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            padding: '2rem',
-            maxWidth: 800,
-            width: '90%',
+            padding: '2.5rem 2rem 2rem 2rem',
+            minWidth: 600,
+            maxWidth: 700,
+            width: '100%',
             maxHeight: '80vh',
             overflow: 'auto'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 20, color: 'var(--text)' }}>Customize Profile</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <div style={{ fontWeight: 700, fontSize: 22, color: 'var(--text)' }}>
+                Customize Profile
+              </div>
               <button 
                 onClick={handleCancelCustomize}
                 style={{
@@ -966,205 +875,225 @@ export default function UserProfile() {
             
             {/* Background Section */}
             <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
                 Background
-              </label>
-              
-              {/* Background Type Toggle */}
-              <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+              </h3>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                 <button
-                  onClick={() => setCustomizeState(prev => ({ ...prev, backgroundType: 'color' }))}
+                  onClick={() => setCustomizeData(prev => ({ ...prev, backgroundType: 'inherit' }))}
                   style={{
-                    padding: '8px 16px',
+                    padding: '6px 12px',
                     borderRadius: 6,
                     border: '1px solid var(--border)',
-                    background: customizeState.backgroundType === 'color' ? 'var(--primary)' : 'transparent',
-                    color: customizeState.backgroundType === 'color' ? 'white' : 'var(--text)',
+                    background: customizeData?.backgroundType === 'inherit' ? 'var(--primary)' : 'transparent',
+                    color: customizeData?.backgroundType === 'inherit' ? 'white' : 'var(--text)',
                     cursor: 'pointer',
-                    fontSize: 14
+                    fontSize: 12
+                  }}
+                >
+                  Inherit
+                </button>
+                <button
+                  onClick={() => setCustomizeData(prev => ({ ...prev, backgroundType: 'color' }))}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--border)',
+                    background: customizeData?.backgroundType === 'color' ? 'var(--primary)' : 'transparent',
+                    color: customizeData?.backgroundType === 'color' ? 'white' : 'var(--text)',
+                    cursor: 'pointer',
+                    fontSize: 12
                   }}
                 >
                   Color
                 </button>
                 <button
-                  onClick={() => setCustomizeState(prev => ({ ...prev, backgroundType: 'image' }))}
+                  onClick={() => setCustomizeData(prev => ({ ...prev, backgroundType: 'image' }))}
                   style={{
-                    padding: '8px 16px',
+                    padding: '6px 12px',
                     borderRadius: 6,
                     border: '1px solid var(--border)',
-                    background: customizeState.backgroundType === 'image' ? 'var(--primary)' : 'transparent',
-                    color: customizeState.backgroundType === 'image' ? 'white' : 'var(--text)',
+                    background: customizeData?.backgroundType === 'image' ? 'var(--primary)' : 'transparent',
+                    color: customizeData?.backgroundType === 'image' ? 'white' : 'var(--text)',
                     cursor: 'pointer',
-                    fontSize: 14
+                    fontSize: 12
                   }}
                 >
                   Image
                 </button>
-            </div>
+              </div>
+              
+              {/* Inherit Background Option */}
+              {customizeData?.backgroundType === 'inherit' && (
+                <div style={{ 
+                  padding: '16px', 
+                  background: 'var(--background)', 
+                  borderRadius: 8, 
+                  border: '1px solid var(--border)',
+                  textAlign: 'center',
+                  color: 'var(--text-secondary)',
+                  fontSize: 14
+                }}>
+                  Uses the theme gradient background
+                </div>
+              )}
 
               {/* Color Background Option */}
-              {customizeState.backgroundType === 'color' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              {customizeData?.backgroundType === 'color' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{
-                    width: 120,
-                    height: 60,
-                    background: customizeState.backgroundColor,
+                    width: '100%',
+                    height: 40,
+                    background: customizeData?.backgroundColor || 'var(--primary)',
                     borderRadius: 8,
-                    border: '2px solid var(--border)',
+                    border: '1px solid var(--border)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'var(--text-secondary)',
-                    fontSize: 12
+                    color: 'white',
+                    fontSize: 14,
+                    fontWeight: 600
                   }}>
-                    Background
+                    Background Color
                   </div>
-                <input
-                  type="color"
-                    value={customizeState.backgroundColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, backgroundColor: e.target.value }))}
-                  style={{
-                      width: 60,
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
+                  <input
+                    type="color"
+                    value={customizeData?.backgroundColor || '#4A90E2'}
+                    onChange={(e) => setCustomizeData(prev => ({ ...prev, backgroundColor: e.target.value }))}
+                    style={{ width: 40, height: 40, border: 'none', borderRadius: 8, cursor: 'pointer' }}
+                  />
                 </div>
               )}
 
               {/* Image Background Option */}
-              {customizeState.backgroundType === 'image' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{
-                    width: 120,
-                    height: 60,
-                    background: customizeState.backgroundImage ? `url(${customizeState.backgroundImage})` : 'var(--background)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    borderRadius: 8,
-                    border: '2px solid var(--border)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--text-secondary)',
-                    fontSize: 12
-                  }}>
-                    {customizeState.backgroundImage ? '' : 'Upload Image'}
-                  </div>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleBackgroundImageChange}
-                  style={{
-                      width: 200,
-                      height: 40,
-                    border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      padding: '8px',
-                      fontSize: 12
-                  }}
-                />
-              </div>
+              {customizeData?.backgroundType === 'image' && (
+                <div style={{ position: 'relative', width: '100%', height: 120, background: '#f8f6ff', borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)' }}>
+                  {customizeData?.backgroundImage ? (
+                    <img 
+                      src={customizeData.backgroundImage} 
+                      alt="Background Preview" 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                  ) : (
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      height: '100%',
+                      color: 'var(--text-secondary)',
+                      fontSize: 14
+                    }}>
+                      Click to upload background image
+                    </div>
+                  )}
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleBackgroundImageChange} 
+                    style={{ 
+                      position: 'absolute', 
+                      top: 0, 
+                      left: 0, 
+                      width: '100%', 
+                      height: '100%', 
+                      opacity: 0, 
+                      cursor: 'pointer' 
+                    }} 
+                  />
+                  {customizeData?.backgroundImage && (
+                    <button
+                      onClick={() => setCustomizeData(prev => ({ ...prev, backgroundImage: null }))}
+                      style={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        background: 'rgba(0,0,0,0.5)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: 24,
+                        height: 24,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 14
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Colors Section */}
             <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
                 Colors
-              </label>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-                {/* Button Color */}
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                    Button Color
-                  </label>
-                <input
-                  type="color"
-                    value={customizeState.buttonColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, buttonColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                </div>
-                
-                {/* Header Text Color */}
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                    Header Text
-                  </label>
-                <input
-                    type="color"
-                    value={customizeState.headerColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, headerColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                      height: 40,
-                    border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      cursor: 'pointer'
-                    }}
-                  />
-            </div>
-
-                {/* Body Text Color */}
-                <div>
-                  <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                    Body Text
-              </label>
-                <input
-                  type="color"
-                    value={customizeState.textColor}
-                    onChange={(e) => setCustomizeState(prev => ({ ...prev, textColor: e.target.value }))}
-                  style={{
-                      width: '100%',
-                    height: 40,
-                      border: '1px solid var(--border)',
-                    borderRadius: 8,
-                    cursor: 'pointer'
-                  }}
-                />
-                </div>
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ fontSize: 14, color: 'var(--text)', minWidth: 100 }}>Button Color:</span>
+                      <div style={{
+                        width: '100%',
+                        height: 30,
+                        background: customizeData?.buttonColor || 'var(--primary)',
+                        borderRadius: 6,
+                        border: '1px solid var(--border)'
+                      }} />
+                      <input
+                        type="color"
+                        value={customizeData?.buttonColor || '#4A90E2'}
+                        onChange={(e) => setCustomizeData(prev => ({ ...prev, buttonColor: e.target.value }))}
+                        style={{ width: 30, height: 30, border: 'none', borderRadius: 6, cursor: 'pointer' }}
+                      />
+                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ fontSize: 14, color: 'var(--text)', minWidth: 100 }}>Header Text:</span>
+                      <div style={{
+                        width: '100%',
+                        height: 30,
+                        background: customizeData?.headerTextColor || 'var(--text)',
+                        borderRadius: 6,
+                        border: '1px solid var(--border)'
+                      }} />
+                      <input
+                        type="color"
+                        value={customizeData?.headerTextColor || '#000000'}
+                        onChange={(e) => setCustomizeData(prev => ({ ...prev, headerTextColor: e.target.value }))}
+                        style={{ width: 30, height: 30, border: 'none', borderRadius: 6, cursor: 'pointer' }}
+                      />
+                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ fontSize: 14, color: 'var(--text)', minWidth: 100 }}>Body Text:</span>
+                      <div style={{
+                        width: '100%',
+                        height: 30,
+                        background: customizeData?.bodyTextColor || 'var(--text-secondary)',
+                        borderRadius: 6,
+                        border: '1px solid var(--border)'
+                      }} />
+                      <input
+                        type="color"
+                        value={customizeData?.bodyTextColor || '#000000'}
+                        onChange={(e) => setCustomizeData(prev => ({ ...prev, bodyTextColor: e.target.value }))}
+                        style={{ width: 30, height: 30, border: 'none', borderRadius: 6, cursor: 'pointer' }}
+                      />
+                    </div>
               </div>
             </div>
 
             {/* Sidebar Widgets Section */}
             <div style={{ marginBottom: 24 }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: 'var(--text)', 
-                marginBottom: 12 
-              }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
                 Sidebar Widgets
-              </label>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                 {/* Left Sidebar */}
                 <div>
                   <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                    Left 
+                    Left
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {[
@@ -1172,8 +1101,7 @@ export default function UserProfile() {
                       { id: 'bestFriends', label: 'Best Friends', icon: '👥' },
                       { id: 'musicPlayer', label: 'Music Player', icon: '🎵' },
                       { id: 'showcaseGif', label: 'Showcase Gif', icon: '🎬' },
-                      { id: 'showcasePicture', label: 'Showcase Pic', icon: '🖼️' },
-                      { id: 'customHtml', label: 'Custom HTML', icon: '⚙️' }
+                      { id: 'showcasePic', label: 'Showcase Pic', icon: '🖼️' }
                     ].map(widget => (
                       <label key={widget.id} style={{ 
                         display: 'flex', 
@@ -1183,23 +1111,23 @@ export default function UserProfile() {
                         border: '1px solid var(--border)',
                         borderRadius: 6,
                         cursor: 'pointer',
-                        background: customizeState.leftSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'var(--card)',
-                        color: customizeState.leftSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                        background: customizeData?.leftSidebarWidgets?.includes(widget.id) ? 'var(--primary)' : 'transparent',
+                        color: customizeData?.leftSidebarWidgets?.includes(widget.id) ? 'white' : 'var(--text)',
                         fontSize: 12
                       }}>
                         <input
                           type="checkbox"
-                          checked={customizeState.leftSidebarWidgets.includes(widget.id)}
+                          checked={customizeData?.leftSidebarWidgets?.includes(widget.id) || false}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setCustomizeState(prev => ({
+                              setCustomizeData(prev => ({
                                 ...prev,
-                                leftSidebarWidgets: [...prev.leftSidebarWidgets, widget.id]
+                                leftSidebarWidgets: [...(prev.leftSidebarWidgets || []), widget.id]
                               }));
                             } else {
-                              setCustomizeState(prev => ({
+                              setCustomizeData(prev => ({
                                 ...prev,
-                                leftSidebarWidgets: prev.leftSidebarWidgets.filter(id => id !== widget.id)
+                                leftSidebarWidgets: (prev.leftSidebarWidgets || []).filter(id => id !== widget.id)
                               }));
                             }
                           }}
@@ -1211,11 +1139,11 @@ export default function UserProfile() {
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Right Sidebar */}
                 <div>
                   <label style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, display: 'block' }}>
-                    Right 
+                    Right
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {[
@@ -1230,27 +1158,27 @@ export default function UserProfile() {
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 8,
-                      padding: '8px 12px',
+                        padding: '8px 12px',
                         border: '1px solid var(--border)',
-                      borderRadius: 6,
-                      cursor: 'pointer',
-                        background: customizeState.rightSidebarWidgets.includes(widget.id) ? 'var(--primary)' : 'var(--card)',
-                        color: customizeState.rightSidebarWidgets.includes(widget.id) ? 'white' : 'var(--text)',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        background: customizeData?.rightSidebarWidgets?.includes(widget.id) ? 'var(--primary)' : 'transparent',
+                        color: customizeData?.rightSidebarWidgets?.includes(widget.id) ? 'white' : 'var(--text)',
                         fontSize: 12
                       }}>
                         <input
                           type="checkbox"
-                          checked={customizeState.rightSidebarWidgets.includes(widget.id)}
+                          checked={customizeData?.rightSidebarWidgets?.includes(widget.id) || false}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setCustomizeState(prev => ({
+                              setCustomizeData(prev => ({
                                 ...prev,
-                                rightSidebarWidgets: [...prev.rightSidebarWidgets, widget.id]
+                                rightSidebarWidgets: [...(prev.rightSidebarWidgets || []), widget.id]
                               }));
                             } else {
-                              setCustomizeState(prev => ({
+                              setCustomizeData(prev => ({
                                 ...prev,
-                                rightSidebarWidgets: prev.rightSidebarWidgets.filter(id => id !== widget.id)
+                                rightSidebarWidgets: (prev.rightSidebarWidgets || []).filter(id => id !== widget.id)
                               }));
                             }
                           }}
@@ -1309,971 +1237,1390 @@ export default function UserProfile() {
         </div>
       )}
 
-      {/* Cover Photo */}
-      <div style={{ 
-        height: 200, 
-        background: profile.headerType === 'color' 
-          ? profile.headerColor 
-          : `url(${profile.headerImage || profile.coverPhoto})`, 
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center',
-        position: 'relative'
-      }}>
-        <div style={{ 
-          position: 'absolute', 
-          bottom: 20, 
-          left: 20, 
-          display: 'flex', 
-          alignItems: 'flex-end', 
-          gap: 20 
+      {/* Edit Feeling Modal */}
+      {isEditingFeeling && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-          <img 
-            src={profile.avatar} 
-            alt={profile.name}
-            style={{ 
-              width: 120, 
-              height: 120, 
-              borderRadius: '50%', 
-              border: '4px solid var(--card)',
-              objectFit: 'cover'
-            }} 
-          />
-          <div style={{ color: 'white', marginBottom: 10 }}>
-            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>{profile.name}</h1>
-            <p style={{ margin: '4px 0', fontSize: 16, opacity: 0.9 }}>{profile.username}</p>
-            <p style={{ margin: '4px 0', fontSize: 14, opacity: 0.8 }}>{profile.location} • Joined {profile.joinedDate}</p>
-            </div>
-          </div>
-        
-        {/* Action Buttons */}
-        <div style={{ 
-          position: 'absolute', 
-          bottom: 20, 
-          right: 20, 
-          display: 'flex', 
-          gap: 12 
-        }}>
-          <button 
-            onClick={handleEditProfile}
-            className="button" 
-            style={{ 
-              background: 'rgba(255,255,255,0.2)', 
-              color: 'white', 
-              border: '1px solid rgba(255,255,255,0.3)',
-              padding: '8px 16px',
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.2s'
-            }}
-          >
-            Edit Profile
-          </button>
-          <button 
-            onClick={() => setShowCustomizeModal(true)}
-            className="button" 
-            style={{ 
-              background: 'rgba(255,255,255,0.2)', 
-              color: 'white', 
-              border: '1px solid rgba(255,255,255,0.3)',
-              padding: '8px 16px',
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.2s'
-            }}
-          >
-            Customize
-          </button>
-          <button className="button" style={{ 
-            background: 'rgba(255,255,255,0.2)', 
-            color: 'white', 
-            border: '1px solid rgba(255,255,255,0.3)',
-            padding: '8px 16px',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 500,
-            cursor: 'pointer',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.2s'
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '2rem',
+            minWidth: 400,
+            maxWidth: 500,
+            width: '100%',
+            maxHeight: '80vh',
+            overflow: 'auto'
           }}>
-            Share
-          </button>
-        </div>
-      </div>
-
-            {/* Profile Content */}
-      <div style={{ 
-        maxWidth: 1200, 
-        margin: '0 auto', 
-        padding: '24px',
-        display: 'grid',
-        gridTemplateColumns: '300px 1fr 300px',
-        gap: 24,
-        background: customizeState.backgroundType === 'color' 
-          ? customizeState.backgroundColor 
-          : customizeState.backgroundImage 
-            ? `url(${customizeState.backgroundImage})` 
-            : '#ffffff',
-        backgroundSize: customizeState.backgroundType === 'image' ? 'cover' : 'auto',
-        backgroundPosition: customizeState.backgroundType === 'image' ? 'center' : 'auto'
-      }}>
-        {/* Left Sidebar */}
-        <div>
-          {/* About Section */}
-          <div style={{ 
-            background: 'var(--card)', 
-            borderRadius: 12, 
-            padding: 24, 
-            marginBottom: 24,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>
-            <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 18 }}>About</h3>
-            <p style={{ 
-              color: customizeState.textColor, 
-              fontSize: 14, 
-              lineHeight: 1.6, 
-              margin: '0 0 20px 0' 
-            }}>
-              {profile.bio}
-            </p>
-            
-            {/* Stats */}
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(2, 1fr)', 
-              gap: 16, 
-              paddingTop: 20,
-              borderTop: '1px solid var(--border)'
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 20, fontWeight: 600, color: customizeState.buttonColor }}>{profile.followers}</div>
-                <div style={{ fontSize: 12, color: customizeState.textColor }}>Followers</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--text)' }}>
+                Edit Feeling
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 20, fontWeight: 600, color: customizeState.buttonColor }}>{profile.following}</div>
-                <div style={{ fontSize: 12, color: customizeState.textColor }}>Following</div>
-              </div>
+              <button 
+                onClick={handleCancelFeeling}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
             </div>
-          </div>
 
-                    {/* Feelings Widget */}
-          {customizeState.leftSidebarWidgets.includes('feelings') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <h3 style={{ margin: 0, color: customizeState.headerColor, fontSize: 16 }}>{profile.name.split(' ')[0]} Is Feeling:</h3>
-          <button 
-                  onClick={() => setShowFeelingEdit(true)}
-            style={{ 
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: 14,
-                    color: 'var(--text-secondary)',
-                    padding: 4,
-                    borderRadius: 4,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-              transition: 'all 0.2s'
-            }} 
-            onMouseEnter={(e) => {
-                    e.target.style.color = 'var(--text)';
-            }}
-            onMouseLeave={(e) => {
-                    e.target.style.color = 'var(--text-secondary)';
-            }}
-          >
-                  ✏️
-          </button>
-        </div>
+            {/* Feeling Emoji Section */}
+            <div style={{ marginBottom: 24 }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
+                Feeling Emoji
+              </h3>
               <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 12,
-                padding: '12px',
+                fontSize: 48, 
+                textAlign: 'center', 
+                marginBottom: 16,
+                padding: '16px',
                 background: 'var(--background)',
-                borderRadius: 8,
+                borderRadius: 12,
                 border: '1px solid var(--border)'
               }}>
-                <div style={{ fontSize: 24 }}>{profile.feelingEmoji}</div>
-                <div>
-                  <div style={{ color: customizeState.textColor, fontWeight: 500, fontSize: 12 }}>{profile.feeling}</div>
-                  <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>{profile.feelingDescription}</div>
-      </div>
+                {newFeelingEmoji}
               </div>
-            </div>
-          )}
-
-          {/* Best Friends Widget */}
-          {customizeState.leftSidebarWidgets.includes('bestFriends') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Best Friends</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {['Sarah', 'Mike', 'Emma'].map((friend, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      background: `hsl(${index * 120}, 70%, 60%)`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: 14,
-                      fontWeight: 600
-                    }}>
-                      {friend.charAt(0)}
-      </div>
-                    <span style={{ color: customizeState.textColor, fontSize: 14 }}>{friend}</span>
-                  </div>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(6, 1fr)', 
+                gap: 8,
+                maxHeight: 200,
+                overflow: 'auto'
+              }}>
+                {[
+                  '🤪', '😊', '🙂', '🥰', '😘', '😴',
+                  '😎', '🤗', '😌', '👑', '😄', '😝',
+                  '🤏', '🙂', '😇', '🤠', '👻', '🤖',
+                  '🐱', '🐶', '🐰', '🐼', '🐨', '🐯',
+                  '🦊', '🐸', '🐵', '🐷', '🐮', '🐷',
+                  '🦁', '🐯', '🐸', '🐵', '🐷', '🐮'
+                ].map((emoji, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setNewFeelingEmoji(emoji)}
+                    style={{
+                      fontSize: 24,
+                      padding: '8px',
+                      border: '1px solid var(--border)',
+                      borderRadius: 8,
+                      background: newFeelingEmoji === emoji ? 'var(--primary)' : 'transparent',
+                      color: newFeelingEmoji === emoji ? 'white' : 'var(--text)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {emoji}
+                  </button>
                 ))}
               </div>
             </div>
-          )}
 
-          {/* Music Player Widget */}
-          {customizeState.leftSidebarWidgets.includes('musicPlayer') && (
+            {/* Feeling Input Section */}
+            <div style={{ marginBottom: 24 }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
+                Feeling
+              </h3>
+              <input
+                type="text"
+                value={newFeeling}
+                onChange={(e) => setNewFeeling(e.target.value)}
+                placeholder="How are you feeling?"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 14,
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            {/* Description Input Section */}
+            <div style={{ marginBottom: 24 }}>
+              <h3 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
+                Description
+              </h3>
+              <input
+                type="text"
+                value={newFeelingDescription}
+                onChange={(e) => setNewFeelingDescription(e.target.value)}
+                placeholder="Describe your feeling..."
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text)',
+                  fontSize: 14,
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button 
+                onClick={handleCancelFeeling}
+                style={{
+                  flex: 1,
+                  background: 'none',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-secondary)',
+                  padding: '12px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveFeeling}
+                style={{
+                  flex: 1,
+                  background: 'linear-gradient(90deg, var(--primary), var(--pink))',
+                  border: 'none',
+                  color: 'white',
+                  padding: '12px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Post Modal */}
+      {showCreatePostModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 16,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            padding: '24px',
+            minWidth: 500,
+            maxWidth: 600,
+            width: '100%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--text)' }}>
+                Create Post
+              </div>
+              <button 
+                onClick={handleCloseCreatePost}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 24,
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  padding: 0,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* User Info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <img 
+                src={userData.avatar} 
+                alt="Avatar" 
+                style={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: '50%',
+                  objectFit: 'cover'
+                }} 
+              />
+              <div>
+                <div style={{ fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>
+                  {userData.name}
+                </div>
+                <button style={{
+                  background: 'var(--background)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 6,
+                  padding: '4px 8px',
+                  fontSize: 12,
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4
+                }}>
+                  🌐 Public ▼
+                </button>
+              </div>
+            </div>
+
+            {/* Post Content */}
+            <textarea
+              placeholder={`What's on your mind, ${userData.name.split(' ')[0]}?`}
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              style={{
+                width: '100%',
+                minHeight: 120,
+                padding: '16px',
+                borderRadius: 8,
+                border: '1px solid var(--border)',
+                background: 'var(--background)',
+                color: 'var(--text)',
+                fontSize: 14,
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                boxSizing: 'border-box'
+              }}
+            />
+
+            {/* Media Preview */}
+            {postImage && (
+              <div style={{ position: 'relative', marginTop: 16 }}>
+                <img 
+                  src={postImage} 
+                  alt="Post preview" 
+                  style={{ 
+                    width: '100%', 
+                    maxHeight: 200, 
+                    borderRadius: 8,
+                    objectFit: 'cover'
+                  }} 
+                />
+                <button
+                  onClick={() => setPostImage(null)}
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    background: 'rgba(0,0,0,0.5)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 24,
+                    height: 24,
+                    cursor: 'pointer'
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            {/* Add Media Section */}
+            <div style={{ marginTop: 20 }}>
+              <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>
+                Add to your post
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <label style={{ cursor: 'pointer' }}>
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    onChange={handlePostImageChange}
+                    style={{ display: 'none' }}
+                  />
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-secondary)',
+                    fontSize: 14
+                  }}>
+                    📷 Photo/Video
+                  </div>
+                </label>
+                <label style={{ cursor: 'pointer' }}>
+                  <input
+                    type="file"
+                    accept="image/gif,video/*"
+                    onChange={handlePostImageChange}
+                    style={{ display: 'none' }}
+                  />
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-secondary)',
+                    fontSize: 14
+                  }}>
+                    🎬 GIF
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Post Button */}
+            <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
+              <button
+                onClick={handleAddPost}
+                disabled={!newPost.trim() && !postImage}
+                style={{
+                  background: newPost.trim() || postImage ? 'var(--primary)' : 'var(--text-secondary)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 32px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: newPost.trim() || postImage ? 'pointer' : 'not-allowed',
+                  opacity: newPost.trim() || postImage ? 1 : 0.5
+                }}
+              >
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div>
+        {/* Cover Photo */}
+        <div style={{ 
+          height: 200, 
+          background: `url(${headerImage || userData.coverPhoto})`, 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          position: 'relative'
+        }}>
+          <div style={{ 
+            position: 'absolute', 
+            bottom: 20, 
+            left: 20, 
+            display: 'flex', 
+            alignItems: 'flex-end', 
+            gap: 20 
+          }}>
+            <img 
+              src={selectedImage || userData.avatar} 
+              alt={userData.name}
+              style={{ 
+                width: 120, 
+                height: 120, 
+                borderRadius: '50%', 
+                border: '4px solid var(--card)',
+                objectFit: 'cover'
+              }} 
+            />
+            <div style={{ color: 'white', marginBottom: 10 }}>
+              <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>{userData.name}</h1>
+              <p style={{ margin: '4px 0', fontSize: 16, opacity: 0.9 }}>{userData.username}</p>
+              <p style={{ margin: '4px 0', fontSize: 14, opacity: 0.8 }}>{userData.location} • Joined {userData.joinedDate}</p>
+            </div>
+          </div>
+          
+          {/* Action Buttons */}
+          <div style={{ 
+            position: 'absolute', 
+            bottom: 20, 
+            right: 20, 
+            display: 'flex', 
+            gap: 12 
+          }}>
+            <button 
+              onClick={handleEditProfile}
+              className="button" 
+              style={{ 
+                background: 'rgba(255,255,255,0.2)', 
+                color: 'white', 
+                border: '1px solid rgba(255,255,255,0.3)',
+                padding: '8px 16px',
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.2s'
+              }}
+            >
+              Edit Profile
+            </button>
+            <button 
+              onClick={handleCustomizeProfile}
+              className="button" 
+              style={{ 
+                background: 'rgba(255,255,255,0.2)', 
+                color: 'white', 
+                border: '1px solid rgba(255,255,255,0.3)',
+                padding: '8px 16px',
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.2s'
+              }}
+            >
+              Customize
+            </button>
+
+            <button className="button" style={{ 
+              background: 'rgba(255,255,255,0.2)', 
+              color: 'white', 
+              border: '1px solid rgba(255,255,255,0.3)',
+              padding: '8px 16px',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.2s'
+            }}>
+              Share
+            </button>
+          </div>
+        </div>
+
+        {/* Profile Content */}
+        <div style={{ 
+          maxWidth: 1200, 
+          margin: '0 auto', 
+          padding: '24px 20px',
+          display: 'grid',
+          gridTemplateColumns: '300px 1fr 300px',
+          gap: 24,
+          background: customizeData?.backgroundType === 'image' && customizeData?.backgroundImage 
+            ? `url(${customizeData.backgroundImage})` 
+            : customizeData?.backgroundType === 'color' && customizeData?.backgroundColor !== 'inherit' 
+              ? customizeData?.backgroundColor 
+              : 'inherit',
+          backgroundSize: customizeData?.backgroundType === 'image' && customizeData?.backgroundImage ? 'cover' : 'auto',
+          backgroundPosition: customizeData?.backgroundType === 'image' && customizeData?.backgroundImage ? 'center' : 'auto',
+          backgroundRepeat: customizeData?.backgroundType === 'image' && customizeData?.backgroundImage ? 'no-repeat' : 'auto'
+        }}>
+          {/* Left Sidebar */}
+          <div>
+            {/* About Section */}
             <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
+              background: 'var(--card)',
+              borderRadius: 16,
+              padding: 24,
               marginBottom: 24,
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
             }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎵 Now Playing</h3>
-              <div style={{ 
-                background: 'var(--background)', 
-                borderRadius: 8, 
-                padding: 12,
-                border: '1px solid var(--border)'
+              <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>About</h3>
+              <p style={{ 
+                margin: '0 0 20px 0', 
+                color: customizeData?.bodyTextColor || 'var(--text-secondary)', 
+                lineHeight: 1.6,
+                fontSize: 14
               }}>
-                <div style={{ color: customizeState.textColor, fontWeight: 600, fontSize: 12 }}>Animal Sanctuary Vibes</div>
-                <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>Peaceful Nature Sounds</div>
-                <div style={{ 
-                  width: '100%', 
-                  height: 4, 
-                  background: 'var(--border)', 
-                  borderRadius: 2, 
-                  marginTop: 8,
-                  overflow: 'hidden'
-                }}>
+                {userData.bio}
+              </p>
+              
+              {/* Follower/Following Count */}
+              <div style={{ 
+                display: 'flex', 
+                gap: 24, 
+                justifyContent: 'center',
+                paddingTop: 16,
+                borderTop: '1px solid var(--border)'
+              }}>
+                <div style={{ textAlign: 'center' }}>
                   <div style={{ 
-                    width: '65%', 
-                    height: '100%', 
-                    background: customizeState.buttonColor,
-                    borderRadius: 2
-                  }}></div>
+                    fontSize: 24, 
+                    fontWeight: 700, 
+                    color: customizeData?.headerTextColor || 'var(--text)',
+                    marginBottom: 4
+                  }}>
+                    0
+                  </div>
+                  <div style={{ 
+                    fontSize: 12, 
+                    color: customizeData?.bodyTextColor || 'var(--text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    Followers
+                  </div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ 
+                    fontSize: 24, 
+                    fontWeight: 700, 
+                    color: customizeData?.headerTextColor || 'var(--text)',
+                    marginBottom: 4
+                  }}>
+                    0
+                  </div>
+                  <div style={{ 
+                    fontSize: 12, 
+                    color: customizeData?.bodyTextColor || 'var(--text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    Following
+                  </div>
                 </div>
               </div>
             </div>
-          )}
 
-          {/* Showcase GIF Widget */}
-          {customizeState.leftSidebarWidgets.includes('showcaseGif') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎬 Showcase GIF</h3>
+            {/* Feelings Widget */}
+            {customizeData?.leftSidebarWidgets?.includes('feelings') && (
               <div style={{ 
-                width: '100%', 
-                height: 120, 
-                background: 'var(--background)', 
-                borderRadius: 8,
-                border: '1px solid var(--border)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-secondary)',
-                fontSize: 12
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
               }}>
-                Upload GIF
-              </div>
-            </div>
-          )}
-
-          {/* Showcase Picture Widget */}
-          {customizeState.leftSidebarWidgets.includes('showcasePicture') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🖼️ Showcase Picture</h3>
-              <div style={{ 
-                width: '100%', 
-                height: 120, 
-                background: 'var(--background)', 
-                borderRadius: 8,
-                border: '1px solid var(--border)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-secondary)',
-                fontSize: 12
-              }}>
-                Upload Picture
-              </div>
-            </div>
-          )}
-
-          {/* Custom HTML Widget */}
-          {customizeState.leftSidebarWidgets.includes('customHtml') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>⚙️ Custom Widget</h3>
-              <div style={{ 
-                background: 'var(--background)', 
-                borderRadius: 8, 
-                padding: 12,
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-                fontSize: 12
-              }}>
-                <div style={{ marginBottom: 8 }}>Add your custom HTML here</div>
-                <textarea 
-                  placeholder="Enter custom HTML..."
-                  style={{
-                    width: '100%',
-                    height: 80,
-                    border: 'none',
-                    background: 'transparent',
-                    color: customizeState.textColor,
-                    fontSize: 10,
-                    resize: 'none',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-          )}
-      </div>
-
-        {/* Main Timeline */}
-        <div>
-
-      {/* Tabs */}
-          <div style={{ 
-            display: 'flex', 
-            gap: 0, 
-            marginBottom: 24,
-            background: 'var(--card)',
-            borderRadius: 12,
-            padding: 4,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>
-            {['timeline', 'badges', 'gallery', 'fundraisers'].map(tab => (
-          <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-            style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  background: activeTab === tab ? customizeState.buttonColor : 'transparent',
-                  color: activeTab === tab ? 'white' : customizeState.textColor,
-              border: 'none',
-                  borderRadius: 8,
-                  fontSize: 14,
-              fontWeight: 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content */}
-          <div style={{ 
-            background: 'var(--card)', 
-            borderRadius: 12, 
-            padding: 24,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>
-          {activeTab === 'timeline' && (
-              <div>
-                {/* Post Creation Area */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <h3 style={{ margin: 0, color: customizeData?.headerTextColor || 'var(--text)', fontSize: 16, fontWeight: 600 }}>
+                    {userData.name} Is Feeling:
+                  </h3>
+                  <button
+                    onClick={handleEditFeeling}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      fontSize: 16,
+                      padding: 4
+                    }}
+                  >
+                    ✏️
+                  </button>
+                </div>
                 <div style={{ 
-                  background: 'var(--background)', 
+                  background: 'linear-gradient(135deg, #f8f6ff, #e8e4ff)', 
                   borderRadius: 12, 
-                  padding: 20, 
-                  marginBottom: 24, 
-                  border: '1px solid var(--border)'
+                  padding: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12
                 }}>
-                <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                    <img 
-                      src={profile.avatar} 
-                      alt={profile.name} 
-                      style={{ 
-                        width: 40, 
-                        height: 40, 
-                        borderRadius: '50%',
-                        objectFit: 'cover'
-                      }} 
-                    />
-                  <div style={{ flex: 1 }}>
-                    <div 
-                      onClick={() => setShowPostModal(true)}
-                      style={{
-                        width: '95%',
-                                    minHeight: 40,
-                        border: 'none',
-                        background: 'transparent',
-                        fontSize: 16,
-                        resize: 'vertical',
-                        outline: 'none',
-                        fontFamily: 'inherit',
-                        display: 'flex',
-                        alignItems: 'center',
-                                    color: customizeState.textColor,
-                        cursor: 'pointer',
-                                    padding: '8px 12px',
-                                    borderRadius: 8,
-                                    border: '1px solid var(--border)'
-                      }}
-                    >
-                                  What's on your mind, {profile.name.split(' ')[0]}?
+                  <span style={{ fontSize: 32 }}>{currentFeelingEmoji}</span>
+                  <div>
+                    <div style={{ 
+                      fontSize: 16, 
+                      fontWeight: 600, 
+                      color: customizeData?.bodyTextColor || 'var(--text)',
+                      marginBottom: 4
+                    }}>
+                      {currentFeeling}
+                    </div>
+                    <div style={{ 
+                      fontSize: 14, 
+                      color: customizeData?.bodyTextColor || 'var(--text-secondary)' 
+                    }}>
+                      {currentFeelingDescription}
                     </div>
                   </div>
                 </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', gap: 16 }}>
-                    <button 
-                      onClick={() => setShowPostModal(true)}
+              </div>
+            )}
+
+            {/* Best Friends Widget */}
+            {customizeData?.leftSidebarWidgets?.includes('bestFriends') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Best Friends</h3>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No best friends yet</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                    Add your best friends here!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Music Player Widget */}
+            {customizeData?.leftSidebarWidgets?.includes('musicPlayer') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Music Player</h3>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No music playing</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                    Connect your music account!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Showcase Gif Widget */}
+            {customizeData?.leftSidebarWidgets?.includes('showcaseGif') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  {showcaseGif ? (
+                    <div>
+                      <img 
+                        src={showcaseGif} 
+                        alt="Showcase GIF" 
                         style={{ 
-                          background: 'none', 
-                          border: 'none', 
-                          cursor: 'pointer', 
-                          fontSize: 16,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          color: 'var(--text-secondary)',
-                          padding: '8px 12px',
+                          maxWidth: '100%', 
+                          maxHeight: 200, 
+                          borderRadius: 8,
+                          marginBottom: 12
+                        }} 
+                      />
+                      <button
+                        onClick={() => document.getElementById('showcase-gif-upload').click()}
+                        disabled={uploadingGif}
+                        style={{
+                          background: uploadingGif ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
                           borderRadius: 6,
-                          transition: 'all 0.2s'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.background = 'var(--card)';
-                          e.target.style.color = 'var(--text)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.background = 'none';
-                          e.target.style.color = 'var(--text-secondary)';
+                          fontSize: 12,
+                          cursor: uploadingGif ? 'not-allowed' : 'pointer',
+                          marginRight: 8
                         }}
                       >
-                        <img 
-                          src={CameraPixel} 
-                          alt="Camera" 
-                          style={{ width: 24, height: 24 }}
-                        />
-                        Photo/Video
-                    </button>
-                    <button 
-                      onClick={() => setShowPostModal(true)}
-                        style={{ 
-                          background: 'none', 
-                          border: 'none', 
-                          cursor: 'pointer', 
-                          fontSize: 16,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          color: 'var(--text-secondary)',
-                          padding: '8px 12px',
+                        {uploadingGif ? 'Uploading...' : 'Change GIF'}
+                      </button>
+                      <button
+                        onClick={() => setShowcaseGif(null)}
+                        style={{
+                          background: 'var(--danger)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
                           borderRadius: 6,
-                          transition: 'all 0.2s'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.background = 'var(--card)';
-                          e.target.style.color = 'var(--text)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.background = 'none';
-                          e.target.style.color = 'var(--text-secondary)';
+                          fontSize: 12,
+                          cursor: 'pointer'
                         }}
                       >
-                        <img 
-                          src={MoviePixel} 
-                          alt="Movie" 
-                          style={{ width: 20, height: 20 }}
-                        />
-                        GIF
-                    </button>
-                  </div>
-                  <button 
-                    onClick={() => setShowPostModal(true)}
-                    className="button" 
-                      style={{ 
-                        padding: '8px 16px', 
-                        fontSize: 14,
-                        background: customizeState.buttonColor,
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: 6,
-                        cursor: 'pointer',
-                        fontWeight: 500
-                      }}
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: '0 0 12px 0' }}>No gif selected</p>
+                      <button
+                        onClick={() => document.getElementById('showcase-gif-upload').click()}
+                        disabled={uploadingGif}
+                        style={{
+                          background: uploadingGif ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingGif ? 'not-allowed' : 'pointer'
+                        }}
+                      >
+                        {uploadingGif ? 'Uploading...' : 'Upload GIF'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/gif,video/*"
+                  onChange={handleShowcaseGifChange}
+                  style={{ display: 'none' }}
+                  id="showcase-gif-upload"
+                />
+              </div>
+            )}
+
+            {/* Showcase Pic Widget */}
+            {customizeData?.leftSidebarWidgets?.includes('showcasePic') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  {showcasePicture ? (
+                    <div>
+                      <img 
+                        src={showcasePicture} 
+                        alt="Showcase Picture" 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: 200, 
+                          borderRadius: 8,
+                          marginBottom: 12
+                        }} 
+                      />
+                      <button
+                        onClick={() => document.getElementById('showcase-picture-upload').click()}
+                        disabled={uploadingPicture}
+                        style={{
+                          background: uploadingPicture ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingPicture ? 'not-allowed' : 'pointer',
+                          marginRight: 8
+                        }}
+                      >
+                        {uploadingPicture ? 'Uploading...' : 'Change Picture'}
+                      </button>
+                      <button
+                        onClick={() => setShowcasePicture(null)}
+                        style={{
+                          background: 'var(--danger)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: '0 0 12px 0' }}>No picture selected</p>
+                      <button
+                        onClick={() => document.getElementById('showcase-picture-upload').click()}
+                        disabled={uploadingPicture}
+                        style={{
+                          background: uploadingPicture ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingPicture ? 'not-allowed' : 'pointer'
+                        }}
+                      >
+                        {uploadingPicture ? 'Uploading...' : 'Upload Picture'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleShowcasePictureChange}
+                  style={{ display: 'none' }}
+                  id="showcase-picture-upload"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Center Content */}
+          <div>
+            {/* Tabs */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 0, 
+              marginBottom: 24,
+              background: 'var(--card)',
+              borderRadius: 16,
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              {[
+                { id: 'timeline', label: 'Timeline' },
+                { id: 'badges', label: 'Badges' },
+                { id: 'gallery', label: 'Gallery' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    flex: 1,
+                    padding: '16px 24px',
+                    background: activeTab === tab.id ? customizeData?.buttonColor || 'var(--primary)' : 'transparent',
+                    color: activeTab === tab.id ? 'white' : customizeData?.bodyTextColor || 'var(--text)',
+                    border: 'none',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Add Post */}
+            <div style={{ 
+              background: 'var(--card)',
+              borderRadius: 16,
+              padding: 24,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <img 
+                  src={userData.avatar} 
+                  alt="Avatar" 
+                  style={{ 
+                    width: 40, 
+                    height: 40, 
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }} 
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    onClick={handleOpenCreatePost}
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      borderRadius: 8,
+                      border: '1px solid var(--border)',
+                      background: 'var(--background)',
+                      color: 'var(--text-secondary)',
+                      fontSize: 14,
+                      boxSizing: 'border-box',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
                   >
-                    Post
-                  </button>
+                    What's on your mind, {userData.name.split(' ')[0]}?
+                  </div>
                 </div>
               </div>
               
-                <h3 style={{ margin: '0 0 20px 0', color: customizeState.headerColor }}>Posts</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {USER_POSTS.map((post) => (
-                    <div key={post.id} style={{ 
-                      background: 'var(--background)', 
-                      borderRadius: 12, 
-                      padding: 16,
-                      border: '1px solid var(--border)'
-                    }}>
-                      {/* Post Header */}
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: 12, 
-                        marginBottom: 12 
-                      }}>
-                        <img 
-                          src={profile.avatar} 
-                          alt={profile.name}
-                          style={{ 
-                            width: 40, 
-                            height: 40, 
-                            borderRadius: '50%',
-                            objectFit: 'cover'
-                          }} 
-                        />
-                        <div>
-                          <div style={{ color: customizeState.headerColor, fontWeight: 600, fontSize: 14 }}>{profile.name}</div>
-                          <div style={{ color: customizeState.textColor, fontSize: 12 }}>{post.time}</div>
-                  </div>
+              {postImage && (
+                <div style={{ position: 'relative', marginBottom: 16 }}>
+                  <img 
+                    src={postImage} 
+                    alt="Post preview" 
+                    style={{ 
+                      width: '100%', 
+                      maxHeight: 200, 
+                      borderRadius: 8,
+                      objectFit: 'cover'
+                    }} 
+                  />
+                  <button
+                    onClick={() => setPostImage(null)}
+                    style={{
+                      position: 'absolute',
+                      top: 8,
+                      right: 8,
+                      background: 'rgba(0,0,0,0.5)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: 24,
+                      height: 24,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    ×
+                  </button>
                 </div>
-
-                      {/* Post Content */}
-                      <p style={{ 
-                        color: customizeState.textColor, 
-                        fontSize: 14, 
-                        lineHeight: 1.5, 
-                        margin: '0 0 12px 0' 
-                      }}>
-                        {post.content}
-                      </p>
-                      
-                      {/* Post Image */}
-                      {post.image && (
-                        <img 
-                          src={post.image} 
-                          alt="Post"
-                          style={{ 
-                            width: '100%', 
-                            height: 200, 
-                            objectFit: 'cover',
-                            borderRadius: 8,
-                            marginBottom: 12
-                          }} 
-                        />
-                      )}
-                      
-                      {/* Post Actions */}
-                      <div style={{ 
-                        display: 'flex',
-                        justifyContent: 'space-between', 
-                        alignItems: 'center',
-                        paddingTop: 12,
-                        borderTop: '1px solid var(--border)'
-                      }}>
-                        <button className="button" style={{ 
-                          background: 'transparent', 
-                          color: 'var(--text)', 
-                          padding: '8px 12px', 
-                        fontSize: 14,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6
-                        }}>
-                          ❤️ {post.likes}
-                        </button>
-                        <button className="button" style={{ 
-                          background: 'transparent', 
-                          color: 'var(--text)', 
-                          padding: '8px 12px', 
-                          fontSize: 14,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6
-                        }}>
-                          💬 {post.comments}
-                        </button>
-                        <button className="button" style={{ 
-                          background: 'transparent', 
-                          color: 'var(--text)', 
-                          padding: '8px 12px', 
-                          fontSize: 14,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6
-                        }}>
-                          🔄 {post.shares}
-                        </button>
-                    </div>
-                  </div>
-                  ))}
-                  </div>
-                </div>
-          )}
-
-          {activeTab === 'badges' && (
-              <div>
-                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Badges Earned</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-                  {BADGES.map((badge, index) => (
-                    <div key={index} style={{ 
-                      background: 'var(--background)', 
-                      borderRadius: 8, 
-                      padding: 16,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12
-                    }}>
-                      <div style={{ fontSize: 32 }}>{badge.icon}</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: 14, marginBottom: 4 }}>{badge.name}</div>
-                        <div style={{ color: 'var(--text-secondary)', fontSize: 12, marginBottom: 4 }}>{badge.description}</div>
-                        <div style={{ color: 'var(--text-secondary)', fontSize: 11 }}>Earned {badge.earned}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-            {activeTab === 'gallery' && (
-                    <div>
-                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Photo Gallery</h3>
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
-                  gap: 16 
-                }}>
-                  {GALLERY_IMAGES.map((image) => (
-                    <div key={image.id} style={{ 
-                      background: 'var(--background)', 
-                      borderRadius: 8, 
-                      overflow: 'hidden',
-                      border: '1px solid var(--border)'
-                    }}>
-                      <img 
-                        src={image.url} 
-                        alt={image.caption}
-                        style={{ 
-                          width: '100%', 
-                          height: 200, 
-                          objectFit: 'cover'
-                        }} 
-                      />
-                      <div style={{ padding: 12 }}>
-                        <p style={{ 
-                          color: 'var(--text)', 
-                          fontSize: 14, 
-                          margin: 0,
-                          textAlign: 'center'
-                        }}>
-                          {image.caption}
-                        </p>
-                  </div>
-                </div>
-                ))}
-                  </div>
-                </div>
-          )}
-
-          {activeTab === 'fundraisers' && (
-              <div>
-                <h3 style={{ margin: '0 0 20px 0', color: 'var(--text)' }}>Active Fundraisers</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {FUNDRAISERS.map((fundraiser, index) => (
-                    <div key={index} style={{ 
-                      display: 'flex', 
-                      gap: 16,
-                      padding: '16px',
-                      background: 'var(--background)',
-                      borderRadius: 8
-                    }}>
-                      <img 
-                        src={fundraiser.image} 
-                        alt={fundraiser.name}
-                        style={{ 
-                          width: 80, 
-                          height: 60, 
-                          borderRadius: 8,
-                          objectFit: 'cover'
-                        }} 
-                      />
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{ margin: '0 0 8px 0', color: 'var(--text)' }}>{fundraiser.name}</h4>
-                        <div style={{ marginBottom: 8 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 4 }}>
-                            <span style={{ color: 'var(--text-secondary)' }}>Progress</span>
-                            <span style={{ color: 'var(--text)' }}>${fundraiser.raised} / ${fundraiser.goal}</span>
-                  </div>
-                          <div style={{ 
-                            width: '100%', 
-                            height: 6, 
-                            background: 'var(--gray)', 
-                            borderRadius: 3,
-                            overflow: 'hidden'
-                          }}>
-                            <div style={{ 
-                              width: `${(fundraiser.raised / fundraiser.goal) * 100}%`, 
-                              height: '100%', 
-                              background: 'var(--primary)',
-                              borderRadius: 3
-                            }} />
-                </div>
-                  </div>
-                        <div style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
-                          {fundraiser.daysLeft} days left
-                </div>
-              </div>
-                </div>
-                ))}
-                  </div>
-            </div>
-          )}
-                </div>
-              </div>
-
-
-
-        {/* Right Sidebar */}
-        <div>
-          {/* Quick Stats Widget */}
-          {customizeState.rightSidebarWidgets.includes('quickStats') && (
-                      <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Quick Stats</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Level</span>
-                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.level}</span>
-                      </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>XP</span>
-                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.xp}</span>
-                      </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Total Donated</span>
-                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>${profile.totalDonated}</span>
-                    </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: customizeState.textColor, fontSize: 14 }}>Animals Helped</span>
-                  <span style={{ color: customizeState.buttonColor, fontWeight: 600, fontSize: 14 }}>{profile.animalsHelped}</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Recent Activity Widget */}
-          {customizeState.rightSidebarWidgets.includes('recentActivity') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Recent Activity</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
-                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Donated to Luna's surgery</span>
-                  </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
-                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Visited Alveus Sanctuary</span>
-              </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
-                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Shared a post</span>
-            </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: customizeState.buttonColor }}></div>
-                  <span style={{ color: customizeState.textColor, fontSize: 12 }}>Earned "Donor" badge</span>
-                    </div>
-                  </div>
-              </div>
-          )}
-
-          {/* Following List Widget */}
-          {customizeState.rightSidebarWidgets.includes('followingList') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>Following</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {FOLLOWED_ANIMALS.slice(0, 3).map((animal, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <img 
-                      src={animal.image} 
-                      alt={animal.name}
-                      style={{ 
-                        width: 32, 
-                        height: 32, 
-                        borderRadius: '50%',
-                        objectFit: 'cover'
-                      }} 
+              )}
+              
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <label style={{ cursor: 'pointer' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePostImageChange}
+                      style={{ display: 'none' }}
                     />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ color: customizeState.textColor, fontWeight: 500, fontSize: 12 }}>{animal.name}</div>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>{animal.type}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Music Player Widget */}
-          {customizeState.rightSidebarWidgets.includes('musicPlayer') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>🎵 Now Playing</h3>
-              <div style={{ 
-                background: 'var(--background)', 
-                borderRadius: 8, 
-                padding: 12,
-                border: '1px solid var(--border)'
-              }}>
-                <div style={{ color: customizeState.textColor, fontWeight: 600, fontSize: 12 }}>Animal Sanctuary Vibes</div>
-                <div style={{ color: 'var(--text-secondary)', fontSize: 10 }}>Peaceful Nature Sounds</div>
-                <div style={{ 
-                  width: '100%', 
-                  height: 4, 
-                  background: 'var(--border)', 
-                  borderRadius: 2, 
-                  marginTop: 8,
-                  overflow: 'hidden'
-                }}>
-                  <div style={{ 
-                    width: '65%', 
-                    height: '100%', 
-                    background: customizeState.buttonColor,
-                    borderRadius: 2
-                  }}></div>
-                    </div>
-              </div>
-            </div>
-          )}
-
-          {/* Showcase GIF Widget */}
-          {customizeState.rightSidebarWidgets.includes('showcaseGif') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <div style={{ 
-                width: '100%', 
-                height: 120, 
-                background: 'var(--background)', 
-                borderRadius: 8,
-                border: '1px solid var(--border)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-secondary)',
-                fontSize: 12
-              }}>
-                Upload GIF
-              </div>
-            </div>
-          )}
-
-          {/* Custom HTML Widget */}
-          {customizeState.rightSidebarWidgets.includes('customHtml') && (
-            <div style={{ 
-              background: 'var(--card)', 
-              borderRadius: 12, 
-              padding: 20,
-              marginBottom: 24,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', color: customizeState.headerColor, fontSize: 16 }}>⚙️ Custom Widget</h3>
-              <div style={{ 
-                background: 'var(--background)', 
-                borderRadius: 8, 
-                padding: 12,
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-                fontSize: 12
-              }}>
-                <div style={{ marginBottom: 8 }}>Add your custom HTML here</div>
-                <textarea 
-                  placeholder="Enter custom HTML..."
+                    <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>📷 Photo</span>
+                  </label>
+                </div>
+                <button
+                  onClick={handleAddPost}
+                  disabled={!newPost.trim() && !postImage}
                   style={{
-                    width: '100%',
-                    height: 80,
+                    background: customizeData?.buttonColor || 'linear-gradient(90deg, var(--primary), var(--pink))',
+                    color: 'white',
                     border: 'none',
-                    background: 'transparent',
-                    color: customizeState.textColor,
-                    fontSize: 10,
-                    resize: 'none',
-                    outline: 'none'
+                    padding: '8px 16px',
+                    borderRadius: 8,
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: newPost.trim() || postImage ? 'pointer' : 'not-allowed',
+                    opacity: newPost.trim() || postImage ? 1 : 0.5
                   }}
-                />
+                >
+                  Post
+                </button>
+              </div>
+            </div>
+
+            {/* Tab Content */}
+            <div style={{ 
+              background: 'var(--card)',
+              borderRadius: 16,
+              padding: 24,
+              marginBottom: 24,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+            }}>
+              {activeTab === 'timeline' && (
+                <div>
+                  <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Timeline</h3>
+                  {posts.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                      {posts.map((post) => (
+                        <div key={post.id} style={{ 
+                          padding: 16, 
+                          border: '1px solid var(--border)', 
+                          borderRadius: 8 
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                            <img 
+                              src={userData.avatar} 
+                              alt="Avatar" 
+                              style={{ 
+                                width: 32, 
+                                height: 32, 
+                                borderRadius: '50%',
+                                objectFit: 'cover'
+                              }} 
+                            />
+                            <div>
+                              <div style={{ fontSize: 14, fontWeight: 500, color: customizeData?.bodyTextColor || 'var(--text)' }}>
+                                {userData.name}
+                              </div>
+                              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                                {post.time}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <p style={{ margin: '0 0 12px 0', color: customizeData?.bodyTextColor || 'var(--text)', lineHeight: 1.5 }}>
+                            {post.content}
+                          </p>
+                          
+                          {post.image && (
+                            <img 
+                              src={post.image} 
+                              alt="Post" 
+                              style={{ 
+                                width: '100%', 
+                                borderRadius: 8,
+                                marginBottom: 12
+                              }} 
+                            />
+                          )}
+                          
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                            <button style={{ 
+                              background: 'none', 
+                              border: 'none', 
+                              color: 'var(--text-secondary)', 
+                              cursor: 'pointer',
+                              fontSize: 12,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 4
+                            }}>
+                              ❤️ {post.likes}
+                            </button>
+                            <button style={{ 
+                              background: 'none', 
+                              border: 'none', 
+                              color: 'var(--text-secondary)', 
+                              cursor: 'pointer',
+                              fontSize: 12,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 4
+                            }}>
+                              💬 {post.comments}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                      <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No posts yet</p>
+                      <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                        Share your first post to start your journey!
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'badges' && (
+                <div>
+                  <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Badges</h3>
+                  <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                    <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No badges earned yet</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                      Complete challenges to earn badges!
+                    </p>
                   </div>
                 </div>
-          )}
+              )}
+
+              {activeTab === 'gallery' && (
+                <div>
+                  <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Gallery</h3>
+                  <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                    <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No photos yet</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                      Share photos to build your gallery!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div>
+            {/* Feelings Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('feelings') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <h3 style={{ margin: 0, color: customizeData?.headerTextColor || 'var(--text)', fontSize: 16, fontWeight: 600 }}>
+                    {userData.name} Is Feeling:
+                  </h3>
+                  <button
+                    onClick={handleEditFeeling}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      fontSize: 16,
+                      padding: 4
+                    }}
+                  >
+                    ✏️
+                  </button>
+                </div>
+                <div style={{ 
+                  background: 'linear-gradient(135deg, #f8f6ff, #e8e4ff)', 
+                  borderRadius: 12, 
+                  padding: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12
+                }}>
+                  <span style={{ fontSize: 32 }}>{currentFeelingEmoji}</span>
+                  <div>
+                    <div style={{ 
+                      fontSize: 16, 
+                      fontWeight: 600, 
+                      color: customizeData?.bodyTextColor || 'var(--text)',
+                      marginBottom: 4
+                    }}>
+                      {currentFeeling}
+                    </div>
+                    <div style={{ 
+                      fontSize: 14, 
+                      color: customizeData?.bodyTextColor || 'var(--text-secondary)' 
+                    }}>
+                      {currentFeelingDescription}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Recent Activity Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('recentActivity') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Recent Activity</h3>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No recent activity</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                    Your activity will appear here
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Following Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('following') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Following</h3>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>Not following anyone yet</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                    Start following people!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Music Player Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('musicPlayer') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <h3 style={{ margin: '0 0 16px 0', color: customizeData?.headerTextColor || 'var(--text)' }}>Music Player</h3>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: 0 }}>No music playing</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0 0' }}>
+                    Connect your music account!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Showcase Gif Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('showcaseGif') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  {showcaseGif ? (
+                    <div>
+                      <img 
+                        src={showcaseGif} 
+                        alt="Showcase GIF" 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: 200, 
+                          borderRadius: 8,
+                          marginBottom: 12
+                        }} 
+                      />
+                      <button
+                        onClick={() => document.getElementById('showcase-gif-upload-right').click()}
+                        disabled={uploadingGif}
+                        style={{
+                          background: uploadingGif ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingGif ? 'not-allowed' : 'pointer',
+                          marginRight: 8
+                        }}
+                      >
+                        {uploadingGif ? 'Uploading...' : 'Change GIF'}
+                      </button>
+                      <button
+                        onClick={() => setShowcaseGif(null)}
+                        style={{
+                          background: 'var(--danger)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: '0 0 12px 0' }}>No gif selected</p>
+                      <button
+                        onClick={() => document.getElementById('showcase-gif-upload-right').click()}
+                        disabled={uploadingGif}
+                        style={{
+                          background: uploadingGif ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingGif ? 'not-allowed' : 'pointer'
+                        }}
+                      >
+                        {uploadingGif ? 'Uploading...' : 'Upload GIF'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/gif,video/*"
+                  onChange={handleShowcaseGifChange}
+                  style={{ display: 'none' }}
+                  id="showcase-gif-upload-right"
+                />
+              </div>
+            )}
+
+            {/* Showcase Picture Widget */}
+            {customizeData?.rightSidebarWidgets?.includes('showcasePicture') && (
+              <div style={{ 
+                background: 'var(--card)',
+                borderRadius: 16,
+                padding: 24,
+                marginBottom: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  {showcasePicture ? (
+                    <div>
+                      <img 
+                        src={showcasePicture} 
+                        alt="Showcase Picture" 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: 200, 
+                          borderRadius: 8,
+                          marginBottom: 12
+                        }} 
+                      />
+                      <button
+                        onClick={() => document.getElementById('showcase-picture-upload-right').click()}
+                        disabled={uploadingPicture}
+                        style={{
+                          background: uploadingPicture ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingPicture ? 'not-allowed' : 'pointer',
+                          marginRight: 8
+                        }}
+                      >
+                        {uploadingPicture ? 'Uploading...' : 'Change Picture'}
+                      </button>
+                      <button
+                        onClick={() => setShowcasePicture(null)}
+                        style={{
+                          background: 'var(--danger)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ color: customizeData?.bodyTextColor || 'var(--text-secondary)', margin: '0 0 12px 0' }}>No picture selected</p>
+                      <button
+                        onClick={() => document.getElementById('showcase-picture-upload-right').click()}
+                        disabled={uploadingPicture}
+                        style={{
+                          background: uploadingPicture ? 'var(--text-secondary)' : 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: uploadingPicture ? 'not-allowed' : 'pointer'
+                        }}
+                      >
+                        {uploadingPicture ? 'Uploading...' : 'Upload Picture'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleShowcasePictureChange}
+                  style={{ display: 'none' }}
+                  id="showcase-picture-upload-right"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-} 
+}

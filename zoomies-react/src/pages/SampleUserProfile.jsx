@@ -2,103 +2,7 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 // Mock data for sample user profiles
-const SAMPLE_USERS = {
-  'clara': {
-    name: 'Clara Johnson',
-    username: '@clarajohnson',
-    avatar: 'https://picsum.photos/100/100?random=10',
-    coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center',
-    bio: 'Animal lover and rescue advocate. Always looking for ways to help animals in need! 🐾',
-    location: 'Portland, OR',
-    joinedDate: 'January 2023',
-    totalDonated: 850,
-    animalsHelped: 32,
-    followers: 456,
-    following: 89,
-    level: 6,
-    xp: 1840,
-    nextLevelXp: 2000,
-    feeling: 'Happy',
-    feelingEmoji: '😊',
-    feelingDescription: 'Feeling great today!'
-  },
-  'sam': {
-    name: 'Sam Wilson',
-    username: '@samwilson',
-    avatar: 'https://picsum.photos/100/100?random=11',
-    coverPhoto: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=800&h=300&fit=crop&crop=center',
-    bio: 'Cat dad and sanctuary volunteer. Making the world a better place for all animals! 😺',
-    location: 'Seattle, WA',
-    joinedDate: 'February 2023',
-    totalDonated: 620,
-    animalsHelped: 28,
-    followers: 234,
-    following: 67,
-    level: 5,
-    xp: 1420,
-    nextLevelXp: 1600,
-    feeling: 'Excited',
-    feelingEmoji: '🤗',
-    feelingDescription: 'Just adopted a new kitten!'
-  },
-  'megan': {
-    name: 'Megan Davis',
-    username: '@megandavis',
-    avatar: 'https://picsum.photos/100/100?random=12',
-    coverPhoto: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&h=300&fit=crop&crop=center',
-    bio: 'Rescue worker and animal advocate. Every life matters! 🐕',
-    location: 'Austin, TX',
-    joinedDate: 'March 2023',
-    totalDonated: 1200,
-    animalsHelped: 45,
-    followers: 678,
-    following: 123,
-    level: 7,
-    xp: 2340,
-    nextLevelXp: 2800,
-    feeling: 'Grateful',
-    feelingEmoji: '🙏',
-    feelingDescription: 'Thankful for all the support!'
-  },
-  'alex': {
-    name: 'Alex Chen',
-    username: '@alexchen',
-    avatar: 'https://picsum.photos/100/100?random=13',
-    coverPhoto: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=300&fit=crop&crop=center',
-    bio: 'Dog trainer and animal behavior specialist. Helping animals and their humans! 🐕',
-    location: 'Denver, CO',
-    joinedDate: 'April 2023',
-    totalDonated: 480,
-    animalsHelped: 19,
-    followers: 345,
-    following: 78,
-    level: 4,
-    xp: 980,
-    nextLevelXp: 1200,
-    feeling: 'Focused',
-    feelingEmoji: '💪',
-    feelingDescription: 'Working on new training techniques'
-  },
-  'jess': {
-    name: 'Jess Rodriguez',
-    username: '@jessrodriguez',
-    avatar: 'https://picsum.photos/100/100?random=14',
-    coverPhoto: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=800&h=300&fit=crop&crop=center',
-    bio: 'Bunny mom and small animal advocate. Every bunny deserves love! 🐰',
-    location: 'San Diego, CA',
-    joinedDate: 'May 2023',
-    totalDonated: 320,
-    animalsHelped: 15,
-    followers: 189,
-    following: 45,
-    level: 3,
-    xp: 720,
-    nextLevelXp: 800,
-    feeling: 'Peaceful',
-    feelingEmoji: '😌',
-    feelingDescription: 'Enjoying a quiet day with my bunnies'
-  }
-};
+const SAMPLE_USERS = {};
 
 const BADGES = [
   { name: 'Donor', icon: '💖', description: 'Made first donation', earned: '2024-01-15' },
@@ -107,95 +11,44 @@ const BADGES = [
   { name: 'Volunteer', icon: '🤝', description: 'Volunteered 20+ hours', earned: '2024-06-01' }
 ];
 
-const FOLLOWED_ANIMALS = [
-  { name: 'Stompy', type: 'Goat', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', sanctuary: 'Alveus Sanctuary', status: 'Active' },
-  { name: 'Luna', type: 'Cow', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', sanctuary: 'Gentle Barn', status: 'Recovering' },
-  { name: 'Bella', type: 'Pig', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', sanctuary: 'Farm Sanctuary', status: 'Thriving' }
-];
+const FOLLOWED_ANIMALS = [];
 
-const FOLLOWED_SANCTUARIES = [
-  { name: 'Alveus Sanctuary', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=60&h=60&fit=crop&crop=center', location: 'Austin, TX', animals: 47 },
-  { name: 'Gentle Barn', image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=60&h=60&fit=crop&crop=center', location: 'Santa Clarita, CA', animals: 89 },
-  { name: 'Farm Sanctuary', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&h=60&fit=crop&crop=center', location: 'Watkins Glen, NY', animals: 156 }
-];
+const FOLLOWED_SANCTUARIES = [];
 
-const ACTIVITY_FEED = [
-  { type: 'donation', content: 'Donated $50 to Stompy', time: '2 hours ago', icon: '💖' },
-  { type: 'post', content: 'Just visited Alveus Sanctuary! The animals are doing amazing. #sanctuarylife', time: '1 day ago', icon: '📸' },
-  { type: 'achievement', content: 'Earned the "Volunteer" badge!', time: '3 days ago', icon: '🏆' },
-  { type: 'event', content: 'Registered for "Walk for Animals" event', time: '1 week ago', icon: '🎟️' },
-  { type: 'fundraiser', content: 'Started fundraiser for Luna\'s surgery', time: '2 weeks ago', icon: '💰' }
-];
+const ACTIVITY_FEED = [];
 
-const DONATIONS = [
-  { to: 'Stompy', amount: 50, date: '2024-07-01', type: 'Monthly' },
-  { to: 'Luna', amount: 25, date: '2024-06-15', type: 'One-time' },
-  { to: 'Bella', amount: 100, date: '2024-06-01', type: 'Emergency' },
-  { to: 'Alveus Sanctuary', amount: 75, date: '2024-05-20', type: 'General' }
-];
+const DONATIONS = [];
 
-const FUNDRAISERS = [
-  { name: 'Help Luna Get Surgery', goal: 2500, raised: 1800, daysLeft: 5, image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=200&h=120&fit=crop&crop=center' },
-  { name: 'Stompy\'s Medical Fund', goal: 2000, raised: 815, daysLeft: 12, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=120&fit=crop&crop=center' }
-];
+const FUNDRAISERS = [];
 
-const USER_POSTS = [
-  { 
-    id: 1, 
-    content: 'Just visited Alveus Sanctuary today! The animals are doing amazing. Stompy was so happy to see us! 🐐 #sanctuarylife', 
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-    time: '2 hours ago',
-    likes: 24,
-    comments: 8,
-    shares: 3
-  },
-  { 
-    id: 2, 
-    content: 'Volunteering at the local animal shelter this weekend. Every little bit helps! 🐕 #volunteer #animalwelfare', 
-    image: null,
-    time: '1 day ago',
-    likes: 18,
-    comments: 5,
-    shares: 2
-  },
-  { 
-    id: 3, 
-    content: 'Look at this adorable kitten I met today! She was so playful and full of energy. Can\'t wait to see her find her forever home! 😺', 
-    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop&crop=center',
-    time: '3 days ago',
-    likes: 42,
-    comments: 12,
-    shares: 7
-  },
-  { 
-    id: 4, 
-    content: 'Started my fundraiser for Luna\'s surgery! Please help if you can. Every donation counts! 💕', 
-    image: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400&h=300&fit=crop&crop=center',
-    time: '1 week ago',
-    likes: 56,
-    comments: 15,
-    shares: 12
-  }
-];
+const USER_POSTS = [];
 
-const GALLERY_IMAGES = [
-  { id: 1, url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop&crop=center', caption: 'Stompy at Alveus' },
-  { id: 2, url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=center', caption: 'Adorable kitten' },
-  { id: 3, url: 'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=300&h=300&fit=crop&crop=center', caption: 'Luna the cow' },
-  { id: 4, url: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=300&h=300&fit=crop&crop=center', caption: 'Bella the pig' },
-  { id: 5, url: 'https://images.unsplash.com/photo-1543852786-1cf6624b998d?w=300&h=300&fit=crop&crop=center', caption: 'Volunteering day' },
-  { id: 6, url: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=300&h=300&fit=crop&crop=center', caption: 'Sanctuary visit' },
-  { id: 7, url: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=300&fit=crop&crop=center', caption: 'Dog training' },
-  { id: 8, url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&h=300&fit=crop&crop=center', caption: 'Cat cuddles' },
-  { id: 9, url: 'https://images.unsplash.com/photo-1529429617124-5b1096d02c13?w=300&h=300&fit=crop&crop=center', caption: 'Rescue mission' }
-];
+const GALLERY_IMAGES = [];
 
 export default function SampleUserProfile() {
   const { username } = useParams();
   const [activeTab, setActiveTab] = useState('timeline');
   
   // Get user data based on username parameter
-  const userData = SAMPLE_USERS[username] || SAMPLE_USERS['clara'];
+  const userData = SAMPLE_USERS[username];
+  
+  // If no user data, show empty state
+  if (!userData) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'var(--background)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 16
+      }}>
+        <h1 style={{ color: 'var(--text)', margin: 0 }}>No User Found</h1>
+        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>This user profile is not available.</p>
+      </div>
+    );
+  }
 
   const renderProgressBar = (current, max) => {
     const percentage = (current / max) * 100;
