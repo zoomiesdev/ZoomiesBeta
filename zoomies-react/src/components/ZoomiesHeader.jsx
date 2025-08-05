@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ThemeSelector from './ThemeSelector';
 import AuthModal from './AuthModal';
+import UserTypeSelection from './UserTypeSelection';
 import ProfileEditModal from './ProfileEditModal';
 import logoBlack from '../assets/LogoBlack.png';
 import logoWhite from '../assets/LogoWhite.png';
@@ -25,6 +26,7 @@ export default function ZoomiesHeader() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [userTypeModalOpen, setUserTypeModalOpen] = useState(false);
   const [profileEditModalOpen, setProfileEditModalOpen] = useState(false);
   const [tooltip, setTooltip] = useState({ show: false, text: '', x: 0, y: 0 });
   const [currentPage, setCurrentPage] = useState('/');
@@ -76,7 +78,8 @@ export default function ZoomiesHeader() {
 
   return (
     <>
-      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+              <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+        <UserTypeSelection isOpen={userTypeModalOpen} onClose={() => setUserTypeModalOpen(false)} />
       <ProfileEditModal 
         isOpen={profileEditModalOpen} 
         onClose={() => setProfileEditModalOpen(false)}
@@ -84,6 +87,8 @@ export default function ZoomiesHeader() {
           setProfileEditModalOpen(false);
         }}
       />
+      
+
       <header className="zoomies-header" style={{
         display: 'flex', 
         alignItems: 'center', 
@@ -504,7 +509,10 @@ export default function ZoomiesHeader() {
                   cursor: 'pointer',
                   transition: 'background 0.2s',
                   borderBottom: '1px solid var(--border, #eee)'
-                }} onClick={() => { setAuthModalOpen(true); setLoginDropdownOpen(false); }}>
+                }} onClick={() => { 
+                  setUserTypeModalOpen(true); 
+                  setLoginDropdownOpen(false); 
+                }}>
                   Sign In / Sign Up
                 </button>
               </div>
@@ -833,7 +841,10 @@ export default function ZoomiesHeader() {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <button 
-                  onClick={() => { setAuthModalOpen(true); toggleMobileMenu(); }} 
+                  onClick={() => { 
+                    setUserTypeModalOpen(true); 
+                    toggleMobileMenu(); 
+                  }} 
                   className="button" 
                   style={{ 
                     width: '100%',

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 
-export default function AuthModal({ isOpen, onClose }) {
-  const [isLogin, setIsLogin] = useState(true);
+export default function AuthModal({ isOpen, onClose, userType = "user", initialMode = "login" }) {
+  const [isLogin, setIsLogin] = useState(initialMode === "login");
 
   if (!isOpen) return null;
 
@@ -18,7 +18,7 @@ export default function AuthModal({ isOpen, onClose }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1002,
       padding: '20px',
       backdropFilter: 'blur(4px)'
     }}>
@@ -71,6 +71,7 @@ export default function AuthModal({ isOpen, onClose }) {
           <SignupForm 
             onSwitchToLogin={() => setIsLogin(true)}
             onClose={onClose}
+            userType={userType}
           />
         )}
       </div>

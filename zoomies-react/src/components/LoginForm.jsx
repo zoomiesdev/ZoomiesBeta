@@ -14,13 +14,17 @@ export default function LoginForm({ onSwitchToSignup, onClose }) {
     setError('');
 
     try {
+      console.log('Attempting login with email:', email);
       const { error } = await signIn(email, password);
       if (error) {
+        console.error('Login error:', error);
         setError(error.message);
       } else {
+        console.log('Login successful');
         onClose?.();
       }
     } catch (err) {
+      console.error('Login exception:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);

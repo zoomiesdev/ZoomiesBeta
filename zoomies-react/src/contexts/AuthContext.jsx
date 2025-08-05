@@ -25,12 +25,35 @@ export const AuthProvider = ({ children }) => {
     
     try {
       const { data: profile, error } = await userService.getUserByAuthId(authUser.id)
-      if (error) {
+      
+      if (error && error.code === 'PGRST116') {
+        // No profile found, create one automatically
+        console.log('No profile found, creating new profile...')
+        const { data: newProfile, error: createError } = await userService.updateCurrentUser({
+          username: authUser.email?.split('@')[0] || 'user',
+          email: authUser.email || '',
+          name: authUser.user_metadata?.name || authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'New User',
+          type: authUser.user_metadata?.type || 'user',
+          bio: 'New Zoomies member! 🐾',
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${authUser.email?.split('@')[0] || 'user'}`
+        })
+        
+        if (createError) {
+          console.error('Error creating profile:', createError)
+          return null
+        }
+        
+        console.log('Created new profile:', newProfile)
+        return {
+          ...authUser,
+          ...newProfile
+        }
+      } else if (error) {
         console.error('Error fetching user profile:', error)
         return null
       }
       
-      console.log('Found profile:', profile)
+      console.log('Found existing profile:', profile)
       
       // Combine auth user with profile data
       return {
@@ -64,10 +87,8 @@ export const AuthProvider = ({ children }) => {
         console.log('Auth state changed:', event, session?.user?.id)
         if (session?.user) {
           const fullUser = await fetchUserProfile(session.user)
-          console.log('Setting user:', fullUser)
           setUser(fullUser)
         } else {
-          console.log('Setting user to null')
           setUser(null)
         }
         setLoading(false)
@@ -86,6 +107,9 @@ export const AuthProvider = ({ children }) => {
     console.log('Signing in with email:', email)
     const { data, error } = await authService.signIn(email, password)
     console.log('Sign in result:', { data, error })
+    if (data?.user) {
+      console.log('User metadata after signin:', data.user.user_metadata)
+    }
     return { data, error }
   }
 

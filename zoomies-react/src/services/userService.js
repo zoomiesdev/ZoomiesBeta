@@ -84,6 +84,10 @@ export const userService = {
     // If no user found, create one
     if (error && error.code === 'PGRST116') {
       console.log('User not found, creating new user profile...')
+      
+      // Get user type from metadata or default to 'user'
+      const userType = user.user_metadata?.type || 'user';
+      
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert([{
@@ -91,7 +95,17 @@ export const userService = {
           username: user.email?.split('@')[0] || 'user',
           email: user.email || '',
           name: user.user_metadata?.name || user.email?.split('@')[0] || 'New User',
-          type: 'user',
+          type: userType,
+          // Add sanctuary fields if it's a sanctuary user
+          ...(userType === 'sanctuary' && {
+            sanctuary_name: user.user_metadata?.sanctuary_name || '',
+            sanctuary_description: user.user_metadata?.sanctuary_description || '',
+            sanctuary_website: user.user_metadata?.sanctuary_website || '',
+            sanctuary_phone: user.user_metadata?.sanctuary_phone || '',
+            verification_documents: user.user_metadata?.verification_documents || [],
+            sanctuary_photos: user.user_metadata?.sanctuary_photos || [],
+            verification_status: 'pending'
+          }),
           ...updates
         }])
         .select()

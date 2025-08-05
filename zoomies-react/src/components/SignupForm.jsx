@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { userService } from '../services/userService';
 
-export default function SignupForm({ onSwitchToLogin, onClose }) {
+export default function SignupForm({ onSwitchToLogin, onClose, userType = "user" }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,6 +12,7 @@ export default function SignupForm({ onSwitchToLogin, onClose }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const { signUp } = useAuth();
 
   const handleChange = (e) => {
@@ -43,7 +44,8 @@ export default function SignupForm({ onSwitchToLogin, onClose }) {
       // Sign up with Supabase Auth
       const { data, error } = await signUp(formData.email, formData.password, {
         username: formData.username,
-        full_name: formData.fullName
+        full_name: formData.fullName,
+        type: userType
       });
 
       if (error) {
@@ -51,28 +53,8 @@ export default function SignupForm({ onSwitchToLogin, onClose }) {
       } else {
         console.log('Auth signup successful:', data);
         
-        // Wait a moment for the session to be established
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Create user profile in our users table
-        const userData = {
-          auth_id: data.user.id,
-          username: formData.username,
-          email: formData.email,
-          bio: 'New Zoomies member! 🐾',
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`
-        };
-
-        console.log('Creating user profile with data:', userData);
-        const { data: profileData, error: profileError } = await userService.createUserWithFunction(userData);
-        
-        if (profileError) {
-          console.error('Profile creation error:', profileError);
-          setError(`Profile setup failed: ${profileError.message}`);
-        } else {
-          console.log('Profile created successfully:', profileData);
-          onClose?.();
-        }
+        // Show email confirmation message
+        setShowEmailConfirmation(true);
       }
     } catch (err) {
       console.error('Signup error:', err);
@@ -81,6 +63,50 @@ export default function SignupForm({ onSwitchToLogin, onClose }) {
       setLoading(false);
     }
   };
+
+  if (showEmailConfirmation) {
+    return (
+      <div style={{
+        background: 'var(--card)',
+        borderRadius: 16,
+        padding: '40px 32px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+        maxWidth: 400,
+        width: '100%',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: 64, marginBottom: 16 }}>📧</div>
+        <h2 style={{ margin: '0 0 16px 0', color: 'var(--text)', fontSize: 24 }}>
+          Check Your Email!
+        </h2>
+        <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: 16, lineHeight: 1.5 }}>
+          We've sent a confirmation email to <strong>{formData.email}</strong>
+        </p>
+        <p style={{ margin: '0 0 32px 0', color: 'var(--text-secondary)', fontSize: 14 }}>
+          Click the link in the email to verify your account and complete your profile.
+        </p>
+        <button
+          onClick={() => {
+            onClose();
+            // Show success message
+            alert('Account created successfully! Please check your email to verify your account.');
+          }}
+          style={{
+            padding: '12px 24px',
+            borderRadius: 8,
+            border: 'none',
+            background: 'var(--primary)',
+            color: 'white',
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          Got it!
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{
