@@ -32,47 +32,78 @@ export const animalService = {
 
   // Create new animal
   async createAnimal(animalData) {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('No authenticated user')
-    
-    // Get the user's profile to get the sanctuary info
-    const { data: userProfile, error: userError } = await supabase
-      .from('users')
-      .select('id, sanctuary_name')
-      .eq('auth_id', user.id)
-      .single()
-    
-    if (userError) throw userError
-    
-    const animal = {
-      name: animalData.name,
-      species: animalData.species,
-      sanctuary: userProfile.sanctuary_name,
-      about: animalData.description,
-      profile_img: animalData.profile_img || null,
-      cover_img: animalData.cover_img || null,
-      donation_goal: animalData.donation_goal || 0,
-      donation_raised: 0,
-      status: 'Active'
+    try {
+      console.log('Creating animal with data:', animalData)
+      
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('No authenticated user')
+      
+      console.log('Authenticated user:', user.id)
+      
+      // Get the user's profile to get the sanctuary info
+      const { data: userProfile, error: userError } = await supabase
+        .from('users')
+        .select('id, sanctuary_name')
+        .eq('auth_id', user.id)
+        .single()
+      
+      if (userError) {
+        console.error('Error getting user profile:', userError)
+        throw userError
+      }
+      
+      console.log('User profile:', userProfile)
+      
+      const animal = {
+        name: animalData.name,
+        animal_type: animalData.animal_type,
+        species: animalData.species,
+        sanctuary: userProfile.sanctuary_name,
+        about: animalData.description,
+        profile_img: animalData.profile_img || null,
+        cover_img: animalData.cover_img || null,
+        donation_goal: animalData.donation_goal || 0,
+        donation_raised: 0,
+        status: 'Active'
+      }
+      
+      console.log('Animal object to insert:', animal)
+      
+      const { data, error } = await supabase
+        .from('animals')
+        .insert([animal])
+        .select()
+        .single()
+      
+      if (error) {
+        console.error('Error inserting animal:', error)
+      } else {
+        console.log('Animal created successfully:', data)
+      }
+      
+      return { data, error }
+    } catch (error) {
+      console.error('Error in createAnimal:', error)
+      return { data: null, error }
     }
-    
-    const { data, error } = await supabase
-      .from('animals')
-      .insert([animal])
-      .select()
-      .single()
-    
-    return { data, error }
   },
 
   // Update animal
   async updateAnimal(animalId, updates) {
+    console.log('Updating animal:', animalId, 'with updates:', updates);
+    
     const { data, error } = await supabase
       .from('animals')
       .update(updates)
       .eq('id', animalId)
       .select()
       .single()
+    
+    if (error) {
+      console.error('Error updating animal:', error);
+    } else {
+      console.log('Animal updated successfully:', data);
+    }
     
     return { data, error }
   },

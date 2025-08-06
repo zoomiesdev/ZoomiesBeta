@@ -80,21 +80,22 @@ export const AuthProvider = ({ children }) => {
     }
 
     getInitialSession()
-
-    // Listen for auth changes
+    
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id)
-        if (session?.user) {
+        
+        if (event === 'SIGNED_IN' && session?.user) {
           const fullUser = await fetchUserProfile(session.user)
           setUser(fullUser)
-        } else {
+        } else if (event === 'SIGNED_OUT') {
           setUser(null)
+          setLoading(false)
         }
-        setLoading(false)
       }
     )
-
+    
     return () => subscription.unsubscribe()
   }, [])
 
@@ -109,6 +110,9 @@ export const AuthProvider = ({ children }) => {
     console.log('Sign in result:', { data, error })
     if (data?.user) {
       console.log('User metadata after signin:', data.user.user_metadata)
+      // Immediately fetch user profile after successful login
+      const fullUser = await fetchUserProfile(data.user)
+      setUser(fullUser)
     }
     return { data, error }
   }

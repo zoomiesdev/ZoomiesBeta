@@ -13,6 +13,7 @@ import Community from './pages/Community';
 import UserProfile from './pages/UserProfile';
 import Dashboard from './pages/Dashboard';
 import SanctuaryDashboard from './pages/SanctuaryDashboard';
+import AnimalProfile from './pages/AnimalProfile';
 import Premium from './pages/Premium';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sanctuary-dashboard" element={<SanctuaryDashboard />} />
+            <Route path="/animal/:animalId" element={<AnimalProfile />} />
             <Route path="/premium" element={<Premium />} />
             <Route path="/ambassadors/:id" element={<AmbassadorProfilePage />} />
             <Route path="/ambassadors-copy/:id" element={<AmbassadorProfilePageCopy />} />

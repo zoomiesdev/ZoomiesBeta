@@ -38,6 +38,25 @@ export const postService = {
     return { data, error }
   },
 
+  // Get posts for a specific animal
+  async getPostsByAnimal(animalId) {
+    const { data, error } = await supabase
+      .from('posts')
+      .select(`
+        *,
+        users!posts_user_id_fkey (
+          id,
+          username,
+          name,
+          avatar
+        )
+      `)
+      .eq('animal_id', animalId)
+      .order('created_at', { ascending: false })
+    
+    return { data, error }
+  },
+
   // Create a new post
   async createPost(postData) {
     const { data: { user } } = await supabase.auth.getUser()
@@ -56,6 +75,7 @@ export const postService = {
       user_id: userProfile.id,
       content: postData.content,
       image_url: postData.image_url || null,
+      animal_id: postData.animal_id || null,
       type: 'post'
     }
     

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { animalService } from '../services/animalService';
 import StompyBanner from '../assets/StompyBanner.png';
 import StompyProfilePic from '../assets/StompyProfilePic.png';
 import LunaBanner from '../assets/LunaBanner.png';
@@ -7,9 +8,9 @@ import LunaProfilePic from '../assets/LunaProfilePic.png';
 import MaxBanner from '../assets/MaxBanner.png';
 import MaxProfilePic from '../assets/MaxProfilePic.png';
 
-const ANIMALS = {};
-
 export default function AmbassadorHub() {
+  const [animals, setAnimals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [selectedSanctuary, setSelectedSanctuary] = useState('all');
@@ -30,23 +31,49 @@ export default function AmbassadorHub() {
     };
   }, []);
 
+  // Load animals from database
+  useEffect(() => {
+    const loadAnimals = async () => {
+      try {
+        setLoading(true);
+        console.log('Loading animals from database...');
+        const { data, error } = await animalService.getAllAnimals();
+        if (error) {
+          console.error('Error loading animals:', error);
+        } else {
+          console.log('Animals loaded successfully:', data);
+          setAnimals(data || []);
+        }
+      } catch (error) {
+        console.error('Error loading animals:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAnimals();
+  }, []);
+
   // Get unique species and sanctuaries for filter options
-  const species = ['all', ...new Set(Object.values(ANIMALS).map(animal => animal.species))];
-  const sanctuaries = ['all', ...new Set(Object.values(ANIMALS).map(animal => animal.sanctuary))];
+  const species = ['all', ...new Set(animals.map(animal => animal.animal_type || animal.species))];
+  const sanctuaries = ['all', ...new Set(animals.map(animal => animal.sanctuary))];
 
   // Filter animals based on search and filters
-  const filteredAnimals = Object.entries(ANIMALS).filter(([id, animal]) => {
+  const filteredAnimals = animals.filter(animal => {
     const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         animal.species.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (animal.animal_type || animal.species).toLowerCase().includes(searchTerm.toLowerCase()) ||
                          animal.sanctuary.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSpecies = selectedSpecies === 'all' || animal.species === selectedSpecies;
+    const matchesSpecies = selectedSpecies === 'all' || (animal.animal_type || animal.species) === selectedSpecies;
     const matchesSanctuary = selectedSanctuary === 'all' || animal.sanctuary === selectedSanctuary;
     const matchesViewMode = viewMode === 'all' || (viewMode === 'featured' && animal.featured);
     
     return matchesSearch && matchesSpecies && matchesSanctuary && matchesViewMode;
   });
 
-  const featuredAnimals = Object.entries(ANIMALS).filter(([id, animal]) => animal.featured);
+  console.log('Animals state:', animals);
+  console.log('Filtered animals:', filteredAnimals);
+
+  const featuredAnimals = animals.filter(animal => animal.featured);
 
   return (
     <div className="ambassador-hub" style={{ minHeight: '100vh' }}>
@@ -201,92 +228,102 @@ export default function AmbassadorHub() {
         </div>
         {/* Results Count */}
         <div style={{ textAlign: 'center', marginBottom: 16, color: 'var(--text)', fontSize: 14 }}>
-          Showing {filteredAnimals.length} of {Object.keys(ANIMALS).length} animals
+          Showing {filteredAnimals.length} of {animals.length} animals
         </div>
       </div>
-      {/* Animals Grid */}
-      <div className="ambassador-grid" style={{ padding: '0 32px 32px', maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
-        {filteredAnimals.map(([id, animal]) => (
-          <div key={id} className="ambassador-card" style={{ 
-            background: 'var(--card)', 
-            borderRadius: 16, 
-            boxShadow: '0 4px 16px rgba(0,0,0,0.08)', 
-            overflow: 'hidden',
-            transition: 'transform 0.2s, box-shadow 0.2s',
-            cursor: 'pointer'
-          }}>
-            {/* Cover Image */}
-            <div style={{ position: 'relative', height: 160 }}>
-              <img 
-                src={animal.coverImg} 
-                alt={animal.name}
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'cover' 
-                }} 
-              />
-              {animal.featured && (
-                <div className="pixel-header" style={{
-                  position: 'absolute',
-                  top: 12,
-                  right: 12,
-                  background: 'var(--primary)',
-                  color: '#fff',
-                  padding: '4px 8px',
-                  borderRadius: 6,
-                  fontSize: 12,
-                  fontWeight: 'normal'
-                }}>
-                  ⭐ Featured
-                </div>
-              )}
-            </div>
-            {/* Content */}
-            <div style={{ padding: 24 }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+            {/* Animals Grid */}
+      <div className="ambassador-grid" style={{ padding: '0 32px 32px', maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+        {loading ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+            Loading animals...
+          </div>
+        ) : filteredAnimals.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+            No animals found. {animals.length === 0 ? 'No animals have been added yet.' : 'Try adjusting your filters.'}
+          </div>
+        ) : (
+          filteredAnimals.map((animal) => (
+            <div key={animal.id} className="ambassador-card" style={{ 
+              background: 'var(--card)', 
+              borderRadius: 16, 
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)', 
+              overflow: 'hidden',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              cursor: 'pointer'
+            }}>
+              {/* Cover Image */}
+              <div style={{ position: 'relative', height: 160 }}>
                 <img 
-                  src={animal.profileImg} 
-                  alt={animal.name} 
+                  src={animal.cover_img || 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center'} 
+                  alt={animal.name}
                   style={{ 
-                    width: 60, 
-                    height: 60, 
-                    borderRadius: '50%', 
-                    objectFit: 'cover',
-                    marginRight: 12
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
                   }} 
                 />
-                <div>
-                  <h2 className="pixel-header" style={{ margin: '0 0 4px 0', fontSize: 20, fontWeight: 'normal' }}>{animal.name}</h2>
-                  <p style={{ color: 'var(--primary)', margin: 0, fontSize: 14, fontWeight: 600 }}>{animal.species}</p>
-                </div>
+                {animal.featured && (
+                  <div className="pixel-header" style={{
+                    position: 'absolute',
+                    top: 12,
+                    right: 12,
+                    background: 'var(--primary)',
+                    color: '#fff',
+                    padding: '4px 8px',
+                    borderRadius: 6,
+                    fontSize: 12,
+                    fontWeight: 'normal'
+                  }}>
+                    ⭐ Featured
+                  </div>
+                )}
               </div>
-              <p style={{ color: 'var(--text)', margin: '0 0 16px 0', fontSize: 14, opacity: 0.8 }}>
-                {animal.sanctuary}
-              </p>
-              <p style={{ color: 'var(--text)', margin: '0 0 16px 0', fontSize: 14, lineHeight: 1.4 }}>
-                {animal.story}
-              </p>
-              {/* Progress Bar */}
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6 }}>
-                  <span style={{ color: 'var(--text)', opacity: 0.7 }}>${animal.donation.raised.toLocaleString()}</span>
-                  <span style={{ color: 'var(--text)', opacity: 0.7 }}>{Math.round((animal.donation.raised/animal.donation.goal)*100)}%</span>
-                </div>
-                <div style={{ width: '100%', background: isDark ? '#2A2A2A' : 'var(--gray)', borderRadius: 6, height: 8, overflow: 'hidden' }}>
-                  <div 
+              {/* Content */}
+              <div style={{ padding: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                  <img 
+                    src={animal.profile_img || `https://api.dicebear.com/7.x/avataaars/svg?seed=${animal.name}`} 
+                    alt={animal.name} 
                     style={{ 
-                      width: `${Math.round((animal.donation.raised/animal.donation.goal)*100)}%`, 
-                      background: 'linear-gradient(90deg, var(--primary), var(--pink))', 
-                      height: '100%', 
-                      borderRadius: 6 
-                    }}
-                  ></div>
+                      width: 60, 
+                      height: 60, 
+                      borderRadius: '50%', 
+                      objectFit: 'cover',
+                      marginRight: 12
+                    }} 
+                  />
+                  <div>
+                    <h2 className="pixel-header" style={{ margin: '0 0 4px 0', fontSize: 20, fontWeight: 'normal' }}>{animal.name}</h2>
+                    <p style={{ color: 'var(--primary)', margin: 0, fontSize: 14, fontWeight: 600 }}>{animal.animal_type || animal.species}</p>
+                  </div>
+                </div>
+                <p style={{ color: 'var(--text)', margin: '0 0 16px 0', fontSize: 14, opacity: 0.8 }}>
+                  {animal.sanctuary}
+                </p>
+                <p style={{ color: 'var(--text)', margin: '0 0 16px 0', fontSize: 14, lineHeight: 1.4 }}>
+                  {animal.about || 'No description available.'}
+                </p>
+                {/* Progress Bar */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6 }}>
+                    <span style={{ color: 'var(--text)', opacity: 0.7 }}>${(animal.donation_raised || 0).toLocaleString()}</span>
+                    <span style={{ color: 'var(--text)', opacity: 0.7 }}>{animal.donation_goal > 0 ? Math.round(((animal.donation_raised || 0)/animal.donation_goal)*100) : 0}%</span>
+                  </div>
+                  <div style={{ width: '100%', background: isDark ? '#2A2A2A' : 'var(--gray)', borderRadius: 6, height: 8, overflow: 'hidden' }}>
+                    <div 
+                      style={{ 
+                        width: `${animal.donation_goal > 0 ? Math.round(((animal.donation_raised || 0)/animal.donation_goal)*100) : 0}%`,  
+                        background: 'linear-gradient(90deg, var(--primary), var(--pink))', 
+                        height: '100%', 
+                        borderRadius: 6 
+                      }}
+                    ></div>
+                  </div>
                 </div>
               </div>
               {/* Actions */}
               <div style={{ display: 'flex', gap: 8 }}>
-                <Link to={`/ambassadors/${id}`} className="button pixel-font" style={{ 
+                <Link to={`/animal/${animal.id}`} className="button pixel-font" style={{ 
                   padding: '8px 16px', 
                   fontSize: 16,
                   flex: 1,
@@ -309,8 +346,8 @@ export default function AmbassadorHub() {
                 </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       {/* No Results Message */}
       {filteredAnimals.length === 0 && (
