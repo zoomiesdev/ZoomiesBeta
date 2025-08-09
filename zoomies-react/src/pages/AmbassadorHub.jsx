@@ -14,7 +14,7 @@ export default function AmbassadorHub() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecies, setSelectedSpecies] = useState('all');
   const [selectedSanctuary, setSelectedSanctuary] = useState('all');
-  const [viewMode, setViewMode] = useState('featured'); // 'featured' or 'all'
+  const [viewMode, setViewMode] = useState('all'); // 'featured' or 'all'
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -322,25 +322,61 @@ export default function AmbassadorHub() {
                 </div>
               </div>
               {/* Actions */}
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', padding: '0 24px 24px' }}>
                 <Link to={`/animal/${animal.id}`} className="button pixel-font" style={{ 
-                  padding: '8px 16px', 
-                  fontSize: 16,
-                  flex: 1,
+                  padding: '12px 24px', 
+                  fontSize: 14,
+                  fontWeight: 600,
                   textAlign: 'center',
                   background: 'linear-gradient(90deg, var(--accent), var(--primary))',
                   color: 'var(--button-text, #fff)',
                   border: 'none',
-                  borderRadius: 20
+                  borderRadius: 25,
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  width: '140px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  boxSizing: 'border-box',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 16px rgba(0,0,0,0.25)';
+                  e.target.style.background = 'linear-gradient(90deg, var(--primary), var(--pink))';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                  e.target.style.background = 'linear-gradient(90deg, var(--accent), var(--primary))';
                 }}>
                   View Profile
                 </Link>
                 <button className="button pixel-font" style={{ 
-                  padding: '8px 16px', 
-                  fontSize: 16,
+                  padding: '12px 24px', 
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textAlign: 'center',
                   background: 'var(--primary)',
                   color: 'var(--button-text, #fff)',
-                  flex: 1
+                  border: 'none',
+                  borderRadius: 25,
+                  display: 'inline-block',
+                  width: '140px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  boxSizing: 'border-box',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 16px rgba(0,0,0,0.25)';
+                  e.target.style.background = 'var(--pink)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                  e.target.style.background = 'var(--primary)';
                 }}>
                   Donate
                 </button>

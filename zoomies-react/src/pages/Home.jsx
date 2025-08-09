@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollNumber from '../components/ScrollNumber';
-import SupabaseTest from '../components/SupabaseTest';
 import MaxProfilePic from '../assets/MaxProfilePic.png';
 import MaxBanner from '../assets/MaxBanner.png';
 import StompyProfilePic from '../assets/StompyProfilePic.png';
@@ -83,8 +82,6 @@ export default function Home() {
         minWidth: 240,
         marginTop: 24
       }}>
-        {/* Supabase Connection Test */}
-        <SupabaseTest />
         {/* Thanks to our Sponsors */}
         <div style={{ background: 'var(--card)', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ margin: 0, fontSize: 16, color: 'var(--primary)' }}>Thanks to our Sponsors!</h3>

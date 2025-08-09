@@ -26,6 +26,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/ambassador-hub" element={<AmbassadorHub />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/community/topic/:topic" element={<Community />} />
+            <Route path="/community/:communityId" element={<Community />} />
+            <Route path="/post/:postId" element={<Community />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sanctuary-dashboard" element={<SanctuaryDashboard />} />
